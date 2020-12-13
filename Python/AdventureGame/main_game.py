@@ -1,6 +1,8 @@
 # main build the window and start the program
-import pygame, sys
+import pygame
+import sys
 from pygame.locals import *
+
 from GameObject.game_player import *
 
 WINDOWWIDTH = 1024
@@ -13,6 +15,8 @@ DARKGREEN = (21, 156, 75)
 PLAYER_SIZE = 20
 BGCOLOR = DARKGREEN
 FPS = 60
+
+DIRECTIONS = ['LEFT', 'RIGHT', ' UP', 'DOWN']
 
 def main():
     global FPSCLOCK, DISPLAYSURF, BASICFONT, player
@@ -31,14 +35,17 @@ def run_game():
         checkForQuit()
         for event in pygame.event.get():
             if event.type == KEYUP: # a person let go of the key
-                player.set_move(None)
+                if event.key in (K_a, K_LEFT):
+                    player.remove_direction('LEFT')
+                if event.key in (K_d, K_RIGHT):
+                    player.remove_direction('RIGHT')
             if event.type == KEYDOWN: # a person is pressed or is pressing a key
-                if event.key in (K_a, K_LEFT) and player.get_move() is None:
-                    player.set_move('LEFT')
-                if event.key in (K_d, K_RIGHT) and player.get_move() is None:
-                    player.set_move('RIGHT')
+                if event.key in (K_a, K_LEFT):
+                    player.add_direction('LEFT')
+                if event.key in (K_d, K_RIGHT):
+                    player.add_direction('RIGHT')
 
-        move_player(player.get_move())
+        move_player(player.get_current_direction())
         DISPLAYSURF.fill(BGCOLOR)
         draw_player_icon(player.get_x_position(), player.get_y_position())
         pygame.display.update()
