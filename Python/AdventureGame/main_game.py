@@ -11,6 +11,7 @@ WINDOWWIDTH = 1024
 WINDOWHEIGHT = 768
 
 RED = (255, 0, 0)
+BLACK = (0, 0, 0)
 GREEN = (0, 255, 0)
 DARKGREEN = (21, 156, 75)
 
@@ -57,9 +58,10 @@ def run_game():
                     player.add_direction('DOWN')
 
         move_player(player.get_current_direction())
+        enemy.move_enemy(player.get_x_position(), player.get_y_position())
         DISPLAYSURF.fill(BGCOLOR)
         draw_player_icon(player.get_x_position(), player.get_y_position(), PLAYER_SIZE, PLAYER_SIZE, RED)
-        draw_player_icon(enemy.get_x_position(), enemy.get_y_position(), PLAYER_SIZE, PLAYER_SIZE, RED)
+        draw_player_icon(enemy.get_x_position(), enemy.get_y_position(), PLAYER_SIZE, PLAYER_SIZE, BLACK)
         pygame.display.update()
         FPSCLOCK.tick(FPS)
 
