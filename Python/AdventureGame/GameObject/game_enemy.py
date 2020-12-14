@@ -38,13 +38,13 @@ class Enemy:
 
     def move_enemy(self, player_x_position, player_y_position):
         if player_x_position > self.x_position:
-            self.x_position += 2
+            self.x_position += 1
         if player_x_position < self.x_position:
-            self.x_position -= 2
+            self.x_position -= 1
         if player_y_position > self.y_position:
-            self.y_position += 2
+            self.y_position += 1
         if player_y_position < self.y_position:
-            self.y_position -= 2
+            self.y_position -= 1
 
     def to_string(self):
         return 'X position: %s, Y position: %s' % (self.x_position, self.y_position)
