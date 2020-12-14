@@ -4,6 +4,8 @@ import sys
 from pygame.locals import *
 
 from GameObject.game_player import *
+from GameObject.game_enemy import *
+
 
 WINDOWWIDTH = 1024
 WINDOWHEIGHT = 768
@@ -19,9 +21,10 @@ FPS = 60
 DIRECTIONS = ['LEFT', 'RIGHT', ' UP', 'DOWN']
 
 def main():
-    global FPSCLOCK, DISPLAYSURF, BASICFONT, player
+    global FPSCLOCK, DISPLAYSURF, BASICFONT, player, enemy
 
     player = Player(502, 374)
+    enemy = Enemy(0,0)
     pygame.init()
     FPSCLOCK = pygame.time.Clock()
     DISPLAYSURF = pygame.display.set_mode((WINDOWWIDTH, WINDOWHEIGHT))
@@ -55,7 +58,8 @@ def run_game():
 
         move_player(player.get_current_direction())
         DISPLAYSURF.fill(BGCOLOR)
-        draw_player_icon(player.get_x_position(), player.get_y_position())
+        draw_player_icon(player.get_x_position(), player.get_y_position(), PLAYER_SIZE, PLAYER_SIZE, RED)
+        draw_player_icon(enemy.get_x_position(), enemy.get_y_position(), PLAYER_SIZE, PLAYER_SIZE, RED)
         pygame.display.update()
         FPSCLOCK.tick(FPS)
 
@@ -69,9 +73,9 @@ def move_player(move_direction):
     if move_direction == 'DOWN' and player.get_y_position() + 2 < (WINDOWHEIGHT - PLAYER_SIZE):
         player.set_y_position(player.get_y_position() + 2)
 
-def draw_player_icon(x_position, y_position):
-    player_icon = pygame.Rect(x_position, y_position, PLAYER_SIZE, PLAYER_SIZE)
-    pygame.draw.rect(DISPLAYSURF, RED, player_icon)
+def draw_player_icon(x_position, y_position, icon_width_, icon_height, color):
+    rect_icon = pygame.Rect(x_position, y_position, icon_width_, icon_height)
+    pygame.draw.rect(DISPLAYSURF, color, rect_icon)
 
 def terminate():
     '''Terminates games.'''
