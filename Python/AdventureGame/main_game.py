@@ -39,11 +39,19 @@ def run_game():
                     player.remove_direction('LEFT')
                 if event.key in (K_d, K_RIGHT):
                     player.remove_direction('RIGHT')
+                if event.key in (K_w, K_UP):
+                    player.remove_direction('UP')
+                if event.key in (K_s, K_DOWN):
+                    player.remove_direction('DOWN')
             if event.type == KEYDOWN: # a person is pressed or is pressing a key
                 if event.key in (K_a, K_LEFT):
                     player.add_direction('LEFT')
                 if event.key in (K_d, K_RIGHT):
                     player.add_direction('RIGHT')
+                if event.key in (K_w, K_UP):
+                    player.add_direction('UP')
+                if event.key in (K_s, K_DOWN):
+                    player.add_direction('DOWN')
 
         move_player(player.get_current_direction())
         DISPLAYSURF.fill(BGCOLOR)
@@ -56,6 +64,10 @@ def move_player(move_direction):
         player.set_x_position(player.get_x_position() - 2)
     if move_direction == 'RIGHT' and player.get_x_position() + 2 < (WINDOWWIDTH - PLAYER_SIZE):
         player.set_x_position(player.get_x_position() + 2)
+    if move_direction == 'UP' and player.get_y_position() - 2 > 0:
+        player.set_y_position(player.get_y_position() - 2)
+    if move_direction == 'DOWN' and player.get_y_position() + 2 < (WINDOWHEIGHT - PLAYER_SIZE):
+        player.set_y_position(player.get_y_position() + 2)
 
 def draw_player_icon(x_position, y_position):
     player_icon = pygame.Rect(x_position, y_position, PLAYER_SIZE, PLAYER_SIZE)
