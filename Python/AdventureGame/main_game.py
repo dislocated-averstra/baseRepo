@@ -57,6 +57,7 @@ def run_game():
                 if event.key in (K_s, K_DOWN):
                     player.add_vertical_direction('DOWN')
 
+        check_for_enemy_player_overlap(player.get_x_position(), player.get_y_position(), enemy.get_x_position(), enemy.get_y_position())
         player.move_player(WINDOWHEIGHT, WINDOWWIDTH)
         enemy.move_enemy(player.get_x_position(), player.get_y_position())
         DISPLAYSURF.fill(BGCOLOR)
@@ -68,6 +69,13 @@ def run_game():
 def draw_player_icon(x_position, y_position, icon_width_, icon_height, color):
     rect_icon = pygame.Rect(x_position, y_position, icon_width_, icon_height)
     pygame.draw.rect(DISPLAYSURF, color, rect_icon)
+
+def check_for_enemy_player_overlap(player_x_position, player_y_position, enemy_x_position, enemy_y_position):
+    '''Checks to see if the enemy has overtaken the player.'''
+    player_rect = pygame.Rect(player_x_position, player_y_position, PLAYER_SIZE, PLAYER_SIZE)
+    enemy_rect = pygame.Rect(enemy_x_position, enemy_y_position, PLAYER_SIZE, PLAYER_SIZE)
+    if pygame.Rect.colliderect(player_rect,enemy_rect) == True:
+        terminate()
 
 def terminate():
     '''Terminates games.'''
