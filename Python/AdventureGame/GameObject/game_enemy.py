@@ -1,24 +1,14 @@
-class Enemy:
+from Python.AdventureGame.GameObject.game_object import GameBaseObject
+
+
+class Enemy(GameBaseObject):
     directions = []
 
     def __init__(self, x_position, y_position):
-        self.x_position = x_position
-        self.y_position = y_position
-
-    def get_x_position(self):
-        return self.x_position
-
-    def get_y_position(self):
-        return self.y_position
+        super().__init__(x_position, y_position)
 
     def get_directions(self):
         return self.directions
-
-    def set_x_position(self, x_position):
-        self.x_position = x_position
-
-    def set_y_position(self, y_position):
-        self.y_position = y_position
 
     def set_direction(self, move):
         self.move = move

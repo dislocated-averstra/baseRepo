@@ -7,6 +7,7 @@ from pygame.locals import *
 from GameObject.game_enemy import *
 from GameObject.game_player import *
 
+
 WINDOWWIDTH = 1024
 WINDOWHEIGHT = 768
 
