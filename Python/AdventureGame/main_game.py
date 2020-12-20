@@ -1,9 +1,11 @@
 # main build the window and start the program
-import sys
 
+
+
+
+import sys
 import pygame
 from pygame.locals import *
-
 from GameObject.game_enemy import *
 from GameObject.game_player import *
 

@@ -1,23 +1,16 @@
-class Player:
+from Python.AdventureGame.GameObject.game_object import GameBaseObject
+
+
+class Player( GameBaseObject):
     horizontal_directions = []
     vertical_directions = []
 
     def __init__(self, x_position, y_position, size):
-        self.x_position = x_position
-        self.y_position = y_position
+        # GameObject__init__(self, x_position, y_position)
         self.size = size
+        super().__init__(x_position, y_position)
 
-    def get_x_position(self):
-        return self.x_position
 
-    def get_y_position(self):
-        return self.y_position
-
-    def set_x_position(self, x_position):
-        self.x_position = x_position
-
-    def set_y_position(self, y_position):
-        self.y_position = y_position
 
     def set_size(self, size):
         self.size = size
