@@ -6,6 +6,7 @@ import pygame
 from pygame.locals import *
 from GameObject.game_enemy import *
 from GameObject.game_player import *
+from GameBoard.game_board import *
 
 WINDOWWIDTH = 1024
 WINDOWHEIGHT = 768
@@ -28,10 +29,11 @@ DIRECTIONS = ['LEFT', 'RIGHT', ' UP', 'DOWN']
 
 
 def main():
-    global FPSCLOCK, DISPLAYSURF, player, enemy, BIGFONT
+    global FPSCLOCK, DISPLAYSURF, BASICFONT, player, enemy, board, BIGFONT
 
     player = Player(502, 374, PLAYER_SIZE)
     enemy = Enemy(0, 0)
+    board = GameBoard(int(WINDOWWIDTH / 32), int(WINDOWHEIGHT / 32))
     pygame.init()
     FPSCLOCK = pygame.time.Clock()
     DISPLAYSURF = pygame.display.set_mode((WINDOWWIDTH, WINDOWHEIGHT))
@@ -69,11 +71,13 @@ def run_game():
                 if event.key in (K_s, K_DOWN):
                     player.add_vertical_direction('DOWN')
 
-        check_for_enemy_player_overlap(player.get_x_position(), player.get_y_position(), enemy.get_x_position(),
-                                       enemy.get_y_position())
+        check_for_enemy_player_overlap(player.get_x_position(), player.get_y_position(), enemy.get_x_position(), enemy.get_y_position())
+        board.add_to_board(0, 'brick')
+        brick_wall = pygame.image.load('gameSprites/BrickWall.png')
         player.move_player(WINDOWHEIGHT, WINDOWWIDTH)
         enemy.move_enemy(player.get_x_position(), player.get_y_position())
         DISPLAYSURF.fill(BGCOLOR)
+        DISPLAYSURF.blit(brick_wall, (0, 0))
         draw_player_icon(player.get_x_position(), player.get_y_position(), PLAYER_SIZE, PLAYER_SIZE, RED)
         draw_player_icon(enemy.get_x_position(), enemy.get_y_position(), PLAYER_SIZE, PLAYER_SIZE, BLACK)
         showTextScreen('Battle Square')
