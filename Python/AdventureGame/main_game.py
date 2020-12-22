@@ -29,10 +29,10 @@ DIRECTIONS = ['LEFT', 'RIGHT', ' UP', 'DOWN']
 
 
 def main():
-    global FPSCLOCK, DISPLAYSURF, BASICFONT, player, enemy, board, BIGFONT
+    global FPSCLOCK, DISPLAYSURF, BASICFONT, player, board, BIGFONT #enemy
 
     player = Player(502, 374, PLAYER_SIZE)
-    enemy = Enemy(0, 0)
+    #enemy = Enemy(0, 0)
     board = GameBoard(int(WINDOWWIDTH / 32), int(WINDOWHEIGHT / 32))
     pygame.init()
     FPSCLOCK = pygame.time.Clock()
@@ -71,16 +71,16 @@ def run_game():
                 if event.key in (K_s, K_DOWN):
                     player.add_vertical_direction('DOWN')
 
-        check_for_enemy_player_overlap(player.get_x_position(), player.get_y_position(), enemy.get_x_position(), enemy.get_y_position())
+        #check_for_enemy_player_overlap(player.get_x_position(), player.get_y_position(), enemy.get_x_position(), enemy.get_y_position())
         for i in range(1, int(WINDOWHEIGHT/32)):
             board.add_to_board(0, 'brick')
-        brick_wall = pygame.image.load('gameSprites/BrickWall.png')
+        did_player_hit_wall(board.get_board(),player.get_x_position(), player.get_y_position())
         player.move_player(WINDOWHEIGHT, WINDOWWIDTH)
-        enemy.move_enemy(player.get_x_position(), player.get_y_position())
+        #enemy.move_enemy(player.get_x_position(), player.get_y_position())
         DISPLAYSURF.fill(BGCOLOR)
-        DISPLAYSURF.blit(brick_wall, (0, 0))
+        draw_board(board.get_board())
         draw_player_icon(player.get_x_position(), player.get_y_position(), PLAYER_SIZE, PLAYER_SIZE, RED)
-        draw_player_icon(enemy.get_x_position(), enemy.get_y_position(), PLAYER_SIZE, PLAYER_SIZE, BLACK)
+        #draw_player_icon(enemy.get_x_position(), enemy.get_y_position(), PLAYER_SIZE, PLAYER_SIZE, BLACK)
         showTextScreen('Battle Square')
         pygame.display.update()
         FPSCLOCK.tick(FPS)
@@ -97,6 +97,25 @@ def check_for_enemy_player_overlap(player_x_position, player_y_position, enemy_x
     enemy_rect = pygame.Rect(enemy_x_position, enemy_y_position, PLAYER_SIZE, PLAYER_SIZE)
     if pygame.Rect.colliderect(player_rect, enemy_rect) == True:
         terminate()
+
+def did_player_hit_wall(board, player_x_position, player_y_position):
+    '''Checks if the player hit the wall.'''
+    for i in range(0, len(board)):
+        for q in range(0, len(board[i])):
+            if board[i][q] == 'brick':
+                player_rect = pygame.Rect(player_x_position, player_y_position, PLAYER_SIZE, PLAYER_SIZE)
+                wall_rect = pygame.Rect(i, q, 32, 32)
+                if pygame.Rect.colliderect(player_rect, wall_rect) == True:
+                    terminate()
+
+def draw_board(board):
+    '''Draws the board with bricks.'''
+    brick_wall = pygame.image.load('gameSprites/BrickWall.png')
+    for i in range(0, len(board)):
+        for q in range(0, len(board[i])):
+            if board[i][q] == 'brick':
+                DISPLAYSURF.blit(brick_wall, (i*32, q*32))
+
 
 
 def terminate():
