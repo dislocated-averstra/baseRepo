@@ -72,7 +72,8 @@ def run_game():
                     player.add_vertical_direction('DOWN')
 
         check_for_enemy_player_overlap(player.get_x_position(), player.get_y_position(), enemy.get_x_position(), enemy.get_y_position())
-        board.add_to_board(0, 'brick')
+        for i in range(1, int(WINDOWHEIGHT/32)):
+            board.add_to_board(0, 'brick')
         brick_wall = pygame.image.load('gameSprites/BrickWall.png')
         player.move_player(WINDOWHEIGHT, WINDOWWIDTH)
         enemy.move_enemy(player.get_x_position(), player.get_y_position())
