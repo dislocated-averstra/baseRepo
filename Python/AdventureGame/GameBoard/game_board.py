@@ -27,3 +27,6 @@ class GameBoard:
 
     def add_to_board(self, width_index, board_piece):
         self.board[width_index].append(board_piece)
+
+    def add_to_gameboard(self, width_index, height_index, string):
+        self.board[width_index].insert(height_index, string)

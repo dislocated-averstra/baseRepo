@@ -1,6 +1,6 @@
 # main build the window and start the program
 
-
+import csv
 import sys
 import pygame
 from pygame.locals import *
@@ -27,18 +27,21 @@ FPS = 60
 
 DIRECTIONS = ['LEFT', 'RIGHT', ' UP', 'DOWN']
 
+MAXHEALTH = 3
+
 
 def main():
-    global FPSCLOCK, DISPLAYSURF, BASICFONT, player, board, BIGFONT #enemy
+    global FPSCLOCK, DISPLAYSURF, BASICFONT, player, enemy, board, BIGFONT
 
     player = Player(502, 374, PLAYER_SIZE)
-    #enemy = Enemy(0, 0)
+    enemy = Enemy(0, 0)
     board = GameBoard(int(WINDOWWIDTH / 32), int(WINDOWHEIGHT / 32))
     pygame.init()
     FPSCLOCK = pygame.time.Clock()
     DISPLAYSURF = pygame.display.set_mode((WINDOWWIDTH, WINDOWHEIGHT))
     BIGFONT = pygame.font.Font('freesansbold.ttf', 40)
     pygame.display.set_caption('Main Game')
+
     run_game()
 
 
@@ -71,17 +74,18 @@ def run_game():
                 if event.key in (K_s, K_DOWN):
                     player.add_vertical_direction('DOWN')
 
-        #check_for_enemy_player_overlap(player.get_x_position(), player.get_y_position(), enemy.get_x_position(), enemy.get_y_position())
-        for i in range(1, int(WINDOWHEIGHT/32)):
-            board.add_to_board(0, 'brick')
-        did_player_hit_wall(board.get_board(),player.get_x_position(), player.get_y_position())
+        check_for_enemy_player_overlap(player.get_x_position(), player.get_y_position(), enemy.get_x_position(),
+                                       enemy.get_y_position())
+        did_player_hit_wall(board.get_board(), player.get_x_position(), player.get_y_position())
         player.move_player(WINDOWHEIGHT, WINDOWWIDTH)
-        #enemy.move_enemy(player.get_x_position(), player.get_y_position())
+        enemy.move_enemy(player.get_x_position(), player.get_y_position())
         DISPLAYSURF.fill(BGCOLOR)
         draw_board(board.get_board())
         draw_player_icon(player.get_x_position(), player.get_y_position(), PLAYER_SIZE, PLAYER_SIZE, RED)
-        #draw_player_icon(enemy.get_x_position(), enemy.get_y_position(), PLAYER_SIZE, PLAYER_SIZE, BLACK)
+        draw_player_icon(enemy.get_x_position(), enemy.get_y_position(), PLAYER_SIZE, PLAYER_SIZE, BLACK)
         showTextScreen('Battle Square')
+        drawHealthMeter(3)
+        loop_through_brick_file(board)
         pygame.display.update()
         FPSCLOCK.tick(FPS)
 
@@ -98,6 +102,7 @@ def check_for_enemy_player_overlap(player_x_position, player_y_position, enemy_x
     if pygame.Rect.colliderect(player_rect, enemy_rect) == True:
         terminate()
 
+
 def did_player_hit_wall(board, player_x_position, player_y_position):
     '''Checks if the player hit the wall.'''
     for i in range(0, len(board)):
@@ -108,14 +113,32 @@ def did_player_hit_wall(board, player_x_position, player_y_position):
                 if pygame.Rect.colliderect(player_rect, wall_rect) == True:
                     terminate()
 
+
+def drawHealthMeter(currentHealth):
+    for i in range(currentHealth):  # draw red health bars
+        pygame.draw.rect(DISPLAYSURF, RED, (900, 50 + (10 * MAXHEALTH) - i * 10, 20, 10))
+    for i in range(MAXHEALTH):  # draw the white outlines
+        pygame.draw.rect(DISPLAYSURF, WHITE, (900, 50 + (10 * MAXHEALTH) - i * 10, 20, 10), 1)
+
+
 def draw_board(board):
     '''Draws the board with bricks.'''
     brick_wall = pygame.image.load('gameSprites/BrickWall.png')
     for i in range(0, len(board)):
         for q in range(0, len(board[i])):
             if board[i][q] == 'brick':
-                DISPLAYSURF.blit(brick_wall, (i*32, q*32))
+                DISPLAYSURF.blit(brick_wall, (i * 32, q * 32))
 
+
+def loop_through_brick_file(board):
+    with open('/Users/ngocphan/PycharmProjects/baseRepo/Python/AdventureGame/LevelLayout/brick.csv') as f:
+        data = csv.reader(f)
+        for row in data:
+            ab = data.line_num - 1
+            for i in range(0, len(row)-1):
+                board.add_to_gameboard(ab, i, row[i])
+                # for q in range(0, len(board[i])):
+                # for j in range(0, len(word)):
 
 
 def terminate():
