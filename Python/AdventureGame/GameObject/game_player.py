@@ -70,6 +70,28 @@ class Player( GameBaseObject):
             if horizontal_direction == 'RIGHT' and self.get_x_position() + 1 < (window_width - self.size):
                 self.set_x_position(self.get_x_position() + 1)
 
+    def stop_player(self, window_height, window_width):
+        horizontal_direction, vertical_direction = self.get_current_direction()
+        if horizontal_direction is None and vertical_direction is not None:
+            if vertical_direction == 'UP' and self.get_y_position() - 2 > 0:
+                self.set_y_position(self.get_y_position() + 4)
+            if vertical_direction == 'DOWN' and self.get_y_position() + 2 < (window_height - self.size):
+                self.set_y_position(self.get_y_position() - 4)
+        elif horizontal_direction is not None and vertical_direction is None:
+            if horizontal_direction == 'LEFT' and self.get_x_position() - 2 > 0:
+                self.set_x_position(self.get_x_position() + 4)
+            if horizontal_direction == 'RIGHT' and self.get_x_position() + 2 < (window_width - self.size):
+                self.set_x_position(self.get_x_position() - 4)
+        elif horizontal_direction is not None and vertical_direction is not None:
+            if vertical_direction == 'UP' and self.get_y_position() - 1 > 0:
+                self.set_y_position(self.get_y_position() + 2)
+            if vertical_direction == 'DOWN' and self.get_y_position() + 1 < (window_height - self.size):
+                self.set_y_position(self.get_y_position() - 2)
+            if horizontal_direction == 'LEFT' and self.get_x_position() - 1 > 0:
+                self.set_x_position(self.get_x_position() + 2)
+            if horizontal_direction == 'RIGHT' and self.get_x_position() + 1 < (window_width - self.size):
+                self.set_x_position(self.get_x_position() - 2)
+
 
     def to_string(self):
         return 'X position: %s, Y position: %s' % (self.x_position, self.y_position)
