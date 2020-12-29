@@ -14,8 +14,8 @@ class Enemy(GameBaseObject):
         self.move = move
 
     def add_direction(self, direction):
-       if direction not in self.directions:
-           self.directions.insert(0, direction)
+        if direction not in self.directions:
+            self.directions.insert(0, direction)
 
     def remove_direction(self, direction):
         self.directions.remove(direction)

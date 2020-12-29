@@ -30,3 +30,6 @@ class GameBoard:
 
     def add_to_gameboard(self, width_index, height_index, string):
         self.board[width_index].insert(height_index, string)
+
+    def remove_element(self, width_index, height_index, string):
+        self.board[width_index].remove(string)
