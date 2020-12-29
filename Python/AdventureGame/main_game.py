@@ -3,6 +3,7 @@
 import csv
 import sys
 import pygame
+from pygame.event import clear
 from pygame.locals import *
 from GameObject.game_enemy import *
 from GameObject.game_player import *
@@ -86,6 +87,7 @@ def run_game():
         showTextScreen('Battle Square')
         drawHealthMeter(3)
         loop_through_brick_file(board)
+        move_element(board)
         pygame.display.update()
         FPSCLOCK.tick(FPS)
 
@@ -135,10 +137,17 @@ def loop_through_brick_file(board):
         data = csv.reader(f)
         for row in data:
             ab = data.line_num - 1
-            for i in range(0, len(row)-1):
-                board.add_to_gameboard(ab, i, row[i])
-                # for q in range(0, len(board[i])):
-                # for j in range(0, len(word)):
+            for i in range(0, len(row) - 1):
+                board.add_to_gameboard(i,ab, row[i])
+
+
+def move_element(board):
+    with open('/Users/ngocphan/PycharmProjects/baseRepo/Python/AdventureGame/LevelLayout/brick.csv') as f:
+        data = csv.reader(f)
+        for row in data:
+            ab = data.line_num - 1
+            for i in range(0, len(row) - 1):
+                board.remove_element(i, ab, row[i])
 
 
 def terminate():
