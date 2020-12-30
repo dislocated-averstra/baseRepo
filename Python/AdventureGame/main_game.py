@@ -77,17 +77,17 @@ def run_game():
 
         check_for_enemy_player_overlap(player.get_x_position(), player.get_y_position(), enemy.get_x_position(),
                                        enemy.get_y_position())
-        did_player_hit_wall(board.get_board(), player.get_x_position(), player.get_y_position())
         player.move_player(WINDOWHEIGHT, WINDOWWIDTH)
-        enemy.move_enemy(player.get_x_position(), player.get_y_position())
+        did_player_hit_wall(board.get_board(), player.get_x_position(), player.get_y_position())
+        #enemy.move_enemy(player.get_x_position(), player.get_y_position())
         DISPLAYSURF.fill(BGCOLOR)
         draw_board(board.get_board())
         draw_player_icon(player.get_x_position(), player.get_y_position(), PLAYER_SIZE, PLAYER_SIZE, RED)
-        draw_player_icon(enemy.get_x_position(), enemy.get_y_position(), PLAYER_SIZE, PLAYER_SIZE, BLACK)
+        #draw_player_icon(enemy.get_x_position(), enemy.get_y_position(), PLAYER_SIZE, PLAYER_SIZE, BLACK)
         showTextScreen('Battle Square')
-        drawHealthMeter(3)
+        #drawHealthMeter(3)
         loop_through_brick_file(board)
-        move_element(board)
+        #move_element(board)
         pygame.display.update()
         FPSCLOCK.tick(FPS)
 
@@ -113,7 +113,15 @@ def did_player_hit_wall(board, player_x_position, player_y_position):
                 player_rect = pygame.Rect(player_x_position, player_y_position, PLAYER_SIZE, PLAYER_SIZE)
                 wall_rect = pygame.Rect(i, q, 32, 32)
                 if pygame.Rect.colliderect(player_rect, wall_rect) == True:
-                    terminate()
+                    if 'LEFT' in player.get_horizontal_directions():
+                        player.set_x_position(player_x_position + 2)
+                    if 'RIGHT' in player.get_horizontal_directions():
+                        player.set_x_position(player_x_position - 2)
+                    if 'UP' in player.get_vertical_directions():
+                        player.set_y_position(player_y_position + 2)
+                    if 'DOWN' in player.get_vertical_directions():
+                        player.set_y_position(player_y_position - 2)
+
 
 
 def drawHealthMeter(currentHealth):
@@ -133,7 +141,7 @@ def draw_board(board):
 
 
 def loop_through_brick_file(board):
-    with open('/Users/ngocphan/PycharmProjects/baseRepo/Python/AdventureGame/LevelLayout/brick.csv') as f:
+    with open('/Users/bichn/PycharmProjects/baseRepo/Python/AdventureGame/LevelLayout/brick.csv') as f:
         data = csv.reader(f)
         for row in data:
             ab = data.line_num - 1
