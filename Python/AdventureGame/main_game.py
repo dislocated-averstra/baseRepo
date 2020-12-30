@@ -34,7 +34,7 @@ MAXHEALTH = 3
 def main():
     global FPSCLOCK, DISPLAYSURF, BASICFONT, player, enemy, board, BIGFONT
 
-    player = Player(100, 374, PLAYER_SIZE)
+    player = Player(502, 374, PLAYER_SIZE)
     enemy = Enemy(0, 0)
     board = GameBoard(int(WINDOWWIDTH / 32), int(WINDOWHEIGHT / 32))
     pygame.init()
@@ -79,11 +79,12 @@ def run_game():
                                        enemy.get_y_position())
         did_player_hit_wall(board.get_board(), player.get_x_position(), player.get_y_position())
         player.move_player(WINDOWHEIGHT, WINDOWWIDTH)
-        enemy.move_enemy(player.get_x_position(), player.get_y_position())
+        did_player_hit_wall(board.get_board(), player.get_x_position(), player.get_y_position())
+        #enemy.move_enemy(player.get_x_position(), player.get_y_position())
         DISPLAYSURF.fill(BGCOLOR)
         draw_board(board.get_board())
         draw_player_icon(player.get_x_position(), player.get_y_position(), PLAYER_SIZE, PLAYER_SIZE, RED)
-        draw_player_icon(enemy.get_x_position(), enemy.get_y_position(), PLAYER_SIZE, PLAYER_SIZE, BLACK)
+        #draw_player_icon(enemy.get_x_position(), enemy.get_y_position(), PLAYER_SIZE, PLAYER_SIZE, BLACK)
         showTextScreen('Battle Square')
         drawHealthMeter(3)
 
@@ -114,7 +115,15 @@ def did_player_hit_wall(board, player_x_position, player_y_position):
                 wall_rect = pygame.Rect(i, q, 32, 32)
 
                 if pygame.Rect.colliderect(player_rect, wall_rect) == True:
-                    hit = False
+                    if 'LEFT' in player.get_horizontal_directions():
+                        player.set_x_position(player_x_position + 2)
+                    if 'RIGHT' in player.get_horizontal_directions():
+                        player.set_x_position(player_x_position - 2)
+                    if 'UP' in player.get_vertical_directions():
+                        player.set_y_position(player_y_position + 2)
+                    if 'DOWN' in player.get_vertical_directions():
+                        player.set_y_position(player_y_position - 2)
+
 
 
 def drawHealthMeter(currentHealth):
