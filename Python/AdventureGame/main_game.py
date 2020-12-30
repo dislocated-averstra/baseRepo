@@ -34,7 +34,7 @@ MAXHEALTH = 3
 def main():
     global FPSCLOCK, DISPLAYSURF, BASICFONT, player, enemy, board, BIGFONT
 
-    player = Player(502, 374, PLAYER_SIZE)
+    player = Player(100, 374, PLAYER_SIZE)
     enemy = Enemy(0, 0)
     board = GameBoard(int(WINDOWWIDTH / 32), int(WINDOWHEIGHT / 32))
     pygame.init()
@@ -42,7 +42,7 @@ def main():
     DISPLAYSURF = pygame.display.set_mode((WINDOWWIDTH, WINDOWHEIGHT))
     BIGFONT = pygame.font.Font('freesansbold.ttf', 40)
     pygame.display.set_caption('Main Game')
-
+    loop_through_brick_file(board)
     run_game()
 
 
@@ -86,8 +86,8 @@ def run_game():
         draw_player_icon(enemy.get_x_position(), enemy.get_y_position(), PLAYER_SIZE, PLAYER_SIZE, BLACK)
         showTextScreen('Battle Square')
         drawHealthMeter(3)
-        loop_through_brick_file(board)
-        move_element(board)
+
+        # move_element(board)
         pygame.display.update()
         FPSCLOCK.tick(FPS)
 
@@ -112,8 +112,9 @@ def did_player_hit_wall(board, player_x_position, player_y_position):
             if board[i][q] == 'brick':
                 player_rect = pygame.Rect(player_x_position, player_y_position, PLAYER_SIZE, PLAYER_SIZE)
                 wall_rect = pygame.Rect(i, q, 32, 32)
+
                 if pygame.Rect.colliderect(player_rect, wall_rect) == True:
-                    terminate()
+                    hit = False
 
 
 def drawHealthMeter(currentHealth):
@@ -138,16 +139,16 @@ def loop_through_brick_file(board):
         for row in data:
             ab = data.line_num - 1
             for i in range(0, len(row) - 1):
-                board.add_to_gameboard(i,ab, row[i])
+                board.add_to_gameboard(i, ab, row[i])
 
 
-def move_element(board):
+'''def move_element(board):
     with open('/Users/ngocphan/PycharmProjects/baseRepo/Python/AdventureGame/LevelLayout/brick.csv') as f:
         data = csv.reader(f)
         for row in data:
             ab = data.line_num - 1
             for i in range(0, len(row) - 1):
-                board.remove_element(i, ab, row[i])
+                board.remove_element(i, ab, row[i])'''
 
 
 def terminate():
