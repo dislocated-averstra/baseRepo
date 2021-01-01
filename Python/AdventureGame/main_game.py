@@ -2,12 +2,13 @@
 
 import csv
 import sys
+
 import pygame
-from pygame.event import clear
 from pygame.locals import *
+
+from GameBoard.game_board import *
 from GameObject.game_enemy import *
 from GameObject.game_player import *
-from GameBoard.game_board import *
 
 WINDOWWIDTH = 1024
 WINDOWHEIGHT = 768
@@ -112,7 +113,7 @@ def did_player_hit_wall(board, player_x_position, player_y_position):
         for q in range(0, len(board[i])):
             if board[i][q] == 'brick':
                 player_rect = pygame.Rect(player_x_position, player_y_position, PLAYER_SIZE, PLAYER_SIZE)
-                wall_rect = pygame.Rect(i, q, 32, 32)
+                wall_rect = pygame.Rect(i * 32, q * 32, 32, 32)
 
                 if pygame.Rect.colliderect(player_rect, wall_rect) == True:
                     if 'LEFT' in player.get_horizontal_directions():
@@ -143,7 +144,7 @@ def draw_board(board):
 
 
 def loop_through_brick_file(board):
-    with open('/Users/ngocphan/PycharmProjects/baseRepo/Python/AdventureGame/LevelLayout/brick.csv') as f:
+    with open('LevelLayout/brick.csv') as f:
         data = csv.reader(f)
         for row in data:
             ab = data.line_num - 1
