@@ -102,7 +102,7 @@ def check_for_enemy_player_overlap(player_x_position, player_y_position, enemy_x
     '''Checks to see if the enemy has overtaken the player.'''
     player_rect = pygame.Rect(player_x_position, player_y_position, PLAYER_SIZE, PLAYER_SIZE)
     enemy_rect = pygame.Rect(enemy_x_position, enemy_y_position, PLAYER_SIZE, PLAYER_SIZE)
-    if pygame.Rect.colliderect(player_rect, enemy_rect) == True:
+    if pygame.Rect.colliderect(player_rect, enemy_rect):
         terminate()
 
 
