@@ -3,6 +3,7 @@ import sys
 import pygame
 from pygame.locals import *
 
+from Python.DeathAngelCardGame.Main.GameObjects.dice_sprite import DiceSprite
 from Python.DeathAngelCardGame.Main.GameObjects.space_marine import SpaceMarine
 
 WINDOWWIDTH = 1024
@@ -27,17 +28,19 @@ def main():
 def run_game():
     render_update_group = pygame.sprite.RenderUpdates()
     SpaceMarine.containers = render_update_group
+    DiceSprite.containers = render_update_group
 
-    first_test_sprite = SpaceMarine('Main\SpriteImages/chaplain_raziel.png')
-    second_test_sprite = SpaceMarine('Main\SpriteImages/brother_metraen.png')
-    third_test_sprite = SpaceMarine('Main\SpriteImages/brother_zael.png')
-    forth_test_sprite = SpaceMarine('Main\SpriteImages/brother_omnio.png')
+    first_test_sprite = SpaceMarine('Main\SpriteImages\chaplain_raziel.png')
+    second_test_sprite = SpaceMarine('Main\SpriteImages\\brother_metraen.png')
+    third_test_sprite = SpaceMarine('Main\SpriteImages\\brother_zael.png')
+    forth_test_sprite = SpaceMarine('Main\SpriteImages\\brother_omnio.png')
 
     first_test_sprite.set_position(400, 52)
     second_test_sprite.set_position(400, 172)
     third_test_sprite.set_position(400, 292)
     forth_test_sprite.set_position(400, 412)
 
+    dice = DiceSprite()
     space_marine_sprite_list = [first_test_sprite, second_test_sprite, third_test_sprite, forth_test_sprite]
 
     background = DISPLAYSURF.copy()
@@ -56,15 +59,24 @@ def run_game():
                 x_click_position, y_click_position = event.pos
                 first_test_sprite.check_if_facing_arrow_clicked(x_click_position, y_click_position)
                 if selected_space_marine is not None:
+                    selected_space_marine.set_is_selected(False)
                     selected_space_marine = None
             if event.type == MOUSEBUTTONDOWN:
-                x_click_position, y_click_position = event.pos
-                is_mouse_over_a_space_marine(space_marine_sprite_list, x_click_position, y_click_position)
+                # at this point we set the starting mouse position
+                previous_x_mouse_position, previous_y_mouse_position = event.pos
+                is_mouse_over_a_space_marine(space_marine_sprite_list, previous_x_mouse_position,
+                                             previous_y_mouse_position)
                 selected_space_marine = get_selected_space_marine(space_marine_sprite_list)
             if event.type == MOUSEMOTION:
-                x_click_position, y_click_position = event.pos
+                x_click_position, y_click_position = pygame.mouse.get_pos()
                 if selected_space_marine is not None:
-                    selected_space_marine.set_position(x_click_position, y_click_position)
+                    selected_space_marine.move_relative_to_mouse_movement(
+                        int(previous_x_mouse_position - x_click_position),
+                        int(previous_y_mouse_position - y_click_position))
+                    previous_x_mouse_position = x_click_position
+                    previous_y_mouse_position = y_click_position
+
+        dice.roll_dice()
 
         # clear all the sprites
         render_update_group.clear(DISPLAYSURF, background)
@@ -75,6 +87,7 @@ def run_game():
 
         dirty = render_update_group.draw(DISPLAYSURF)
         dirty_arrows = first_test_sprite.get_arrow_containers().draw(DISPLAYSURF)
+
         pygame.display.update(dirty)
         pygame.display.update(dirty_arrows)
 

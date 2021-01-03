@@ -144,12 +144,17 @@ def draw_board(board):
 
 
 def loop_through_brick_file(board):
-    with open('LevelLayout/brick.csv') as f:
-        data = csv.reader(f)
-        for row in data:
-            ab = data.line_num - 1
-            for i in range(0, len(row) - 1):
-                board.add_to_gameboard(i, ab, row[i])
+    try:
+        with open('LevelLayout/brick.csv') as f:
+            data = csv.reader(f)
+            for row in data:
+                ab = data.line_num - 1
+                for i in range(0, len(row) - 1):
+                    board.add_to_gameboard(i, ab, row[i])
+    except FileNotFoundError:
+        print('Level Layout not found')
+    finally:
+        f.close()
 
 
 '''def move_element(board):

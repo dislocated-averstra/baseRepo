@@ -12,7 +12,7 @@ class MyTestCase(unittest.TestCase):
         SpaceMarine.containers = render_update_group
 
         test_sprite = SpaceMarine('../../Main/SpriteImages/chaplain_raziel.png')
-        test_sprite.move(100, 100)
+        test_sprite.set_position(100, 100)
         self.assertEqual(test_sprite.get_rect_x(), 100)
         self.assertEqual(test_sprite.get_rect_y(), 100)
 
