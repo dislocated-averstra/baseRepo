@@ -23,6 +23,7 @@ TEXTSHADOWCOLOR = GRAY
 TEXTCOLOR = WHITE
 
 PLAYER_SIZE = 20
+SPRITE_SIZE = 32
 BGCOLOR = DARKGREEN
 FPS = 60
 
@@ -34,7 +35,7 @@ MAXHEALTH = 3
 def main():
     global FPSCLOCK, DISPLAYSURF, BASICFONT, player, enemy, board, BIGFONT
 
-    player = Player(502, 374, PLAYER_SIZE)
+    player = Player(300, 400, PLAYER_SIZE)
     enemy = Enemy(0, 0)
     board = GameBoard(int(WINDOWWIDTH / 32), int(WINDOWHEIGHT / 32))
     pygame.init()
@@ -75,9 +76,8 @@ def run_game():
                 if event.key in (K_s, K_DOWN):
                     player.add_vertical_direction('DOWN')
 
-        check_for_enemy_player_overlap(player.get_x_position(), player.get_y_position(), enemy.get_x_position(),
-                                       enemy.get_y_position())
-        did_player_hit_wall(board.get_board(), player.get_x_position(), player.get_y_position())
+        #check_for_enemy_player_overlap(player.get_x_position(), player.get_y_position(), enemy.get_x_position(),
+                                       #enemy.get_y_position())
         player.move_player(WINDOWHEIGHT, WINDOWWIDTH)
         did_player_hit_wall(board.get_board(), player.get_x_position(), player.get_y_position())
         #enemy.move_enemy(player.get_x_position(), player.get_y_position())
@@ -88,7 +88,7 @@ def run_game():
         showTextScreen('Battle Square')
         drawHealthMeter(3)
 
-        # move_element(board)
+        #move_element(board)
         pygame.display.update()
         FPSCLOCK.tick(FPS)
 
@@ -108,22 +108,50 @@ def check_for_enemy_player_overlap(player_x_position, player_y_position, enemy_x
 
 def did_player_hit_wall(board, player_x_position, player_y_position):
     '''Checks if the player hit the wall.'''
-    for i in range(0, len(board)):
-        for q in range(0, len(board[i])):
-            if board[i][q] == 'brick':
-                player_rect = pygame.Rect(player_x_position, player_y_position, PLAYER_SIZE, PLAYER_SIZE)
-                wall_rect = pygame.Rect(i, q, 32, 32)
+    x_index = player_x_position // SPRITE_SIZE
+    y_index = player_y_position // SPRITE_SIZE
+    if x_index == 0 and y_index != 23: #left side
+        for i in range(0, 2):
+            for q in range(y_index - 1, y_index + 2):
+                if board[i][q] == 'brick':
+                    player.stop_player(player_x_position, player_y_position, i, q)
+    elif x_index and y_index == 0: #top left
+        for i in range(0, 2):
+            for q in range(0, 2):
+                if board[i][q] == 'brick':
+                    player.stop_player(player_x_position, player_y_position, i, q)
+    elif x_index == 31 and y_index != 23: #right side
+        for i in range(x_index - 1, x_index + 1):
+            for q in range(y_index - 1, y_index + 2):
+                if board[i][q] == 'brick':
+                    player.stop_player(player_x_position, player_y_position, i, q)
+    elif x_index == 31 and y_index == 0: #top right
+        for i in range(x_index - 1, x_index + 1):
+            for q in range(y_index-1, y_index + 2):
+                if board[i][q] == 'brick':
+                    player.stop_player(player_x_position, player_y_position, i, q)
 
-                if pygame.Rect.colliderect(player_rect, wall_rect) == True:
-                    if 'LEFT' in player.get_horizontal_directions():
-                        player.set_x_position(player_x_position + 2)
-                    if 'RIGHT' in player.get_horizontal_directions():
-                        player.set_x_position(player_x_position - 2)
-                    if 'UP' in player.get_vertical_directions():
-                        player.set_y_position(player_y_position + 2)
-                    if 'DOWN' in player.get_vertical_directions():
-                        player.set_y_position(player_y_position - 2)
+    elif y_index == 0 and x_index != 31: #top side
+        for i in range(x_index - 1, x_index + 2):
+            for q in range(y_index, y_index + 2):
+                if board[i][q] == 'brick':
+                    player.stop_player(player_x_position, player_y_position, i, q)
 
+    elif y_index == 23 and x_index != 31: #bottom side
+        for i in range(x_index - 1, x_index + 2):
+            for q in range(y_index - 1, y_index + 1):
+                if board[i][q] == 'brick':
+                    player.stop_player(player_x_position, player_y_position, i, q)
+    elif x_index == 31 and y_index == 23: #bottom right
+        for i in range(30, 32):
+            for q in range(22, 24):
+                if board[i][q] == 'brick':
+                    player.stop_player(player_x_position, player_y_position, i, q)
+    else:
+        for i in range(x_index - 1, x_index + 2):
+            for q in range(y_index - 1, y_index + 2):
+                if board[i][q] == 'brick':
+                    player.stop_player(player_x_position, player_y_position, i, q)
 
 
 def drawHealthMeter(currentHealth):
@@ -135,29 +163,32 @@ def drawHealthMeter(currentHealth):
 
 def draw_board(board):
     '''Draws the board with bricks.'''
-    brick_wall = pygame.image.load('gameSprites/BrickWall.png')
+    brick_wall = pygame.image.load('gameSprites/BrickWall2.png')
+    key = pygame.image.load('gameSprites/Key.png')
     for i in range(0, len(board)):
         for q in range(0, len(board[i])):
             if board[i][q] == 'brick':
-                DISPLAYSURF.blit(brick_wall, (i * 32, q * 32))
+                DISPLAYSURF.blit(brick_wall, (i * SPRITE_SIZE, q * SPRITE_SIZE))
+            if board[i][q] == 'key':
+                DISPLAYSURF.blit(key, (i * SPRITE_SIZE, q * SPRITE_SIZE))
 
 
 def loop_through_brick_file(board):
-    with open('/Users/ngocphan/PycharmProjects/baseRepo/Python/AdventureGame/LevelLayout/brick.csv') as f:
+    with open('/Users/bichn/PycharmProjects/baseRepo/Python/AdventureGame/LevelLayout/brick.csv') as f:
         data = csv.reader(f)
         for row in data:
             ab = data.line_num - 1
-            for i in range(0, len(row) - 1):
+            for i in range(0, len(row)):
                 board.add_to_gameboard(i, ab, row[i])
 
 
-'''def move_element(board):
+def move_element(board):
     with open('/Users/ngocphan/PycharmProjects/baseRepo/Python/AdventureGame/LevelLayout/brick.csv') as f:
         data = csv.reader(f)
         for row in data:
             ab = data.line_num - 1
-            for i in range(0, len(row) - 1):
-                board.remove_element(i, ab, row[i])'''
+            for i in range(0, len(row)):
+                board.remove_element(i, ab, row[i])
 
 
 def terminate():

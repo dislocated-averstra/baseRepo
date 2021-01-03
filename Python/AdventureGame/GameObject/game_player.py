@@ -1,4 +1,8 @@
 from Python.AdventureGame.GameObject.game_object import GameBaseObject
+import pygame
+
+PLAYER_SIZE = 20
+SPRITE_SIZE = 32
 
 
 class Player( GameBaseObject):
@@ -70,27 +74,18 @@ class Player( GameBaseObject):
             if horizontal_direction == 'RIGHT' and self.get_x_position() + 1 < (window_width - self.size):
                 self.set_x_position(self.get_x_position() + 1)
 
-    def stop_player(self, window_height, window_width):
-        horizontal_direction, vertical_direction = self.get_current_direction()
-        if horizontal_direction is None and vertical_direction is not None:
-            if vertical_direction == 'UP' and self.get_y_position() - 2 > 0:
-                self.set_y_position(self.get_y_position() + 4)
-            if vertical_direction == 'DOWN' and self.get_y_position() + 2 < (window_height - self.size):
-                self.set_y_position(self.get_y_position() - 4)
-        elif horizontal_direction is not None and vertical_direction is None:
-            if horizontal_direction == 'LEFT' and self.get_x_position() - 2 > 0:
-                self.set_x_position(self.get_x_position() + 4)
-            if horizontal_direction == 'RIGHT' and self.get_x_position() + 2 < (window_width - self.size):
-                self.set_x_position(self.get_x_position() - 4)
-        elif horizontal_direction is not None and vertical_direction is not None:
-            if vertical_direction == 'UP' and self.get_y_position() - 1 > 0:
-                self.set_y_position(self.get_y_position() + 2)
-            if vertical_direction == 'DOWN' and self.get_y_position() + 1 < (window_height - self.size):
-                self.set_y_position(self.get_y_position() - 2)
-            if horizontal_direction == 'LEFT' and self.get_x_position() - 1 > 0:
-                self.set_x_position(self.get_x_position() + 2)
-            if horizontal_direction == 'RIGHT' and self.get_x_position() + 1 < (window_width - self.size):
-                self.set_x_position(self.get_x_position() - 2)
+    def stop_player(self, player_x_position, player_y_position, i_wall_coord, q_wall_coord):
+        player_rect = pygame.Rect(player_x_position, player_y_position, PLAYER_SIZE, PLAYER_SIZE)
+        wall_rect = pygame.Rect(i_wall_coord * SPRITE_SIZE, q_wall_coord * SPRITE_SIZE, SPRITE_SIZE, SPRITE_SIZE)
+        if pygame.Rect.colliderect(wall_rect, player_rect):
+            if 'LEFT' in self.get_horizontal_directions():
+                self.set_x_position(player_x_position + 2)
+            if 'RIGHT' in self.get_horizontal_directions():
+                self.set_x_position(player_x_position - 2)
+            if 'UP' in self.get_vertical_directions():
+                self.set_y_position(player_y_position + 2)
+            if 'DOWN' in self.get_vertical_directions():
+                self.set_y_position(player_y_position - 2)
 
 
     def to_string(self):

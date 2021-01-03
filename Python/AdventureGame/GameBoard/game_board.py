@@ -7,7 +7,7 @@ class GameBoard:
         '''Create the board and store the width and height for future use'''
         self.width = width
         self.height = height
-        for i in range(0, width - 1):
+        for i in range(0, width):
             self.board.append([])
 
     def get_width(self):
