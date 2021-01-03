@@ -28,6 +28,10 @@ class SpaceMarine(pygame.sprite.Sprite):
         self.rect.y = y
         self.facing_arrow.set_position(int(x + 5), int(y + 40))
 
+    def move_relative_to_mouse_movement(self, x, y):
+        self.rect.x = self.rect.x - x
+        self.rect.y = self.rect.y - y
+
     def get_rect(self):
         return self.rect
 
