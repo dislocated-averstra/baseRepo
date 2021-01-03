@@ -1,7 +1,7 @@
 from Python.AdventureGame.GameObject.game_object import GameBaseObject
 
 
-class Player( GameBaseObject):
+class Player(GameBaseObject):
     horizontal_directions = []
     vertical_directions = []
 
@@ -9,8 +9,6 @@ class Player( GameBaseObject):
         # GameObject__init__(self, x_position, y_position)
         self.size = size
         super().__init__(x_position, y_position)
-
-
 
     def set_size(self, size):
         self.size = size
@@ -22,8 +20,8 @@ class Player( GameBaseObject):
         return self.horizontal_directions
 
     def add_horizontal_direction(self, direction):
-       if direction not in self.horizontal_directions:
-           self.horizontal_directions.insert(0, direction)
+        if direction not in self.horizontal_directions:
+            self.horizontal_directions.insert(0, direction)
 
     def remove_horizontal_direction(self, direction):
         self.horizontal_directions.remove(direction)
@@ -91,7 +89,6 @@ class Player( GameBaseObject):
                 self.set_x_position(self.get_x_position() + 2)
             if horizontal_direction == 'RIGHT' and self.get_x_position() + 1 < (window_width - self.size):
                 self.set_x_position(self.get_x_position() - 2)
-
 
     def to_string(self):
         return 'X position: %s, Y position: %s' % (self.x_position, self.y_position)
