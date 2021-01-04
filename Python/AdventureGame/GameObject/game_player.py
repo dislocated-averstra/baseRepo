@@ -5,7 +5,7 @@ PLAYER_SIZE = 20
 SPRITE_SIZE = 32
 
 
-class Player( GameBaseObject):
+class Player(GameBaseObject):
     horizontal_directions = []
     vertical_directions = []
 
@@ -13,8 +13,6 @@ class Player( GameBaseObject):
         # GameObject__init__(self, x_position, y_position)
         self.size = size
         super().__init__(x_position, y_position)
-
-
 
     def set_size(self, size):
         self.size = size
@@ -26,8 +24,8 @@ class Player( GameBaseObject):
         return self.horizontal_directions
 
     def add_horizontal_direction(self, direction):
-       if direction not in self.horizontal_directions:
-           self.horizontal_directions.insert(0, direction)
+        if direction not in self.horizontal_directions:
+            self.horizontal_directions.insert(0, direction)
 
     def remove_horizontal_direction(self, direction):
         self.horizontal_directions.remove(direction)
@@ -86,7 +84,6 @@ class Player( GameBaseObject):
                 self.set_y_position(player_y_position + 2)
             if 'DOWN' in self.get_vertical_directions():
                 self.set_y_position(player_y_position - 2)
-
 
     def to_string(self):
         return 'X position: %s, Y position: %s' % (self.x_position, self.y_position)

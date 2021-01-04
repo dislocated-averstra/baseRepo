@@ -33,3 +33,6 @@ class GameBoard:
 
     def remove_element(self, width_index, height_index, string):
         self.board[width_index].remove(string)
+
+    def remove_item(self,width_index, height_index):
+        self.board[width_index][height_index]=""
