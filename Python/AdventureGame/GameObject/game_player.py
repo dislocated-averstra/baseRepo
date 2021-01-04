@@ -4,10 +4,10 @@ import pygame
 PLAYER_SIZE = 20
 SPRITE_SIZE = 32
 
-
 class Player(GameBaseObject):
     horizontal_directions = []
     vertical_directions = []
+    player_item = {'key': 0}
 
     def __init__(self, x_position, y_position, size):
         # GameObject__init__(self, x_position, y_position)
@@ -19,6 +19,12 @@ class Player(GameBaseObject):
 
     def get_size(self):
         return self.size
+
+    def add_key(self):
+        self.player_item['key']+=1
+
+    def remove_key(self):
+        self.player_item['key']-=1
 
     def get_horizontal_directions(self):
         return self.horizontal_directions
