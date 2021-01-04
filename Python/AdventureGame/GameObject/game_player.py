@@ -4,6 +4,7 @@ import pygame
 PLAYER_SIZE = 20
 SPRITE_SIZE = 32
 
+
 class Player(GameBaseObject):
     horizontal_directions = []
     vertical_directions = []
@@ -90,6 +91,9 @@ class Player(GameBaseObject):
                 self.set_y_position(player_y_position + 2)
             if 'DOWN' in self.get_vertical_directions():
                 self.set_y_position(player_y_position - 2)
+
+    def get_key(self):
+        return self.player_item['key']
 
     def to_string(self):
         return 'X position: %s, Y position: %s' % (self.x_position, self.y_position)

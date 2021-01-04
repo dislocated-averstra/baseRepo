@@ -117,9 +117,16 @@ def player_eat_key(board, player_x_position, player_y_position):
                 player_rect = pygame.Rect(player_x_position, player_y_position, PLAYER_SIZE, PLAYER_SIZE)
                 key_rect = pygame.Rect(i * 32, q * 32, 32, 32)
                 if pygame.Rect.colliderect(player_rect, key_rect) == True:
-                    player_item.append('key')
+                    player.add_key()
                     board[i][q] = ""
 
+def use_key(board, player_x_position, player_y_position, i, q): #need to add function call. use did player hit wall for colli detect.
+    '''Use key to open door or chest.'''
+    if player.get_key() == 0:
+        player.stop_player(player_x_position, player_y_position, i, q)
+    if player.get_key() > 0:
+        player.remove_key()
+        board[i][q] = ""
 
 def did_player_hit_wall(board, player_x_position, player_y_position):
     '''Checks if the player hit the wall.'''
@@ -130,41 +137,58 @@ def did_player_hit_wall(board, player_x_position, player_y_position):
             for q in range(0, 3):
                 if board[i][q] == 'brick':
                     player.stop_player(player_x_position, player_y_position, i, q)
+                elif board[i][q] == 'chest' or board[i][q] == 'door':
+                    use_key(board, player_x_position, player_y_position, i, q)
+
     elif x_index == 0 and y_index != 23:  # left side
         for i in range(0, 2):
             for q in range(y_index - 1, y_index + 2):
                 if board[i][q] == 'brick':
                     player.stop_player(player_x_position, player_y_position, i, q)
+                elif board[i][q] == 'chest' or board[i][q] == 'door':
+                    use_key(board, player_x_position, player_y_position, i, q)
     elif x_index == 31 and y_index == 0:  # top right
         for i in range(x_index - 1, x_index + 1):
             for q in range(y_index - 1, y_index + 2):
                 if board[i][q] == 'brick':
                     player.stop_player(player_x_position, player_y_position, i, q)
+                elif board[i][q] == 'chest' or board[i][q] == 'door':
+                    use_key(board, player_x_position, player_y_position, i, q)
     elif y_index == 0 and x_index != 31:  # top side
         for i in range(x_index - 1, x_index + 2):
             for q in range(0, y_index + 2):
                 if board[i][q] == 'brick':
                     player.stop_player(player_x_position, player_y_position, i, q)
+                elif board[i][q] == 'chest' or board[i][q] == 'door':
+                    use_key(board, player_x_position, player_y_position, i, q)
     elif x_index == 31 and y_index != 23:  # right side
         for i in range(x_index - 1, x_index + 1):
             for q in range(y_index - 1, y_index + 2):
                 if board[i][q] == 'brick':
                     player.stop_player(player_x_position, player_y_position, i, q)
+                elif board[i][q] == 'chest' or board[i][q] == 'door':
+                    use_key(board, player_x_position, player_y_position, i, q)
     elif y_index == 23 and x_index != 31:  # bottom side
         for i in range(x_index - 1, x_index + 2):
             for q in range(y_index - 1, y_index + 1):
                 if board[i][q] == 'brick':
                     player.stop_player(player_x_position, player_y_position, i, q)
+                elif board[i][q] == 'chest' or board[i][q] == 'door':
+                    use_key(board, player_x_position, player_y_position, i, q)
     elif x_index == 31 and y_index == 23:  # bottom right
         for i in range(30, 32):
             for q in range(22, 24):
                 if board[i][q] == 'brick':
                     player.stop_player(player_x_position, player_y_position, i, q)
+                elif board[i][q] == 'chest' or board[i][q] == 'door':
+                    use_key(board, player_x_position, player_y_position, i, q)
     else:  # middle of board
         for i in range(x_index - 1, x_index + 2):
             for q in range(y_index - 1, y_index + 2):
                 if board[i][q] == 'brick':
                     player.stop_player(player_x_position, player_y_position, i, q)
+                elif board[i][q] == 'chest' or board[i][q] == 'door':
+                    use_key(board, player_x_position, player_y_position, i, q)
 
 
 def drawHealthMeter(currentHealth):
@@ -178,12 +202,18 @@ def draw_board(board):
     '''Draws the board with bricks.'''
     brick_wall = pygame.image.load('gameSprites/BrickWall2.png')
     key = pygame.image.load('gameSprites/Key.png')
+    chest = pygame.image.load('gameSprites/chest_sprite.png')
+    door = pygame.image.load('gameSprites/door_sprite.png')
     for i in range(0, len(board)):
         for q in range(0, len(board[i])):
             if board[i][q] == 'brick':
                 DISPLAYSURF.blit(brick_wall, (i * SPRITE_SIZE, q * SPRITE_SIZE))
             if board[i][q] == 'key':
                 DISPLAYSURF.blit(key, (i * SPRITE_SIZE, q * SPRITE_SIZE))
+            if board[i][q] == 'chest':
+                DISPLAYSURF.blit(chest, (i * SPRITE_SIZE, q * SPRITE_SIZE))
+            if board[i][q] == 'door':
+                DISPLAYSURF.blit(door, (i * SPRITE_SIZE, q * SPRITE_SIZE))
 
 
 def loop_through_brick_file(board):
