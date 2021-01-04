@@ -2,12 +2,13 @@
 
 import csv
 import sys
+
 import pygame
-from pygame.event import clear
 from pygame.locals import *
+
+from GameBoard.game_board import *
 from GameObject.game_enemy import *
 from GameObject.game_player import *
-from GameBoard.game_board import *
 
 WINDOWWIDTH = 1024
 WINDOWHEIGHT = 768
@@ -198,9 +199,11 @@ def loop_through_brick_file(board):
                     board.add_to_gameboard(i, ab, row[i])
     except FileNotFoundError:
         print ("Not found")
+    finally:
         f.close()
 
-def move_element(board):
+
+'''def move_element(board):
     with open('/Users/ngocphan/PycharmProjects/baseRepo/Python/AdventureGame/LevelLayout/brick.csv') as f:
         data = csv.reader(f)
         for row in data:
