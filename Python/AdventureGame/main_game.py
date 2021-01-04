@@ -127,18 +127,13 @@ def did_player_hit_wall(board, player_x_position, player_y_position):
     '''Checks if the player hit the wall.'''
     x_index = player_x_position // SPRITE_SIZE
     y_index = player_y_position // SPRITE_SIZE
-    if x_index == 0 and y_index != 23: #left side
-        for i in range(0, 2):
-            for q in range(y_index - 1, y_index + 2):
-                if board[i][q] == 'brick':
-                    player.stop_player(player_x_position, player_y_position, i, q)
-    elif x_index and y_index == 0: #top left
+    if x_index and y_index == 0: #top left
         for i in range(0, 2):
             for q in range(0, 2):
                 if board[i][q] == 'brick':
                     player.stop_player(player_x_position, player_y_position, i, q)
-    elif x_index == 31 and y_index != 23: #right side
-        for i in range(x_index - 1, x_index + 1):
+    elif x_index == 0 and y_index != 23: #left side
+        for i in range(0, 2):
             for q in range(y_index - 1, y_index + 2):
                 if board[i][q] == 'brick':
                     player.stop_player(player_x_position, player_y_position, i, q)
@@ -147,10 +142,14 @@ def did_player_hit_wall(board, player_x_position, player_y_position):
             for q in range(y_index-1, y_index + 2):
                 if board[i][q] == 'brick':
                     player.stop_player(player_x_position, player_y_position, i, q)
-
     elif y_index == 0 and x_index != 31: #top side
         for i in range(x_index - 1, x_index + 2):
-            for q in range(y_index, y_index + 2):
+            for q in range(0, y_index + 2):
+                if board[i][q] == 'brick':
+                    player.stop_player(player_x_position, player_y_position, i, q)
+    elif x_index == 31 and y_index != 23: #right side
+        for i in range(x_index - 1, x_index + 1):
+            for q in range(y_index - 1, y_index + 2):
                 if board[i][q] == 'brick':
                     player.stop_player(player_x_position, player_y_position, i, q)
 
@@ -164,7 +163,7 @@ def did_player_hit_wall(board, player_x_position, player_y_position):
             for q in range(22, 24):
                 if board[i][q] == 'brick':
                     player.stop_player(player_x_position, player_y_position, i, q)
-    else:
+    else: #middle of board
         for i in range(x_index - 1, x_index + 2):
             for q in range(y_index - 1, y_index + 2):
                 if board[i][q] == 'brick':
