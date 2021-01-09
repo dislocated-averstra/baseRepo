@@ -1,5 +1,6 @@
-from Python.AdventureGame.GameObject.game_object import GameBaseObject
 import pygame
+
+from Python.AdventureGame.GameObject.game_object import GameBaseObject
 
 PLAYER_SIZE = 20
 SPRITE_SIZE = 32
@@ -22,10 +23,10 @@ class Player(GameBaseObject):
         return self.size
 
     def add_key(self):
-        self.player_item['key']+=1
+        self.player_item['key'] += 1
 
     def remove_key(self):
-        self.player_item['key']-=1
+        self.player_item['key'] -= 1
 
     def get_horizontal_directions(self):
         return self.horizontal_directions
