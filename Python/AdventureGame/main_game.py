@@ -90,7 +90,8 @@ def run_game():
         draw_player_icon(player.get_x_position(), player.get_y_position(), PLAYER_SIZE, PLAYER_SIZE, RED)
         # draw_player_icon(enemy.get_x_position(), enemy.get_y_position(), PLAYER_SIZE, PLAYER_SIZE, BLACK)
         showTextScreen('Battle Square')
-        drawHealthMeter(3)
+        healthHeart(board.get_board())
+        #drawHealthMeter(3)
         # move_element(board)
         player_eat_key(board.get_board(), player.get_x_position(), player.get_y_position())
         pygame.display.update()
@@ -190,12 +191,13 @@ def did_player_hit_wall(board, player_x_position, player_y_position):
                 elif board[i][q] == 'chest' or board[i][q] == 'door':
                     use_key(board, player_x_position, player_y_position, i, q)
 
-
-def drawHealthMeter(currentHealth):
-    for i in range(currentHealth):  # draw red health bars
-        pygame.draw.rect(DISPLAYSURF, RED, (900, 50 + (10 * MAXHEALTH) - i * 10, 20, 10))
-    for i in range(MAXHEALTH):  # draw the white outlines
-        pygame.draw.rect(DISPLAYSURF, WHITE, (900, 50 + (10 * MAXHEALTH) - i * 10, 20, 10), 1)
+def healthHeart(board):
+    full_heart= pygame.image.load('gameSprites/Fullheart.png')
+    full_heart=pygame.transform.scale(full_heart,(100,100))
+    DISPLAYSURF.blit(full_heart, (780, 30))
+    empty_heart = pygame.image.load('gameSprites/EmptyHeart.png')
+    empty_heart=pygame.transform.scale(empty_heart, (100, 100))
+    DISPLAYSURF.blit(empty_heart, (860,30))
 
 
 def draw_board(board):
