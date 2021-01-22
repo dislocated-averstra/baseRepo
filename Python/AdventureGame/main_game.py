@@ -40,7 +40,7 @@ def main():
     global FPSCLOCK, DISPLAYSURF, BASICFONT, player, enemy, board, BIGFONT
 
     player = Player(64, 30, PLAYER_SIZE)
-    enemy = Enemy(0, 0)
+    enemy = Enemy(200, 200,PLAYER_SIZE)
     board = GameBoard(int(WINDOWWIDTH / 32), int(WINDOWHEIGHT / 32))
     pygame.init()
     FPSCLOCK = pygame.time.Clock()
@@ -84,14 +84,14 @@ def run_game():
         # enemy.get_y_position())
         player.move_player(WINDOWHEIGHT, WINDOWWIDTH)
         did_player_hit_wall(board.get_board(), player.get_x_position(), player.get_y_position())
-        # enemy.move_enemy(player.get_x_position(), player.get_y_position())
+        enemy.move_enemy(WINDOWHEIGHT, WINDOWWIDTH)
         DISPLAYSURF.fill(BGCOLOR)
         draw_board(board.get_board())
         draw_player_icon(player.get_x_position(), player.get_y_position(), PLAYER_SIZE, PLAYER_SIZE, RED)
-        # draw_player_icon(enemy.get_x_position(), enemy.get_y_position(), PLAYER_SIZE, PLAYER_SIZE, BLACK)
+        draw_player_icon(enemy.get_x_position(), enemy.get_y_position(), PLAYER_SIZE, PLAYER_SIZE, BLACK)
         showTextScreen('Battle Square')
         healthHeart(board.get_board())
-        #drawHealthMeter(3)
+        # drawHealthMeter(3)
         # move_element(board)
         player_eat_key(board.get_board(), player.get_x_position(), player.get_y_position())
         pygame.display.update()
@@ -121,13 +121,16 @@ def player_eat_key(board, player_x_position, player_y_position):
                     player.add_key()
                     board[i][q] = ""
 
-def use_key(board, player_x_position, player_y_position, i, q): #need to add function call. use did player hit wall for colli detect.
+
+def use_key(board, player_x_position, player_y_position, i,
+            q):  # need to add function call. use did player hit wall for colli detect.
     '''Use key to open door or chest.'''
     if player.get_key() == 0:
         player.stop_player(player_x_position, player_y_position, i, q)
     if player.get_key() > 0:
         player.remove_key()
         board[i][q] = ""
+
 
 def did_player_hit_wall(board, player_x_position, player_y_position):
     '''Checks if the player hit the wall.'''
@@ -191,13 +194,14 @@ def did_player_hit_wall(board, player_x_position, player_y_position):
                 elif board[i][q] == 'chest' or board[i][q] == 'door':
                     use_key(board, player_x_position, player_y_position, i, q)
 
+
 def healthHeart(board):
-    full_heart= pygame.image.load('gameSprites/Fullheart.png')
-    full_heart=pygame.transform.scale(full_heart,(100,100))
+    full_heart = pygame.image.load('gameSprites/Fullheart.png')
+    full_heart = pygame.transform.scale(full_heart, (100, 100))
     DISPLAYSURF.blit(full_heart, (780, 30))
     empty_heart = pygame.image.load('gameSprites/EmptyHeart.png')
-    empty_heart=pygame.transform.scale(empty_heart, (100, 100))
-    DISPLAYSURF.blit(empty_heart, (860,30))
+    empty_heart = pygame.transform.scale(empty_heart, (100, 100))
+    DISPLAYSURF.blit(empty_heart, (860, 30))
 
 
 def draw_board(board):
