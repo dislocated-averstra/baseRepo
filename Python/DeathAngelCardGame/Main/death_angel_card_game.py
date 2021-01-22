@@ -18,9 +18,11 @@ BGCOLOR = BLACK
 
 
 def main():
-    global FPSCLOCK, DISPLAYSURF
+    global FPSCLOCK, DISPLAYSURF, BASICFONT
+    pygame.init()
     FPSCLOCK = pygame.time.Clock()
     DISPLAYSURF = pygame.display.set_mode((WINDOWWIDTH, WINDOWHEIGHT))
+    BASICFONT = pygame.font.Font('freesansbold.ttf', 40)
     pygame.display.set_caption('Death Angel')
     run_game()
 
@@ -40,6 +42,8 @@ def run_game():
     third_test_sprite.set_position(400, 292)
     forth_test_sprite.set_position(400, 412)
 
+    roll_surf, roll_rect = makeTextObjs('ROLL', BASICFONT, BLUE)
+
     dice = DiceSprite()
     space_marine_sprite_list = [first_test_sprite, second_test_sprite, third_test_sprite, forth_test_sprite]
 
@@ -52,6 +56,9 @@ def run_game():
         DISPLAYSURF.blit(background, (0, 0))
         pygame.draw.rect(DISPLAYSURF, BORDERCOLOR,
                          (394, 50, 250, 485), 5)
+
+        roll_rect.topleft = (0, 32)
+        DISPLAYSURF.blit(roll_surf, roll_rect)
 
         checkForQuit()
         for event in pygame.event.get():  # event handling loop
@@ -67,6 +74,9 @@ def run_game():
                 is_mouse_over_a_space_marine(space_marine_sprite_list, previous_x_mouse_position,
                                              previous_y_mouse_position)
                 selected_space_marine = get_selected_space_marine(space_marine_sprite_list)
+                if roll_rect.collidepoint(event.pos) and not dice.is_dice_rolling:
+                    dice.roll_dice()
+
             if event.type == MOUSEMOTION:
                 x_click_position, y_click_position = pygame.mouse.get_pos()
                 if selected_space_marine is not None:
@@ -76,7 +86,7 @@ def run_game():
                     previous_x_mouse_position = x_click_position
                     previous_y_mouse_position = y_click_position
 
-        dice.roll_dice()
+
 
         # clear all the sprites
         render_update_group.clear(DISPLAYSURF, background)
@@ -128,6 +138,9 @@ def checkForQuit():
             terminate()  # terminate if the KEYUP event was for the Esc key
         pygame.event.post(event)  # put the other KEYUP event objects back
 
+def makeTextObjs(text, font, color):
+    surf = font.render(text, True, color)
+    return surf, surf.get_rect()
 
 if __name__ == '__main__':
     main()
