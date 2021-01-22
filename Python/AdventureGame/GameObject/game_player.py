@@ -10,10 +10,20 @@ class Player(GameBaseObject):
     horizontal_directions = []
     vertical_directions = []
     player_item = {'key': 0}
+    player_sprite_positions = {'1': (0, 0),
+                               '2': (0, 32),
+                               '3': (0, 64),
+                               '4': (0, 96),
+                               '5': (0, 128),
+                               '6': (0, 160),
+                               '7': (0, 192),
+                               '8': (0, 224)}
 
     def __init__(self, x_position, y_position, size):
         # GameObject__init__(self, x_position, y_position)
         self.size = size
+        self.sprite_sheet = pygame.image.load('gameSprites/WalkAnimation.png')
+        self.player_image = self.sprite_sheet.subsurface(pygame.Rect(0, 0, 32, 32))
         super().__init__(x_position, y_position)
 
     def set_size(self, size):
@@ -21,6 +31,16 @@ class Player(GameBaseObject):
 
     def get_size(self):
         return self.size
+
+    def get_player_image(self):
+        return self.player_image
+
+    def set_player_image(self):
+        image_number = 0
+        if image_number < 224:
+            image_number += 32
+            self.player_image = self.sprite_sheet.subsurface(p)
+
 
     def add_key(self):
         self.player_item['key'] += 1
