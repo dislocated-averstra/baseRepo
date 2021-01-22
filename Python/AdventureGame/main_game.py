@@ -84,7 +84,7 @@ def run_game():
         # enemy.get_y_position())
         player.move_player(WINDOWHEIGHT, WINDOWWIDTH)
         did_player_hit_wall(board.get_board(), player.get_x_position(), player.get_y_position())
-        # enemy.move_enemy(player.get_x_position(), player.get_y_position())
+        #enemy.move_enemy(WINDOWHEIGHT, WINDOWWIDTH)
         DISPLAYSURF.fill(BGCOLOR)
         draw_board(board.get_board())
         draw_player_icon()
@@ -193,13 +193,14 @@ def did_player_hit_wall(board, player_x_position, player_y_position):
                 elif board[i][q] == 'chest' or board[i][q] == 'door':
                     use_key(board, player_x_position, player_y_position, i, q)
 
+
 def healthHeart(board):
-    full_heart= pygame.image.load('gameSprites/Fullheart.png')
-    full_heart=pygame.transform.scale(full_heart,(100,100))
+    full_heart = pygame.image.load('gameSprites/Fullheart.png')
+    full_heart = pygame.transform.scale(full_heart, (100, 100))
     DISPLAYSURF.blit(full_heart, (780, 30))
     empty_heart = pygame.image.load('gameSprites/EmptyHeart.png')
-    empty_heart=pygame.transform.scale(empty_heart, (100, 100))
-    DISPLAYSURF.blit(empty_heart, (860,30))
+    empty_heart = pygame.transform.scale(empty_heart, (100, 100))
+    DISPLAYSURF.blit(empty_heart, (860, 30))
 
 
 def draw_board(board):
