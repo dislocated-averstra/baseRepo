@@ -1,4 +1,9 @@
+import pygame
+
 from Python.AdventureGame.GameObject.game_object import GameBaseObject
+
+PLAYER_SIZE = 20
+SPRITE_SIZE = 32
 
 
 class Enemy(GameBaseObject):
@@ -47,11 +52,32 @@ class Enemy(GameBaseObject):
     def remove_vertical_direction(self, direction):
         self.vertical_directions.remove(direction)
 
+    def bouncing_enemy(self, enemy_x_position, enemy_y_position, i_wall_coord, q_wall_coord):
+        enemy_rect = pygame.Rect(enemy_x_position, enemy_y_position, PLAYER_SIZE, PLAYER_SIZE)
+        wall_rect = pygame.Rect(i_wall_coord * SPRITE_SIZE, q_wall_coord * SPRITE_SIZE, SPRITE_SIZE, SPRITE_SIZE)
+        if pygame.Rect.colliderect(wall_rect, enemy_rect):
+            if self.directions[0] == "LEFT":
+                self.remove_direction("LEFT")
+                self.directions.append("RIGHT")
+
+            elif self.directions[0] == "RIGHT":
+                self.remove_direction("RIGHT")
+                self.directions.append("UP")
+
+            if self.directions[0] == "UP":
+                self.remove_direction("UP")
+                self.directions.append("DOWN")
+
+            if self.directions[0] == "DOWN":
+                self.remove_direction("DOWN")
+                self.directions.append("UP")
+
+
     def move_enemy(self, window_height, window_width):
 
         if self.directions[0] == "LEFT" and self.get_x_position() - 2 > 0:
             self.set_x_position(self.get_x_position() - 2)
-            if self.get_x_position() == 32:
+            if self.get_x_position() == 2:
                 self.remove_direction("LEFT")
                 self.directions.append("RIGHT")
 
@@ -63,15 +89,15 @@ class Enemy(GameBaseObject):
 
         if self.directions[0] == 'DOWN' and self.get_y_position() + 2 < (window_height - self.size):
             self.set_y_position(self.get_y_position() + 2)
-            if self.get_y_position() == 500:
+            if self.get_y_position() == window_height-2:
                 self.remove_direction("DOWN")
                 self.directions.append("UP")
 
-        if self.directions[0] == 'UP' and self.get_y_position() -2>0:
+        if self.directions[0] == 'UP' and self.get_y_position() - 2 > 0:
             self.set_y_position(self.get_y_position() - 2)
-            if self.get_y_position() == 300:
+            if self.get_y_position() == 2:
                 self.remove_direction("UP")
-                self.directions.append("LEFT")
+                self.directions.append("DOWN")
 
     def to_string(self):
         return 'X position: %s, Y position: %s' % (self.x_position, self.y_position)
