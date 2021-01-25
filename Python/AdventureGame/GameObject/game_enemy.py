@@ -7,7 +7,7 @@ SPRITE_SIZE = 32
 
 
 class Enemy(GameBaseObject):
-    directions = ["LEFT"]
+    directions = ["UP"]
     horizontal_directions = []
     vertical_directions = []
 
@@ -64,14 +64,14 @@ class Enemy(GameBaseObject):
                 self.remove_direction("RIGHT")
                 self.directions.append("UP")
 
-            if self.directions[0] == "UP":
-                self.remove_direction("UP")
-                self.directions.append("DOWN")
-
-            if self.directions[0] == "DOWN":
+            elif self.directions[0] == "DOWN":
                 self.remove_direction("DOWN")
                 self.directions.append("UP")
 
+            else:
+                self.directions[0] == "UP"
+                self.remove_direction("UP")
+                self.directions.append("DOWN")
 
     def move_enemy(self, window_height, window_width):
 
@@ -83,13 +83,13 @@ class Enemy(GameBaseObject):
 
         if self.directions[0] == "RIGHT" and self.get_x_position() + 2 < (window_width - self.size):
             self.set_x_position(self.get_x_position() + 2)
-            if self.get_x_position() == 900:
+            if self.get_x_position() == window_width - 60:
                 self.remove_direction("RIGHT")
-                self.directions.append("DOWN")
+                self.directions.append("UP")
 
         if self.directions[0] == 'DOWN' and self.get_y_position() + 2 < (window_height - self.size):
             self.set_y_position(self.get_y_position() + 2)
-            if self.get_y_position() == window_height-2:
+            if self.get_y_position() == window_height - 2:
                 self.remove_direction("DOWN")
                 self.directions.append("UP")
 

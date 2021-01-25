@@ -40,7 +40,7 @@ def main():
     global FPSCLOCK, DISPLAYSURF, BASICFONT, player, enemy, board, BIGFONT
 
     player = Player(60, 30, PLAYER_SIZE)
-    enemy = Enemy(300, 200, PLAYER_SIZE)
+    enemy = Enemy(300, 40, PLAYER_SIZE)
     board = GameBoard(int(WINDOWWIDTH / 32), int(WINDOWHEIGHT / 32))
     pygame.init()
     FPSCLOCK = pygame.time.Clock()
@@ -140,58 +140,44 @@ def did_enemy_hit_wall(board, enemy_x_position, enemy_y_position):
     if x_index == 0 and y_index == 0:  # top left
         for i in range(0, 2):
             for q in range(0, 2):
-                if board[i][q] == 'brick':
-                    enemy.bouncing_enemy(enemy_x_position, enemy_y_position, i, q)
-                elif board[i][q] == 'chest' or board[i][q] == 'door':
+                if board[i][q] == 'brick' or board[i][q] == 'chest' or board[i][q] == 'door' or board[i][q] == 'key':
                     enemy.bouncing_enemy(enemy_x_position, enemy_y_position, i, q)
     elif x_index == 0 and y_index != 23:  # left side
         for i in range(0, 2):
             for q in range(y_index - 1, y_index + 2):
-                if board[i][q] == 'brick':
-                    enemy.bouncing_enemy(enemy_x_position, enemy_y_position, i, q)
-                elif board[i][q] == 'chest' or board[i][q] == 'door':
+                if board[i][q] == 'brick' or board[i][q] == 'chest' or board[i][q] == 'door' or board[i][q] == 'key':
                     enemy.bouncing_enemy(enemy_x_position, enemy_y_position, i, q)
     elif x_index == 31 and y_index == 0:  # top right
         for i in range(x_index - 1, x_index + 1):
             for q in range(y_index - 1, y_index + 2):
-                if board[i][q] == 'brick':
-                    enemy.bouncing_enemy(enemy_x_position, enemy_y_position, i, q)
-                elif board[i][q] == 'chest' or board[i][q] == 'door':
+                if board[i][q] == 'brick' or board[i][q] == 'chest' or board[i][q] == 'door' or board[i][q] == 'key':
                     enemy.bouncing_enemy(enemy_x_position, enemy_y_position, i, q)
     elif y_index == 0 and x_index != 31:  # top side
         for i in range(x_index - 1, x_index + 2):
             for q in range(0, y_index + 2):
-                if board[i][q] == 'brick':
+                if board[i][q] == 'brick' or board[i][q] == 'chest' or board[i][q] == 'door' or board[i][q] == 'key':
                     enemy.bouncing_enemy(enemy_x_position, enemy_y_position, i, q)
-                elif board[i][q] == 'chest' or board[i][q] == 'door':
-                    enemy.bouncing_enemy(enemy_x_position, enemy_y_position, i, q)
+
     elif x_index == 31 and y_index != 23:  # right side
         for i in range(x_index - 1, x_index + 1):
             for q in range(y_index - 1, y_index + 2):
-                if board[i][q] == 'brick':
-                    enemy.bouncing_enemy(enemy_x_position, enemy_y_position, i, q)
-                elif board[i][q] == 'chest' or board[i][q] == 'door':
+                if board[i][q] == 'brick' or board[i][q] == 'chest' or board[i][q] == 'door' or board[i][q] == 'key':
                     enemy.bouncing_enemy(enemy_x_position, enemy_y_position, i, q)
     elif y_index == 23 and x_index != 31:  # bottom side
         for i in range(x_index - 1, x_index + 2):
             for q in range(y_index - 1, y_index + 1):
-                if board[i][q] == 'brick':
+                if board[i][q] == 'brick' or board[i][q] == 'chest' or board[i][q] == 'door' or board[i][q] == 'key':
                     enemy.bouncing_enemy(enemy_x_position, enemy_y_position, i, q)
-                elif board[i][q] == 'chest' or board[i][q] == 'door':
-                    enemy.bouncing_enemy(enemy_x_position, enemy_y_position, i, q)
+
     elif x_index == 31 and y_index == 23:  # bottom right
         for i in range(30, 32):
             for q in range(22, 24):
-                if board[i][q] == 'brick':
-                    enemy.bouncing_enemy(enemy_x_position, enemy_y_position, i, q)
-                elif board[i][q] == 'chest' or board[i][q] == 'door':
+                if board[i][q] == 'brick' or board[i][q] == 'chest' or board[i][q] == 'door' or board[i][q] == 'key':
                     enemy.bouncing_enemy(enemy_x_position, enemy_y_position, i, q)
     else:  # middle of board
         for i in range(x_index - 1, x_index + 2):
             for q in range(y_index - 1, y_index + 2):
-                if board[i][q] == 'brick':
-                    enemy.bouncing_enemy(enemy_x_position, enemy_y_position, i, q)
-                elif board[i][q] == 'chest' or board[i][q] == 'door':
+                if board[i][q] == 'brick' or board[i][q] == 'chest' or board[i][q] == 'door' or board[i][q] == 'key':
                     enemy.bouncing_enemy(enemy_x_position, enemy_y_position, i, q)
 
 
