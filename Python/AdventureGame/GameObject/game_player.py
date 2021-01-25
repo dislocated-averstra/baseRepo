@@ -20,17 +20,14 @@ class Player(GameBaseObject):
                                '7': (192, 0),
                                '8': (224, 0)}
     image_number = 0
-    total_roll_time = 3
     time_between_sprite_change = .1
-    last_change_time = 0
-    dice_roll_start_time = 0
+    last_change_time = time.time()
 
     def __init__(self, x_position, y_position, size):
         # GameObject__init__(self, x_position, y_position)
         self.size = size
         self.sprite_sheet = pygame.image.load('gameSprites/WalkAnimation.png')
         self.player_image = self.sprite_sheet.subsurface(pygame.Rect(0, 0, 32, 32))
-        self.is_dice_rolling = False
         super().__init__(x_position, y_position)
 
     def set_size(self, size):
@@ -42,12 +39,13 @@ class Player(GameBaseObject):
     def get_player_image(self):
         return self.player_image
 
-    def set_player_image(self): #flip the image for left and add clocks
+    def set_player_image(self):  # flip the image for left and add clocks
         if self.horizontal_directions[0] == 'RIGHT':
             self.player_image = self.sprite_sheet.subsurface(pygame.Rect(self.image_number, 0, 32, 32))
             self.add_to_image_number()
         elif self.horizontal_directions[0] == 'LEFT':
-            self.player_image = pygame.transform.flip(self.sprite_sheet.subsurface(pygame.Rect(self.image_number, 0, 32, 32), True, False))
+            self.player_image = self.sprite_sheet.subsurface(pygame.Rect(self.image_number, 0, 32, 32))
+            self.player_image = pygame.transform.flip(self.player_image, True, False)
             self.add_to_image_number()
 
     def add_to_image_number(self):
@@ -55,23 +53,11 @@ class Player(GameBaseObject):
         if self.image_number == 256:
             self.image_number = 0
 
-    def roll_dice(self):
-        self.is_dice_rolling = True
-        start_time = time.time()
-        self.dice_roll_start_time = start_time
-        self.last_change_time = start_time
-
     def image_updater(self):
-        if self.is_dice_rolling:
-            current_time = time.time()
-            if current_time - self.dice_roll_start_time < self.total_roll_time:
-                if current_time - self.last_change_time < self.time_between_sprite_change:
-                    self.set_player_image()
-                elif current_time - self.last_change_time >= self.time_between_sprite_change:
-                    self.last_change_time = current_time
-                    self.set_player_image()
-            elif current_time - self.dice_roll_start_time >= self.total_roll_time:
-                self.is_dice_rolling = False
+        current_time = time.time()
+        if current_time - self.last_change_time >= self.time_between_sprite_change:
+            self.last_change_time = current_time
+            self.set_player_image()
 
     def add_key(self):
         self.player_item['key'] += 1
@@ -131,8 +117,10 @@ class Player(GameBaseObject):
                 self.set_y_position(self.get_y_position() + 1)
             if horizontal_direction == 'LEFT' and self.get_x_position() - 1 > 0:
                 self.set_x_position(self.get_x_position() - 1)
+                self.image_updater()
             if horizontal_direction == 'RIGHT' and self.get_x_position() + 1 < (window_width - self.size):
                 self.set_x_position(self.get_x_position() + 1)
+                self.image_updater()
 
     def stop_player(self, player_x_position, player_y_position, i_wall_coord, q_wall_coord):
         player_rect = pygame.Rect(player_x_position, player_y_position, PLAYER_SIZE, PLAYER_SIZE)
