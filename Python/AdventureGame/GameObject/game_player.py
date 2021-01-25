@@ -1,4 +1,5 @@
 import pygame
+import time
 
 from Python.AdventureGame.GameObject.game_object import GameBaseObject
 
@@ -10,10 +11,23 @@ class Player(GameBaseObject):
     horizontal_directions = []
     vertical_directions = []
     player_item = {'key': 0}
+    player_sprite_positions = {'1': (0, 0),
+                               '2': (32, 0),
+                               '3': (64, 0),
+                               '4': (96, 0),
+                               '5': (128, 0),
+                               '6': (160, 0),
+                               '7': (192, 0),
+                               '8': (224, 0)}
+    image_number = 0
+    time_between_sprite_change = .1
+    last_change_time = time.time()
 
     def __init__(self, x_position, y_position, size):
         # GameObject__init__(self, x_position, y_position)
         self.size = size
+        self.sprite_sheet = pygame.image.load('gameSprites/WalkAnimation.png')
+        self.player_image = self.sprite_sheet.subsurface(pygame.Rect(0, 0, 32, 32))
         super().__init__(x_position, y_position)
 
     def set_size(self, size):
@@ -21,6 +35,29 @@ class Player(GameBaseObject):
 
     def get_size(self):
         return self.size
+
+    def get_player_image(self):
+        return self.player_image
+
+    def set_player_image(self):  # flip the image for left and add clocks
+        if self.horizontal_directions[0] == 'RIGHT':
+            self.player_image = self.sprite_sheet.subsurface(pygame.Rect(self.image_number, 0, 32, 32))
+            self.add_to_image_number()
+        elif self.horizontal_directions[0] == 'LEFT':
+            self.player_image = self.sprite_sheet.subsurface(pygame.Rect(self.image_number, 0, 32, 32))
+            self.player_image = pygame.transform.flip(self.player_image, True, False)
+            self.add_to_image_number()
+
+    def add_to_image_number(self):
+        self.image_number += 32
+        if self.image_number == 256:
+            self.image_number = 0
+
+    def image_updater(self):
+        current_time = time.time()
+        if current_time - self.last_change_time >= self.time_between_sprite_change:
+            self.last_change_time = current_time
+            self.set_player_image()
 
     def add_key(self):
         self.player_item['key'] += 1
@@ -60,6 +97,7 @@ class Player(GameBaseObject):
 
     def move_player(self, window_height, window_width):
         horizontal_direction, vertical_direction = self.get_current_direction()
+
         if horizontal_direction is None and vertical_direction is not None:
             if vertical_direction == 'UP' and self.get_y_position() - 2 > 0:
                 self.set_y_position(self.get_y_position() - 2)
@@ -68,8 +106,10 @@ class Player(GameBaseObject):
         elif horizontal_direction is not None and vertical_direction is None:
             if horizontal_direction == 'LEFT' and self.get_x_position() - 2 > 0:
                 self.set_x_position(self.get_x_position() - 2)
+                self.image_updater()
             if horizontal_direction == 'RIGHT' and self.get_x_position() + 2 < (window_width - self.size):
                 self.set_x_position(self.get_x_position() + 2)
+                self.image_updater()
         elif horizontal_direction is not None and vertical_direction is not None:
             if vertical_direction == 'UP' and self.get_y_position() - 1 > 0:
                 self.set_y_position(self.get_y_position() - 1)
@@ -77,8 +117,10 @@ class Player(GameBaseObject):
                 self.set_y_position(self.get_y_position() + 1)
             if horizontal_direction == 'LEFT' and self.get_x_position() - 1 > 0:
                 self.set_x_position(self.get_x_position() - 1)
+                self.image_updater()
             if horizontal_direction == 'RIGHT' and self.get_x_position() + 1 < (window_width - self.size):
                 self.set_x_position(self.get_x_position() + 1)
+                self.image_updater()
 
     def stop_player(self, player_x_position, player_y_position, i_wall_coord, q_wall_coord):
         player_rect = pygame.Rect(player_x_position, player_y_position, PLAYER_SIZE, PLAYER_SIZE)

@@ -82,15 +82,14 @@ def run_game():
 
         # check_for_enemy_player_overlap(player.get_x_position(), player.get_y_position(), enemy.get_x_position(),
         # enemy.get_y_position())
-        enemy.move_enemy(WINDOWHEIGHT, WINDOWWIDTH)
         player.move_player(WINDOWHEIGHT, WINDOWWIDTH)
         did_enemy_hit_wall(board.get_board(), enemy.get_x_position(), enemy.get_y_position())
         did_player_hit_wall(board.get_board(), player.get_x_position(), player.get_y_position())
-
+        #enemy.move_enemy(WINDOWHEIGHT, WINDOWWIDTH)
         DISPLAYSURF.fill(BGCOLOR)
         draw_board(board.get_board())
-        draw_player_icon(player.get_x_position(), player.get_y_position(), PLAYER_SIZE, PLAYER_SIZE, RED)
-        draw_player_icon(enemy.get_x_position(), enemy.get_y_position(), PLAYER_SIZE, PLAYER_SIZE, BLACK)
+        draw_player_icon()
+        # draw_player_icon(enemy.get_x_position(), enemy.get_y_position(), PLAYER_SIZE, PLAYER_SIZE, BLACK)
         showTextScreen('Battle Square')
         healthHeart(board.get_board())
         # drawHealthMeter(3)
@@ -100,9 +99,8 @@ def run_game():
         FPSCLOCK.tick(FPS)
 
 
-def draw_player_icon(x_position, y_position, icon_width_, icon_height, color):
-    rect_icon = pygame.Rect(x_position, y_position, icon_width_, icon_height)
-    pygame.draw.rect(DISPLAYSURF, color, rect_icon)
+def draw_player_icon():
+    DISPLAYSURF.blit(player.get_player_image(), (player.get_x_position(), player.get_y_position()))
 
 
 def check_for_enemy_player_overlap(player_x_position, player_y_position, enemy_x_position, enemy_y_position):
@@ -118,20 +116,20 @@ def player_eat_key(board, player_x_position, player_y_position):
         for q in range(0, len(board[i])):
             if board[i][q] == 'key':
                 player_rect = pygame.Rect(player_x_position, player_y_position, PLAYER_SIZE, PLAYER_SIZE)
-                key_rect = pygame.Rect(i * 32, q * 32, 32, 32)
+                key_rect = pygame.Rect(i * SPRITE_SIZE, q * SPRITE_SIZE, SPRITE_SIZE, SPRITE_SIZE)
                 if pygame.Rect.colliderect(player_rect, key_rect) == True:
                     player.add_key()
                     board[i][q] = ""
 
-
-def use_key(board, player_x_position, player_y_position, i,
-            q):  # need to add function call. use did player hit wall for colli detect.
+def use_key(board, player_x_position, player_y_position, i, q): #need to add function call. use did player hit wall for colli detect.
     '''Use key to open door or chest.'''
     if player.get_key() == 0:
         player.stop_player(player_x_position, player_y_position, i, q)
     if player.get_key() > 0:
-        player.remove_key()
-        board[i][q] = ""
+        player_rect = pygame.Rect(player_x_position, player_y_position, PLAYER_SIZE, PLAYER_SIZE)
+        if pygame.Rect.colliderect(player_rect, pygame.Rect(i * SPRITE_SIZE, q * SPRITE_SIZE, SPRITE_SIZE, SPRITE_SIZE)):
+            player.remove_key()
+            board[i][q] = ""
 
 
 def did_enemy_hit_wall(board, enemy_x_position, enemy_y_position):
@@ -192,7 +190,6 @@ def did_player_hit_wall(board, player_x_position, player_y_position):
                     player.stop_player(player_x_position, player_y_position, i, q)
                 elif board[i][q] == 'chest' or board[i][q] == 'door':
                     use_key(board, player_x_position, player_y_position, i, q)
-
     elif x_index == 0 and y_index != 23:  # left side
         for i in range(0, 2):
             for q in range(y_index - 1, y_index + 2):
