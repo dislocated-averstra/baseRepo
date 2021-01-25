@@ -1,4 +1,5 @@
 import pygame
+import time
 
 from Python.AdventureGame.GameObject.game_object import GameBaseObject
 
@@ -11,19 +12,25 @@ class Player(GameBaseObject):
     vertical_directions = []
     player_item = {'key': 0}
     player_sprite_positions = {'1': (0, 0),
-                               '2': (0, 32),
-                               '3': (0, 64),
-                               '4': (0, 96),
-                               '5': (0, 128),
-                               '6': (0, 160),
-                               '7': (0, 192),
-                               '8': (0, 224)}
+                               '2': (32, 0),
+                               '3': (64, 0),
+                               '4': (96, 0),
+                               '5': (128, 0),
+                               '6': (160, 0),
+                               '7': (192, 0),
+                               '8': (224, 0)}
+    image_number = 0
+    total_roll_time = 3
+    time_between_sprite_change = .1
+    last_change_time = 0
+    dice_roll_start_time = 0
 
     def __init__(self, x_position, y_position, size):
         # GameObject__init__(self, x_position, y_position)
         self.size = size
         self.sprite_sheet = pygame.image.load('gameSprites/WalkAnimation.png')
         self.player_image = self.sprite_sheet.subsurface(pygame.Rect(0, 0, 32, 32))
+        self.is_dice_rolling = False
         super().__init__(x_position, y_position)
 
     def set_size(self, size):
@@ -35,12 +42,36 @@ class Player(GameBaseObject):
     def get_player_image(self):
         return self.player_image
 
-    def set_player_image(self):
-        image_number = 0
-        if image_number < 224:
-            image_number += 32
-            self.player_image = self.sprite_sheet.subsurface(p)
+    def set_player_image(self): #flip the image for left and add clocks
+        if self.horizontal_directions[0] == 'RIGHT':
+            self.player_image = self.sprite_sheet.subsurface(pygame.Rect(self.image_number, 0, 32, 32))
+            self.add_to_image_number()
+        elif self.horizontal_directions[0] == 'LEFT':
+            self.player_image = pygame.transform.flip(self.sprite_sheet.subsurface(pygame.Rect(self.image_number, 0, 32, 32), True, False))
+            self.add_to_image_number()
 
+    def add_to_image_number(self):
+        self.image_number += 32
+        if self.image_number == 256:
+            self.image_number = 0
+
+    def roll_dice(self):
+        self.is_dice_rolling = True
+        start_time = time.time()
+        self.dice_roll_start_time = start_time
+        self.last_change_time = start_time
+
+    def image_updater(self):
+        if self.is_dice_rolling:
+            current_time = time.time()
+            if current_time - self.dice_roll_start_time < self.total_roll_time:
+                if current_time - self.last_change_time < self.time_between_sprite_change:
+                    self.set_player_image()
+                elif current_time - self.last_change_time >= self.time_between_sprite_change:
+                    self.last_change_time = current_time
+                    self.set_player_image()
+            elif current_time - self.dice_roll_start_time >= self.total_roll_time:
+                self.is_dice_rolling = False
 
     def add_key(self):
         self.player_item['key'] += 1
@@ -80,6 +111,7 @@ class Player(GameBaseObject):
 
     def move_player(self, window_height, window_width):
         horizontal_direction, vertical_direction = self.get_current_direction()
+
         if horizontal_direction is None and vertical_direction is not None:
             if vertical_direction == 'UP' and self.get_y_position() - 2 > 0:
                 self.set_y_position(self.get_y_position() - 2)
@@ -88,8 +120,10 @@ class Player(GameBaseObject):
         elif horizontal_direction is not None and vertical_direction is None:
             if horizontal_direction == 'LEFT' and self.get_x_position() - 2 > 0:
                 self.set_x_position(self.get_x_position() - 2)
+                self.image_updater()
             if horizontal_direction == 'RIGHT' and self.get_x_position() + 2 < (window_width - self.size):
                 self.set_x_position(self.get_x_position() + 2)
+                self.image_updater()
         elif horizontal_direction is not None and vertical_direction is not None:
             if vertical_direction == 'UP' and self.get_y_position() - 1 > 0:
                 self.set_y_position(self.get_y_position() - 1)

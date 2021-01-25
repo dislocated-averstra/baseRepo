@@ -40,7 +40,7 @@ def main():
     global FPSCLOCK, DISPLAYSURF, BASICFONT, player, enemy, board, BIGFONT
 
     player = Player(64, 30, PLAYER_SIZE)
-    enemy = Enemy(0, 0)
+    enemy = Enemy(100, 100, PLAYER_SIZE)
     board = GameBoard(int(WINDOWWIDTH / 32), int(WINDOWHEIGHT / 32))
     pygame.init()
     FPSCLOCK = pygame.time.Clock()
@@ -100,8 +100,6 @@ def run_game():
 
 def draw_player_icon():
     DISPLAYSURF.blit(player.get_player_image(), (player.get_x_position(), player.get_y_position()))
-
-
 
 
 def check_for_enemy_player_overlap(player_x_position, player_y_position, enemy_x_position, enemy_y_position):
