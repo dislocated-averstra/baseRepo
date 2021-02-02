@@ -142,8 +142,8 @@ class Player(GameBaseObject):
         elif board[i][q] == 'chest' or board[i][q] == 'door':
             self.use_key(board, player_x_position, player_y_position, i, q)
 
-    def did_player_hit_wall(self,board, player_x_position, player_y_position):
-        '''Checks if the player hit the wall.'''
+    '''def did_player_hit_wall(self,board, player_x_position, player_y_position):
+        Checks if the player hit the wall.
         x_index = player_x_position // SPRITE_SIZE
         y_index = player_y_position // SPRITE_SIZE
 
@@ -178,7 +178,7 @@ class Player(GameBaseObject):
         else:  # middle of board
             for i in range(x_index - 1, x_index + 2):
                 for q in range(y_index - 1, y_index + 2):
-                    self.stop_use_key_call_func(board, player_x_position, player_y_position, i, q)
+                    self.stop_use_key_call_func(board, player_x_position, player_y_position, i, q)'''
 
     def get_key(self):
         return self.player_item['key']
