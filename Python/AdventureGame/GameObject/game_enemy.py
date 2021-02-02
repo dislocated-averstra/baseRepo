@@ -56,6 +56,7 @@ class Enemy(GameBaseObject):
         enemy_rect = pygame.Rect(enemy_x_position, enemy_y_position, PLAYER_SIZE, PLAYER_SIZE)
         wall_rect = pygame.Rect(i_wall_coord * SPRITE_SIZE, q_wall_coord * SPRITE_SIZE, SPRITE_SIZE, SPRITE_SIZE)
         if pygame.Rect.colliderect(wall_rect, enemy_rect):
+
             if self.directions[0] == "LEFT":
                 self.remove_direction("LEFT")
                 self.directions.append("RIGHT")
@@ -101,3 +102,45 @@ class Enemy(GameBaseObject):
 
     def to_string(self):
         return 'X position: %s, Y position: %s' % (self.x_position, self.y_position)
+
+    def bounce_call_function(self, board, enemy_x_position, enemy_y_position, i, q):
+        if board[i][q] == 'brick' or board[i][q] == 'chest' or board[i][q] == 'door' or board[i][q] == 'key':
+            self.bouncing_enemy(enemy_x_position, enemy_y_position, i, q)
+
+    def did_enemy_hit_wall(self, board, enemy_x_position, enemy_y_position):
+        x_index = enemy_x_position // SPRITE_SIZE
+        y_index = enemy_y_position // SPRITE_SIZE
+        if x_index == 0 and y_index == 0:  # top left
+            for i in range(0, 2):
+                for q in range(0, 2):
+                    self.bounce_call_function(board, enemy_x_position, enemy_y_position, i, q)
+        elif x_index == 0 and y_index != 23:  # left side
+            for i in range(0, 2):
+                for q in range(y_index - 1, y_index + 2):
+                    self.bounce_call_function(board, enemy_x_position, enemy_y_position, i, q)
+        elif x_index == 31 and y_index == 0:  # top right
+            for i in range(x_index - 1, x_index + 1):
+                for q in range(y_index - 1, y_index + 2):
+                    self.bounce_call_function(board, enemy_x_position, enemy_y_position, i, q)
+        elif y_index == 0 and x_index != 31:  # top side
+            for i in range(x_index - 1, x_index + 2):
+                for q in range(0, y_index + 2):
+                    self.bounce_call_function(board, enemy_x_position, enemy_y_position, i, q)
+
+        elif x_index == 31 and y_index != 23:  # right side
+            for i in range(x_index - 1, x_index + 1):
+                for q in range(y_index - 1, y_index + 2):
+                    self.bounce_call_function(board, enemy_x_position, enemy_y_position, i, q)
+        elif y_index == 23 and x_index != 31:  # bottom side
+            for i in range(x_index - 1, x_index + 2):
+                for q in range(y_index - 1, y_index + 1):
+                    self.bounce_call_function(board, enemy_x_position, enemy_y_position, i, q)
+
+        elif x_index == 31 and y_index == 23:  # bottom right
+            for i in range(30, 32):
+                for q in range(22, 24):
+                    self.bounce_call_function(board, enemy_x_position, enemy_y_position, i, q)
+        else:  # middle of board
+            for i in range(x_index - 1, x_index + 2):
+                for q in range(y_index - 1, y_index + 2):
+                    self.bounce_call_function(board, enemy_x_position, enemy_y_position, i, q)
