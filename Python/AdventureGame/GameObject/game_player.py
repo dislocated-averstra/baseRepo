@@ -3,7 +3,6 @@ import time
 
 from Python.AdventureGame.GameObject.game_object import GameBaseObject
 
-
 PLAYER_SIZE = 20
 SPRITE_SIZE = 32
 
@@ -136,60 +135,27 @@ class Player(GameBaseObject):
             if 'DOWN' in self.get_vertical_directions():
                 self.set_y_position(player_y_position - 2)
 
-    def stop_use_key_call_func(self,board,player_x_position,player_y_position,i,q):
+    def stop_use_key_call_func(self, board, player_x_position, player_y_position, i, q):
         if board[i][q] == 'brick':
             self.stop_player(player_x_position, player_y_position, i, q)
         elif board[i][q] == 'chest' or board[i][q] == 'door':
             self.use_key(board, player_x_position, player_y_position, i, q)
 
-    '''def did_player_hit_wall(self,board, player_x_position, player_y_position):
-        Checks if the player hit the wall.
-        x_index = player_x_position // SPRITE_SIZE
-        y_index = player_y_position // SPRITE_SIZE
-
-        if x_index == 0 and y_index == 0:  # top left
-            for i in range(0, 2):
-                for q in range(0, 2):
-                    self.stop_use_key_call_func(board, player_x_position, player_y_position, i, q)
-        elif x_index == 0 and y_index != 23:  # left side
-            for i in range(0, 2):
-                for q in range(y_index - 1, y_index + 2):
-                    self.stop_use_key_call_func(board, player_x_position, player_y_position, i, q)
-        elif x_index == 31 and y_index == 0:  # top right
-            for i in range(x_index - 1, x_index + 1):
-                for q in range(y_index - 1, y_index + 2):
-                    self.stop_use_key_call_func(board, player_x_position, player_y_position, i, q)
-        elif y_index == 0 and x_index != 31:  # top side
-            for i in range(x_index - 1, x_index + 2):
-                for q in range(0, y_index + 2):
-                    self.stop_use_key_call_func(board, player_x_position, player_y_position, i, q)
-        elif x_index == 31 and y_index != 23:  # right side
-            for i in range(x_index - 1, x_index + 1):
-                for q in range(y_index - 1, y_index + 2):
-                    self.stop_use_key_call_func(board, player_x_position, player_y_position, i, q)
-        elif y_index == 23 and x_index != 31:  # bottom side
-            for i in range(x_index - 1, x_index + 2):
-                for q in range(y_index - 1, y_index + 1):
-                    self.stop_use_key_call_func(board, player_x_position, player_y_position, i, q)
-        elif x_index == 31 and y_index == 23:  # bottom right
-            for i in range(30, 32):
-                for q in range(22, 24):
-                    self.stop_use_key_call_func(board, player_x_position, player_y_position, i, q)
-        else:  # middle of board
-            for i in range(x_index - 1, x_index + 2):
-                for q in range(y_index - 1, y_index + 2):
-                    self.stop_use_key_call_func(board, player_x_position, player_y_position, i, q)'''
+    def did_player_hit_wall(self, board, player_x_position, player_y_position):
+        self.did_object_hit_wall(self.stop_use_key_call_func, board, player_x_position, player_y_position)
 
     def get_key(self):
         return self.player_item['key']
 
-    def use_key(self,board, player_x_position, player_y_position, i, q):  # need to add function call. use did player hit wall for colli detect.
+    def use_key(self, board, player_x_position, player_y_position, i,
+                q):  # need to add function call. use did player hit wall for colli detect.
         '''Use key to open door or chest.'''
         if self.get_key() == 0:
             self.stop_player(player_x_position, player_y_position, i, q)
         if self.get_key() > 0:
             player_rect = pygame.Rect(player_x_position, player_y_position, PLAYER_SIZE, PLAYER_SIZE)
-            if pygame.Rect.colliderect(player_rect, pygame.Rect(i * SPRITE_SIZE, q * SPRITE_SIZE, SPRITE_SIZE, SPRITE_SIZE)):
+            if pygame.Rect.colliderect(player_rect,
+                                       pygame.Rect(i * SPRITE_SIZE, q * SPRITE_SIZE, SPRITE_SIZE, SPRITE_SIZE)):
                 self.remove_key()
                 board[i][q] = ""
 
