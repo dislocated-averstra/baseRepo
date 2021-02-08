@@ -135,8 +135,29 @@ class Player(GameBaseObject):
             if 'DOWN' in self.get_vertical_directions():
                 self.set_y_position(player_y_position - 2)
 
+    def stop_use_key_call_func(self, board, player_x_position, player_y_position, i, q):
+        if board[i][q] == 'brick':
+            self.stop_player(player_x_position, player_y_position, i, q)
+        elif board[i][q] == 'chest' or board[i][q] == 'door':
+            self.use_key(board, player_x_position, player_y_position, i, q)
+
+    def did_player_hit_wall(self, board, player_x_position, player_y_position):
+        self.did_object_hit_wall(self.stop_use_key_call_func, board, player_x_position, player_y_position)
+
     def get_key(self):
         return self.player_item['key']
+
+    def use_key(self, board, player_x_position, player_y_position, i,
+                q):  # need to add function call. use did player hit wall for colli detect.
+        '''Use key to open door or chest.'''
+        if self.get_key() == 0:
+            self.stop_player(player_x_position, player_y_position, i, q)
+        if self.get_key() > 0:
+            player_rect = pygame.Rect(player_x_position, player_y_position, PLAYER_SIZE, PLAYER_SIZE)
+            if pygame.Rect.colliderect(player_rect,
+                                       pygame.Rect(i * SPRITE_SIZE, q * SPRITE_SIZE, SPRITE_SIZE, SPRITE_SIZE)):
+                self.remove_key()
+                board[i][q] = ""
 
     def to_string(self):
         return 'X position: %s, Y position: %s' % (self.x_position, self.y_position)

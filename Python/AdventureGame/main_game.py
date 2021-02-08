@@ -23,6 +23,7 @@ TEXTSHADOWCOLOR = GRAY
 TEXTCOLOR = WHITE
 
 PLAYER_SIZE = 20
+ENERMY_SIZE = 20
 SPRITE_SIZE = 32
 BGCOLOR = DARKGREEN
 FPS = 60
@@ -83,13 +84,13 @@ def run_game():
         # check_for_enemy_player_overlap(player.get_x_position(), player.get_y_position(), enemy.get_x_position(),
         # enemy.get_y_position())
         player.move_player(WINDOWHEIGHT, WINDOWWIDTH)
-        did_enemy_hit_wall(board.get_board(), enemy.get_x_position(), enemy.get_y_position())
-        did_player_hit_wall(board.get_board(), player.get_x_position(), player.get_y_position())
-        #enemy.move_enemy(WINDOWHEIGHT, WINDOWWIDTH)
+        enemy.did_enemy_hit_wall(board.get_board(), enemy.get_x_position(), enemy.get_y_position())
+        player.did_player_hit_wall(board.get_board(), player.get_x_position(), player.get_y_position())
+        enemy.move_enemy(WINDOWHEIGHT, WINDOWWIDTH)
         DISPLAYSURF.fill(BGCOLOR)
         draw_board(board.get_board())
         draw_player_icon()
-        # draw_player_icon(enemy.get_x_position(), enemy.get_y_position(), PLAYER_SIZE, PLAYER_SIZE, BLACK)
+        draw_enemy_icon(enemy.get_x_position(), enemy.get_y_position(), ENERMY_SIZE, ENERMY_SIZE, BLACK)
         showTextScreen('Battle Square')
         healthHeart(board.get_board())
         # drawHealthMeter(3)
@@ -101,6 +102,11 @@ def run_game():
 
 def draw_player_icon():
     DISPLAYSURF.blit(player.get_player_image(), (player.get_x_position(), player.get_y_position()))
+
+
+def draw_enemy_icon(x_position, y_position, icon_width_, icon_height, color):
+    rect_icon = pygame.Rect(x_position, y_position, icon_width_, icon_height)
+    pygame.draw.rect(DISPLAYSURF, color, rect_icon)
 
 
 def check_for_enemy_player_overlap(player_x_position, player_y_position, enemy_x_position, enemy_y_position):
@@ -121,124 +127,9 @@ def player_eat_key(board, player_x_position, player_y_position):
                     player.add_key()
                     board[i][q] = ""
 
-def use_key(board, player_x_position, player_y_position, i, q): #need to add function call. use did player hit wall for colli detect.
-    '''Use key to open door or chest.'''
-    if player.get_key() == 0:
-        player.stop_player(player_x_position, player_y_position, i, q)
-    if player.get_key() > 0:
-        player_rect = pygame.Rect(player_x_position, player_y_position, PLAYER_SIZE, PLAYER_SIZE)
-        if pygame.Rect.colliderect(player_rect, pygame.Rect(i * SPRITE_SIZE, q * SPRITE_SIZE, SPRITE_SIZE, SPRITE_SIZE)):
-            player.remove_key()
-            board[i][q] = ""
 
-
-def did_enemy_hit_wall(board, enemy_x_position, enemy_y_position):
-    x_index = enemy_x_position // SPRITE_SIZE
-    y_index = enemy_y_position // SPRITE_SIZE
-    if x_index == 0 and y_index == 0:  # top left
-        for i in range(0, 2):
-            for q in range(0, 2):
-                if board[i][q] == 'brick' or board[i][q] == 'chest' or board[i][q] == 'door' or board[i][q] == 'key':
-                    enemy.bouncing_enemy(enemy_x_position, enemy_y_position, i, q)
-    elif x_index == 0 and y_index != 23:  # left side
-        for i in range(0, 2):
-            for q in range(y_index - 1, y_index + 2):
-                if board[i][q] == 'brick' or board[i][q] == 'chest' or board[i][q] == 'door' or board[i][q] == 'key':
-                    enemy.bouncing_enemy(enemy_x_position, enemy_y_position, i, q)
-    elif x_index == 31 and y_index == 0:  # top right
-        for i in range(x_index - 1, x_index + 1):
-            for q in range(y_index - 1, y_index + 2):
-                if board[i][q] == 'brick' or board[i][q] == 'chest' or board[i][q] == 'door' or board[i][q] == 'key':
-                    enemy.bouncing_enemy(enemy_x_position, enemy_y_position, i, q)
-    elif y_index == 0 and x_index != 31:  # top side
-        for i in range(x_index - 1, x_index + 2):
-            for q in range(0, y_index + 2):
-                if board[i][q] == 'brick' or board[i][q] == 'chest' or board[i][q] == 'door' or board[i][q] == 'key':
-                    enemy.bouncing_enemy(enemy_x_position, enemy_y_position, i, q)
-
-    elif x_index == 31 and y_index != 23:  # right side
-        for i in range(x_index - 1, x_index + 1):
-            for q in range(y_index - 1, y_index + 2):
-                if board[i][q] == 'brick' or board[i][q] == 'chest' or board[i][q] == 'door' or board[i][q] == 'key':
-                    enemy.bouncing_enemy(enemy_x_position, enemy_y_position, i, q)
-    elif y_index == 23 and x_index != 31:  # bottom side
-        for i in range(x_index - 1, x_index + 2):
-            for q in range(y_index - 1, y_index + 1):
-                if board[i][q] == 'brick' or board[i][q] == 'chest' or board[i][q] == 'door' or board[i][q] == 'key':
-                    enemy.bouncing_enemy(enemy_x_position, enemy_y_position, i, q)
-
-    elif x_index == 31 and y_index == 23:  # bottom right
-        for i in range(30, 32):
-            for q in range(22, 24):
-                if board[i][q] == 'brick' or board[i][q] == 'chest' or board[i][q] == 'door' or board[i][q] == 'key':
-                    enemy.bouncing_enemy(enemy_x_position, enemy_y_position, i, q)
-    else:  # middle of board
-        for i in range(x_index - 1, x_index + 2):
-            for q in range(y_index - 1, y_index + 2):
-                if board[i][q] == 'brick' or board[i][q] == 'chest' or board[i][q] == 'door' or board[i][q] == 'key':
-                    enemy.bouncing_enemy(enemy_x_position, enemy_y_position, i, q)
-
-
-def did_player_hit_wall(board, player_x_position, player_y_position):
-    '''Checks if the player hit the wall.'''
-    x_index = player_x_position // SPRITE_SIZE
-    y_index = player_y_position // SPRITE_SIZE
-    if x_index == 0 and y_index == 0:  # top left
-        for i in range(0, 2):
-            for q in range(0, 2):
-                if board[i][q] == 'brick':
-                    player.stop_player(player_x_position, player_y_position, i, q)
-                elif board[i][q] == 'chest' or board[i][q] == 'door':
-                    use_key(board, player_x_position, player_y_position, i, q)
-    elif x_index == 0 and y_index != 23:  # left side
-        for i in range(0, 2):
-            for q in range(y_index - 1, y_index + 2):
-                if board[i][q] == 'brick':
-                    player.stop_player(player_x_position, player_y_position, i, q)
-                elif board[i][q] == 'chest' or board[i][q] == 'door':
-                    use_key(board, player_x_position, player_y_position, i, q)
-    elif x_index == 31 and y_index == 0:  # top right
-        for i in range(x_index - 1, x_index + 1):
-            for q in range(y_index - 1, y_index + 2):
-                if board[i][q] == 'brick':
-                    player.stop_player(player_x_position, player_y_position, i, q)
-                elif board[i][q] == 'chest' or board[i][q] == 'door':
-                    use_key(board, player_x_position, player_y_position, i, q)
-    elif y_index == 0 and x_index != 31:  # top side
-        for i in range(x_index - 1, x_index + 2):
-            for q in range(0, y_index + 2):
-                if board[i][q] == 'brick':
-                    player.stop_player(player_x_position, player_y_position, i, q)
-                elif board[i][q] == 'chest' or board[i][q] == 'door':
-                    use_key(board, player_x_position, player_y_position, i, q)
-    elif x_index == 31 and y_index != 23:  # right side
-        for i in range(x_index - 1, x_index + 1):
-            for q in range(y_index - 1, y_index + 2):
-                if board[i][q] == 'brick':
-                    player.stop_player(player_x_position, player_y_position, i, q)
-                elif board[i][q] == 'chest' or board[i][q] == 'door':
-                    use_key(board, player_x_position, player_y_position, i, q)
-    elif y_index == 23 and x_index != 31:  # bottom side
-        for i in range(x_index - 1, x_index + 2):
-            for q in range(y_index - 1, y_index + 1):
-                if board[i][q] == 'brick':
-                    player.stop_player(player_x_position, player_y_position, i, q)
-                elif board[i][q] == 'chest' or board[i][q] == 'door':
-                    use_key(board, player_x_position, player_y_position, i, q)
-    elif x_index == 31 and y_index == 23:  # bottom right
-        for i in range(30, 32):
-            for q in range(22, 24):
-                if board[i][q] == 'brick':
-                    player.stop_player(player_x_position, player_y_position, i, q)
-                elif board[i][q] == 'chest' or board[i][q] == 'door':
-                    use_key(board, player_x_position, player_y_position, i, q)
-    else:  # middle of board
-        for i in range(x_index - 1, x_index + 2):
-            for q in range(y_index - 1, y_index + 2):
-                if board[i][q] == 'brick':
-                    player.stop_player(player_x_position, player_y_position, i, q)
-                elif board[i][q] == 'chest' or board[i][q] == 'door':
-                    use_key(board, player_x_position, player_y_position, i, q)
+def testing():
+    enemy.function1()
 
 
 def healthHeart(board):
