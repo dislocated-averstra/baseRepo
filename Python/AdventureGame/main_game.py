@@ -30,12 +30,8 @@ FPS = 60
 
 DIRECTIONS = ['LEFT', 'RIGHT', ' UP', 'DOWN']
 
-MAXHEALTH = 3
-
 KEYSIZE = 20
-
-player_item = []
-
+player_health = {'health': 3}
 
 def main():
     global FPSCLOCK, DISPLAYSURF, BASICFONT, player, enemy, board, BIGFONT
@@ -92,7 +88,7 @@ def run_game():
         draw_player_icon()
         draw_enemy_icon(enemy.get_x_position(), enemy.get_y_position(), ENERMY_SIZE, ENERMY_SIZE, BLACK)
         showTextScreen('Battle Square')
-        healthHeart(board.get_board())
+        player_health(player.get_x_position(), player.get_y_position(),0, 0)
         # drawHealthMeter(3)
         # move_element(board)
         player_eat_key(board.get_board(), player.get_x_position(), player.get_y_position())
@@ -126,19 +122,35 @@ def player_eat_key(board, player_x_position, player_y_position):
                 if pygame.Rect.colliderect(player_rect, key_rect) == True:
                     player.add_key()
                     board[i][q] = ""
-
-
-def testing():
-    enemy.function1()
-
-
-def healthHeart(board):
-    full_heart = pygame.image.load('gameSprites/Fullheart.png')
-    full_heart = pygame.transform.scale(full_heart, (100, 100))
-    DISPLAYSURF.blit(full_heart, (780, 30))
+def player_health(player_x_position, player_y_position, i_wall_coord, q_wall_coord):
+        player_rect = pygame.Rect(player_x_position, player_y_position, PLAYER_SIZE, PLAYER_SIZE)
+        wall_rect = pygame.Rect(i_wall_coord * SPRITE_SIZE, q_wall_coord * SPRITE_SIZE, SPRITE_SIZE, SPRITE_SIZE)
+        if pygame.Rect.colliderect(wall_rect, player_rect):
+            health_heart()
+def health_heart():
     empty_heart = pygame.image.load('gameSprites/EmptyHeart.png')
     empty_heart = pygame.transform.scale(empty_heart, (100, 100))
-    DISPLAYSURF.blit(empty_heart, (860, 30))
+
+    full_heart = pygame.image.load('gameSprites/Fullheart.png')
+    full_heart = pygame.transform.scale(full_heart, (100, 100))
+
+    if player_health['health'] == 3:
+        DISPLAYSURF.blit(full_heart, (680, 30))
+        DISPLAYSURF.blit(full_heart, (780, 30))
+        DISPLAYSURF.blit(full_heart, (580, 30))
+    elif player_health['health'] == 2:
+        DISPLAYSURF.blit(full_heart, (680, 30))
+        DISPLAYSURF.blit(full_heart, (780, 30))
+        DISPLAYSURF.blit(empty_heart, (860, 30))
+    elif player_health['health'] == 1:
+        DISPLAYSURF.blit(full_heart, (680, 30))
+        DISPLAYSURF.blit(empty_heart, (780, 30))
+        DISPLAYSURF.blit(empty_heart, (580, 30))
+    else:
+        DISPLAYSURF.blit(empty_heart, (680, 30))
+        DISPLAYSURF.blit(empty_heart, (780, 30))
+        DISPLAYSURF.blit(empty_heart, (580, 30))
+
 
 
 def draw_board(board):

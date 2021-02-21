@@ -11,6 +11,7 @@ class Player(GameBaseObject):
     horizontal_directions = []
     vertical_directions = []
     player_item = {'key': 0}
+
     player_sprite_positions = {'1': (0, 0),
                                '2': (32, 0),
                                '3': (64, 0),
@@ -147,17 +148,17 @@ class Player(GameBaseObject):
     def get_key(self):
         return self.player_item['key']
 
-    def use_key(self, board, player_x_position, player_y_position, i,
-                q):  # need to add function call. use did player hit wall for colli detect.
+    def use_key(self, board, player_x_position, player_y_position, i, q):  # need to add function call. use did player hit wall for colli detect.
         '''Use key to open door or chest.'''
         if self.get_key() == 0:
             self.stop_player(player_x_position, player_y_position, i, q)
         if self.get_key() > 0:
             player_rect = pygame.Rect(player_x_position, player_y_position, PLAYER_SIZE, PLAYER_SIZE)
-            if pygame.Rect.colliderect(player_rect,
-                                       pygame.Rect(i * SPRITE_SIZE, q * SPRITE_SIZE, SPRITE_SIZE, SPRITE_SIZE)):
+            if pygame.Rect.colliderect(player_rect, pygame.Rect(i * SPRITE_SIZE, q * SPRITE_SIZE, SPRITE_SIZE, SPRITE_SIZE)):
                 self.remove_key()
                 board[i][q] = ""
+
+
 
     def to_string(self):
         return 'X position: %s, Y position: %s' % (self.x_position, self.y_position)
