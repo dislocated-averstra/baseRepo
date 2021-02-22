@@ -1,0 +1,24 @@
+missile team:
+    - Brother Kapheal: {range: 2, location: 'Main\SpriteImages\brother_kaphael.png'}
+    - Brother Adron: {range: 2, location: 'Main\SpriteImages\brother_adron.png'}
+librarian team:
+    - Lexicanium Calistarius: {range: 2, location: 'Main\SpriteImages\lexicanium_calistarius.png'}
+    - Brother Scipio: {range: 2, location: 'Main\SpriteImages\brother_scipio.png'}
+sergeant team:
+    - Sergeant Lorenzo: {range: 2, location: 'Main\SpriteImages\sergeant_lorenzo.png'}
+    - Brother Deino: {range: 2, location: 'Main\SpriteImages\brother_deino.png'}
+assault cannon team:
+    - Brother Leon: {range: 3, location: 'Main\SpriteImages\brother_leon.png'}
+    - Brother Valencio: {range: 2, location: 'Main\SpriteImages\brother_valencio.png'}
+flamer team:
+    - Brother Zael: {range: 1, location: 'Main\SpriteImages\brother_zael.png'}
+    - Brother Omnio: {range: 2, location: 'Main\SpriteImages\brother_omnio.png'}
+chaplain team:
+    - Chaplain Raziel: {range: 2, location: 'Main\SpriteImages\chaplain_raziel.png'}
+    - Brother Metraen: {range: 2, location: 'Main\SpriteImages\brother_metraen.png'}
+storm shield team:
+    - Sergeant Gideon: {range: 0, location: 'Main\SpriteImages\sergeant_gideon.png'}
+    - Brother Noctis: {range: 2, location: 'Main\SpriteImages\brother_noctis.png'}
+claw team:
+    - Brother Claudio: {range: 0, location: 'Main\SpriteImages\brother_claudio.png'}
+    - Brother Goriel: {range: 2, location: 'Main\SpriteImages\brother_goriel.png'}

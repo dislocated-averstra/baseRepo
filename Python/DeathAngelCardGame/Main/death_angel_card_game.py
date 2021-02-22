@@ -5,9 +5,14 @@ from pygame.locals import *
 
 from Python.DeathAngelCardGame.Main.GameObjects.dice_sprite import DiceSprite
 from Python.DeathAngelCardGame.Main.GameObjects.space_marine import SpaceMarine
+from Python.DeathAngelCardGame.Main.Menus.game_menu import Game_Menu
+from Python.DeathAngelCardGame.Main.Utils.game_utils import *
 
-WINDOWWIDTH = 1024
+WINDOWWIDTH = 1360
 WINDOWHEIGHT = 768
+CARDHEIGHT = 120
+CARDWIDTH = 240
+SCREENRECT = pygame.Rect(0, 0, 1360, 768)
 FPS = 60
 
 BLACK = (0, 0, 0)
@@ -21,7 +26,11 @@ def main():
     global FPSCLOCK, DISPLAYSURF, BASICFONT
     pygame.init()
     FPSCLOCK = pygame.time.Clock()
-    DISPLAYSURF = pygame.display.set_mode((WINDOWWIDTH, WINDOWHEIGHT))
+    fullscreen = False
+    # Set the display mode
+    winstyle = 0  # |FULLSCREEN
+    bestdepth = pygame.display.mode_ok(SCREENRECT.size, winstyle, 32)
+    DISPLAYSURF = pygame.display.set_mode(SCREENRECT.size, winstyle, bestdepth)
     BASICFONT = pygame.font.Font('freesansbold.ttf', 40)
     pygame.display.set_caption('Death Angel')
     run_game()
@@ -31,21 +40,18 @@ def run_game():
     render_update_group = pygame.sprite.RenderUpdates()
     SpaceMarine.containers = render_update_group
     DiceSprite.containers = render_update_group
+    Game_Menu.containers = render_update_group
 
-    first_test_sprite = SpaceMarine('Main\SpriteImages\chaplain_raziel.png')
-    second_test_sprite = SpaceMarine('Main\SpriteImages\\brother_metraen.png')
-    third_test_sprite = SpaceMarine('Main\SpriteImages\\brother_zael.png')
-    forth_test_sprite = SpaceMarine('Main\SpriteImages\\brother_omnio.png')
-
-    first_test_sprite.set_position(400, 52)
-    second_test_sprite.set_position(400, 172)
-    third_test_sprite.set_position(400, 292)
-    forth_test_sprite.set_position(400, 412)
+    space_marine_list = init_game()
+    y_position = 25
+    for space_marine in space_marine_list:
+        space_marine.set_position(int((WINDOWWIDTH / 2) - 60), y_position)
+        y_position += 120
 
     roll_surf, roll_rect = makeTextObjs('ROLL', BASICFONT, BLUE)
+    menu_text, menu_rect = makeTextObjs('MENU', BASICFONT, BLUE)
 
     dice = DiceSprite()
-    space_marine_sprite_list = [first_test_sprite, second_test_sprite, third_test_sprite, forth_test_sprite]
 
     background = DISPLAYSURF.copy()
     background.fill(BLACK)
@@ -55,27 +61,33 @@ def run_game():
     while True:
         DISPLAYSURF.blit(background, (0, 0))
         pygame.draw.rect(DISPLAYSURF, BORDERCOLOR,
-                         (394, 50, 250, 485), 5)
+                         (int((WINDOWWIDTH / 2) - 65), 20, 250, 730), 5)
 
         roll_rect.topleft = (0, 32)
         DISPLAYSURF.blit(roll_surf, roll_rect)
 
+        menu_rect.topleft = (WINDOWWIDTH - 130, 0)
+        DISPLAYSURF.blit(menu_text, menu_rect)
+
+        game_menu = None
         checkForQuit()
         for event in pygame.event.get():  # event handling loop
             if event.type == MOUSEBUTTONUP:
-                x_click_position, y_click_position = event.pos
-                first_test_sprite.check_if_facing_arrow_clicked(x_click_position, y_click_position)
                 if selected_space_marine is not None:
                     selected_space_marine.set_is_selected(False)
                     selected_space_marine = None
             if event.type == MOUSEBUTTONDOWN:
                 # at this point we set the starting mouse position
                 previous_x_mouse_position, previous_y_mouse_position = event.pos
-                is_mouse_over_a_space_marine(space_marine_sprite_list, previous_x_mouse_position,
+                is_mouse_over_a_space_marine(space_marine_list, previous_x_mouse_position,
                                              previous_y_mouse_position)
-                selected_space_marine = get_selected_space_marine(space_marine_sprite_list)
+                selected_space_marine = get_selected_space_marine(space_marine_list)
                 if roll_rect.collidepoint(event.pos) and not dice.is_dice_rolling:
                     dice.roll_dice()
+
+                elif menu_rect.collidepoint(event.pos):
+                    game_menu = Game_Menu(WINDOWHEIGHT, WINDOWWIDTH)
+                    DISPLAYSURF.blit(game_menu.get_menu_surface(), game_menu.get_menu_rect())
 
             if event.type == MOUSEMOTION:
                 x_click_position, y_click_position = pygame.mouse.get_pos()
@@ -93,13 +105,10 @@ def run_game():
 
         # update all the sprites
         render_update_group.update()
-        first_test_sprite.get_arrow_containers().update()
 
         dirty = render_update_group.draw(DISPLAYSURF)
-        dirty_arrows = first_test_sprite.get_arrow_containers().draw(DISPLAYSURF)
 
         pygame.display.update(dirty)
-        pygame.display.update(dirty_arrows)
 
         FPSCLOCK.tick(FPS)
 
