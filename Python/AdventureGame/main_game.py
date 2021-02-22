@@ -88,7 +88,7 @@ def run_game():
         draw_player_icon()
         draw_enemy_icon(enemy.get_x_position(), enemy.get_y_position(), ENERMY_SIZE, ENERMY_SIZE, BLACK)
         showTextScreen('Battle Square')
-        health_heart(1)
+        health_heart(player.player_health['health'])
         # drawHealthMeter(3)
         # move_element(board)
         player_eat_key(board.get_board(), player.get_x_position(), player.get_y_position())
