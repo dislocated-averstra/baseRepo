@@ -3,6 +3,7 @@ import time
 
 from Python.AdventureGame.GameObject.game_object import GameBaseObject
 
+
 PLAYER_SIZE = 20
 SPRITE_SIZE = 32
 
@@ -11,7 +12,7 @@ class Player(GameBaseObject):
     horizontal_directions = []
     vertical_directions = []
     player_item = {'key': 0}
-
+    player_health = {'health': 3}
     player_sprite_positions = {'1': (0, 0),
                                '2': (32, 0),
                                '3': (64, 0),
@@ -144,7 +145,7 @@ class Player(GameBaseObject):
 
     def did_player_hit_wall(self, board, player_x_position, player_y_position):
         self.did_object_hit_wall(self.stop_use_key_call_func, board, player_x_position, player_y_position)
-
+        self.health_heart()
     def get_key(self):
         return self.player_item['key']
 
@@ -158,7 +159,29 @@ class Player(GameBaseObject):
                 self.remove_key()
                 board[i][q] = ""
 
+    def health_heart(self):
+        empty_heart = pygame.image.load('gameSprites/EmptyHeart.png')
+        empty_heart = pygame.transform.scale(empty_heart, (100, 100))
 
+        full_heart = pygame.image.load('gameSprites/Fullheart.png')
+        full_heart = pygame.transform.scale(full_heart, (100, 100))
+
+        if self.player_health['health'] == 3:
+            self.DISPLAYSURF.blit(full_heart, (680, 30))
+            self.DISPLAYSURF.blit(full_heart, (780, 30))
+            self.DISPLAYSURF.blit(full_heart, (580, 30))
+        elif self.player_health['health'] == 2:
+            self.DISPLAYSURF.blit(full_heart, (680, 30))
+            self.DISPLAYSURF.blit(full_heart, (780, 30))
+            self.DISPLAYSURF.blit(empty_heart, (860, 30))
+        elif self.player_health['health'] == 1:
+            self.DISPLAYSURF.blit(full_heart, (680, 30))
+            self.DISPLAYSURF.blit(empty_heart, (780, 30))
+            self.DISPLAYSURF.blit(empty_heart, (580, 30))
+        else:
+            self.DISPLAYSURF.blit(empty_heart, (680, 30))
+            self.DISPLAYSURF.blit(empty_heart, (780, 30))
+            self.DISPLAYSURF.blit(empty_heart, (580, 30))
 
     def to_string(self):
         return 'X position: %s, Y position: %s' % (self.x_position, self.y_position)
