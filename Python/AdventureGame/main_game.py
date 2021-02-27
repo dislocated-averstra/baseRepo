@@ -100,7 +100,6 @@ def run_game():
         DISPLAYSURF.fill(BGCOLOR)
         if player_attack:
             draw_sword()
-            #player_attack = False
             current_time = time.time()
             if current_time - last_change_time >= time_between_sprite_change:
                 last_change_time = current_time
@@ -308,8 +307,15 @@ def loop_through_brick_file(board):
             for i in range(0, len(row)):
                 board.remove_element(i, ab, row[i])'''
 
-def draw_sword(): #move to game player and extend time for sword
-    DISPLAYSURF.blit(player.get_player_sword(), (player.get_x_position() + 32, player.get_y_position()))
+def draw_sword():
+    if player.get_player_facing() == 'RIGHT':
+        DISPLAYSURF.blit(player.get_player_sword(), (player.get_x_position() + 32, player.get_y_position()))
+    elif player.get_player_facing() == 'LEFT':
+        DISPLAYSURF.blit(pygame.transform.flip(player.get_player_sword(), True, False), (player.get_x_position() - 32, player.get_y_position()))
+    elif player.get_player_facing() == 'UP':
+        DISPLAYSURF.blit(pygame.transform.rotate(player.get_player_sword(), 90), (player.get_x_position(), player.get_y_position() - 32))
+    elif player.get_player_facing() == 'DOWN':
+        DISPLAYSURF.blit(pygame.transform.rotate(player.get_player_sword(), 270), (player.get_x_position(), player.get_y_position() + 32))
 
 
 def terminate():

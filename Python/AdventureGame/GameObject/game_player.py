@@ -10,6 +10,7 @@ SPRITE_SIZE = 32
 class Player(GameBaseObject):
     horizontal_directions = []
     vertical_directions = []
+    player_facing = ''
     player_item = {'key': 0}
     player_sprite_positions = {'1': (0, 0),
                                '2': (32, 0),
@@ -89,12 +90,17 @@ class Player(GameBaseObject):
     def remove_vertical_direction(self, direction):
         self.vertical_directions.remove(direction)
 
+    def get_player_facing(self):
+        return self.player_facing
+
     def get_current_direction(self):
         if len(self.horizontal_directions) == 0 and len(self.vertical_directions) == 0:
             return None, None
         elif len(self.horizontal_directions) != 0 and len(self.vertical_directions) == 0:
+            self.player_facing = self.horizontal_directions[0]
             return self.horizontal_directions[0], None
         elif len(self.horizontal_directions) == 0 and len(self.vertical_directions) != 0:
+            self.player_facing = self.vertical_directions[0]
             return None, self.vertical_directions[0]
         else:
             return self.horizontal_directions[0], self.vertical_directions[0]
