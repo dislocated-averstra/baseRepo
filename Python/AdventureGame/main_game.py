@@ -38,6 +38,8 @@ KEYSIZE = 20
 player_item = []
 
 
+
+
 def main():
     global FPSCLOCK, DISPLAYSURF, BASICFONT, player, enemy, board, BIGFONT
 
@@ -196,7 +198,7 @@ def loop_through_brick_file(board):
             for i in range(0, len(row)):
                 board.remove_element(i, ab, row[i])'''
 
-def draw_sword():
+def draw_sword(): #animate sword
     if player.get_player_facing() == 'RIGHT':
         DISPLAYSURF.blit(player.get_player_sword(), (player.get_x_position() + 32, player.get_y_position()))
     elif player.get_player_facing() == 'LEFT':
