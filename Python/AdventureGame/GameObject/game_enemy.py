@@ -56,6 +56,7 @@ class Enemy(GameBaseObject):
         enemy_rect = pygame.Rect(enemy_x_position, enemy_y_position, PLAYER_SIZE, PLAYER_SIZE)
         wall_rect = pygame.Rect(i_wall_coord * SPRITE_SIZE, q_wall_coord * SPRITE_SIZE, SPRITE_SIZE, SPRITE_SIZE)
         if pygame.Rect.colliderect(wall_rect, enemy_rect):
+
             if self.directions[0] == "LEFT":
                 self.remove_direction("LEFT")
                 self.directions.append("RIGHT")
@@ -101,3 +102,12 @@ class Enemy(GameBaseObject):
 
     def to_string(self):
         return 'X position: %s, Y position: %s' % (self.x_position, self.y_position)
+
+    def bounce_call_function(self, board, enemy_x_position, enemy_y_position, i, q):
+        if board[i][q] == 'brick' or board[i][q] == 'chest' or board[i][q] == 'door' or board[i][q] == 'key':
+            self.bouncing_enemy(enemy_x_position, enemy_y_position, i, q)
+
+    def did_enemy_hit_wall(self, board, enemy_x_position, enemy_y_position):
+        self.did_object_hit_wall(self.bounce_call_function,board, enemy_x_position, enemy_y_position)
+
+
