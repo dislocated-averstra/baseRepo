@@ -2,6 +2,7 @@
 
 import csv
 import sys
+import time
 
 from pygame.locals import *
 
@@ -22,7 +23,7 @@ WHITE = (255, 255, 255)
 TEXTSHADOWCOLOR = GRAY
 TEXTCOLOR = WHITE
 
-PLAYER_SIZE = 20
+PLAYER_SIZE = 32
 SPRITE_SIZE = 32
 BGCOLOR = DARKGREEN
 FPS = 60
@@ -36,12 +37,14 @@ KEYSIZE = 20
 player_item = []
 
 
+
+
 def main():
     global FPSCLOCK, DISPLAYSURF, BASICFONT, player, enemy, board, BIGFONT
 
-    player = Player(60, 30, PLAYER_SIZE)
+    player = Player(70, 40, PLAYER_SIZE)
     enemy = Enemy(300, 40, PLAYER_SIZE)
-    board = GameBoard(int(WINDOWWIDTH / 32), int(WINDOWHEIGHT / 32))
+    board = GameBoard(int(WINDOWWIDTH / SPRITE_SIZE), int(WINDOWHEIGHT / SPRITE_SIZE))
     pygame.init()
     FPSCLOCK = pygame.time.Clock()
     DISPLAYSURF = pygame.display.set_mode((WINDOWWIDTH, WINDOWHEIGHT))
@@ -58,6 +61,9 @@ def makeTextObjs(text, font, color):
 
 def run_game():
     '''The main code for the game I expect we will refactor this several times as we go'''
+    player_attack = False
+    time_between_sprite_change = 5
+    last_change_time = time.time()
     while True:
         checkForQuit()
         for event in pygame.event.get():
@@ -70,6 +76,8 @@ def run_game():
                     player.remove_vertical_direction('UP')
                 if event.key in (K_s, K_DOWN):
                     player.remove_vertical_direction('DOWN')
+
+
             if event.type == KEYDOWN:  # a person is pressed or is pressing a key
                 if event.key in (K_a, K_LEFT):
                     player.add_horizontal_direction('LEFT')
@@ -79,6 +87,9 @@ def run_game():
                     player.add_vertical_direction('UP')
                 if event.key in (K_s, K_DOWN):
                     player.add_vertical_direction('DOWN')
+                if event.key in (K_h, K_z):
+                    player_attack = True
+
 
         # check_for_enemy_player_overlap(player.get_x_position(), player.get_y_position(), enemy.get_x_position(),
         # enemy.get_y_position())
@@ -87,6 +98,13 @@ def run_game():
         did_player_hit_wall(board.get_board(), player.get_x_position(), player.get_y_position())
         #enemy.move_enemy(WINDOWHEIGHT, WINDOWWIDTH)
         DISPLAYSURF.fill(BGCOLOR)
+        if player_attack:
+            draw_sword()
+            #player_attack = False
+            current_time = time.time()
+            if current_time - last_change_time >= time_between_sprite_change:
+                last_change_time = current_time
+                player_attack = False
         draw_board(board.get_board())
         draw_player_icon()
         # draw_player_icon(enemy.get_x_position(), enemy.get_y_position(), PLAYER_SIZE, PLAYER_SIZE, BLACK)
@@ -289,6 +307,9 @@ def loop_through_brick_file(board):
             ab = data.line_num - 1
             for i in range(0, len(row)):
                 board.remove_element(i, ab, row[i])'''
+
+def draw_sword(): #move to game player and extend time for sword
+    DISPLAYSURF.blit(player.get_player_sword(), (player.get_x_position() + 32, player.get_y_position()))
 
 
 def terminate():

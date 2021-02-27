@@ -3,7 +3,7 @@ import time
 
 from Python.AdventureGame.GameObject.game_object import GameBaseObject
 
-PLAYER_SIZE = 20
+PLAYER_SIZE = 32
 SPRITE_SIZE = 32
 
 
@@ -27,7 +27,8 @@ class Player(GameBaseObject):
         # GameObject__init__(self, x_position, y_position)
         self.size = size
         self.sprite_sheet = pygame.image.load('gameSprites/WalkAnimation.png')
-        self.player_image = self.sprite_sheet.subsurface(pygame.Rect(0, 0, 32, 32))
+        self.player_image = self.sprite_sheet.subsurface(pygame.Rect(0, 0, SPRITE_SIZE, SPRITE_SIZE))
+        self.player_sword = pygame.image.load('gameSprites\sword.png')
         super().__init__(x_position, y_position)
 
     def set_size(self, size):
@@ -39,17 +40,20 @@ class Player(GameBaseObject):
     def get_player_image(self):
         return self.player_image
 
+    def get_player_sword(self):
+        return self.player_sword
+
     def set_player_image(self):  # flip the image for left and add clocks
         if self.horizontal_directions[0] == 'RIGHT':
-            self.player_image = self.sprite_sheet.subsurface(pygame.Rect(self.image_number, 0, 32, 32))
+            self.player_image = self.sprite_sheet.subsurface(pygame.Rect(self.image_number, 0, SPRITE_SIZE, SPRITE_SIZE))
             self.add_to_image_number()
         elif self.horizontal_directions[0] == 'LEFT':
-            self.player_image = self.sprite_sheet.subsurface(pygame.Rect(self.image_number, 0, 32, 32))
+            self.player_image = self.sprite_sheet.subsurface(pygame.Rect(self.image_number, 0, SPRITE_SIZE, SPRITE_SIZE))
             self.player_image = pygame.transform.flip(self.player_image, True, False)
             self.add_to_image_number()
 
     def add_to_image_number(self):
-        self.image_number += 32
+        self.image_number += SPRITE_SIZE
         if self.image_number == 256:
             self.image_number = 0
 
@@ -123,17 +127,26 @@ class Player(GameBaseObject):
                 self.image_updater()
 
     def stop_player(self, player_x_position, player_y_position, i_wall_coord, q_wall_coord):
+        horizontal_direction, vertical_direction = self.get_current_direction()
         player_rect = pygame.Rect(player_x_position, player_y_position, PLAYER_SIZE, PLAYER_SIZE)
         wall_rect = pygame.Rect(i_wall_coord * SPRITE_SIZE, q_wall_coord * SPRITE_SIZE, SPRITE_SIZE, SPRITE_SIZE)
         if pygame.Rect.colliderect(wall_rect, player_rect):
-            if 'LEFT' in self.get_horizontal_directions():
-                self.set_x_position(player_x_position + 2)
-            if 'RIGHT' in self.get_horizontal_directions():
-                self.set_x_position(player_x_position - 2)
-            if 'UP' in self.get_vertical_directions():
-                self.set_y_position(player_y_position + 2)
-            if 'DOWN' in self.get_vertical_directions():
-                self.set_y_position(player_y_position - 2)
+            if horizontal_direction is not None:
+                if self.get_horizontal_directions()[0] == 'LEFT':
+                    self.set_x_position(player_x_position + 2)
+                elif self.get_horizontal_directions()[0] == 'RIGHT':
+                    self.set_x_position(player_x_position - 2)
+            if vertical_direction is not None:
+                if self.get_vertical_directions()[0] == 'UP':
+                    self.set_y_position(player_y_position + 2)
+                elif self.get_vertical_directions()[0] == 'DOWN':
+                    self.set_y_position(player_y_position - 2)
+
+
+
+
+
+
 
     def get_key(self):
         return self.player_item['key']
