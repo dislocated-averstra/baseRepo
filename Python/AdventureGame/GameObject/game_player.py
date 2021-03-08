@@ -44,7 +44,7 @@ class Player(GameBaseObject):
     def get_player_sword(self):
         return self.player_sword
 
-    def set_player_image(self):  # flip the image for left and add clocks
+    def set_player_image(self):
         if self.horizontal_directions[0] == 'RIGHT':
             self.player_image = self.sprite_sheet.subsurface(pygame.Rect(self.image_number, 0, SPRITE_SIZE, SPRITE_SIZE))
             self.add_to_image_number()
