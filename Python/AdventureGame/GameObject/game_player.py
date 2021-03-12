@@ -3,16 +3,15 @@ import time
 
 from Python.AdventureGame.GameObject.game_object import GameBaseObject
 
-
-PLAYER_SIZE = 20
+PLAYER_SIZE = 32
 SPRITE_SIZE = 32
 
 
 class Player(GameBaseObject):
     horizontal_directions = []
     vertical_directions = []
+    player_facing = ''
     player_item = {'key': 0}
-    player_health = {'health': 3}
     player_sprite_positions = {'1': (0, 0),
                                '2': (32, 0),
                                '3': (64, 0),
@@ -29,7 +28,8 @@ class Player(GameBaseObject):
         # GameObject__init__(self, x_position, y_position)
         self.size = size
         self.sprite_sheet = pygame.image.load('gameSprites/WalkAnimation.png')
-        self.player_image = self.sprite_sheet.subsurface(pygame.Rect(0, 0, 32, 32))
+        self.player_image = self.sprite_sheet.subsurface(pygame.Rect(0, 0, SPRITE_SIZE, SPRITE_SIZE))
+        self.player_sword = pygame.image.load('gameSprites\sword.png')
         super().__init__(x_position, y_position)
 
     def set_size(self, size):
@@ -41,17 +41,20 @@ class Player(GameBaseObject):
     def get_player_image(self):
         return self.player_image
 
-    def set_player_image(self):  # flip the image for left and add clocks
+    def get_player_sword(self):
+        return self.player_sword
+
+    def set_player_image(self):
         if self.horizontal_directions[0] == 'RIGHT':
-            self.player_image = self.sprite_sheet.subsurface(pygame.Rect(self.image_number, 0, 32, 32))
+            self.player_image = self.sprite_sheet.subsurface(pygame.Rect(self.image_number, 0, SPRITE_SIZE, SPRITE_SIZE))
             self.add_to_image_number()
         elif self.horizontal_directions[0] == 'LEFT':
-            self.player_image = self.sprite_sheet.subsurface(pygame.Rect(self.image_number, 0, 32, 32))
+            self.player_image = self.sprite_sheet.subsurface(pygame.Rect(self.image_number, 0, SPRITE_SIZE, SPRITE_SIZE))
             self.player_image = pygame.transform.flip(self.player_image, True, False)
             self.add_to_image_number()
 
     def add_to_image_number(self):
-        self.image_number += 32
+        self.image_number += SPRITE_SIZE
         if self.image_number == 256:
             self.image_number = 0
 
@@ -87,12 +90,17 @@ class Player(GameBaseObject):
     def remove_vertical_direction(self, direction):
         self.vertical_directions.remove(direction)
 
+    def get_player_facing(self):
+        return self.player_facing
+
     def get_current_direction(self):
         if len(self.horizontal_directions) == 0 and len(self.vertical_directions) == 0:
             return None, None
         elif len(self.horizontal_directions) != 0 and len(self.vertical_directions) == 0:
+            self.player_facing = self.horizontal_directions[0]
             return self.horizontal_directions[0], None
         elif len(self.horizontal_directions) == 0 and len(self.vertical_directions) != 0:
+            self.player_facing = self.vertical_directions[0]
             return None, self.vertical_directions[0]
         else:
             return self.horizontal_directions[0], self.vertical_directions[0]
@@ -125,17 +133,22 @@ class Player(GameBaseObject):
                 self.image_updater()
 
     def stop_player(self, player_x_position, player_y_position, i_wall_coord, q_wall_coord):
+        horizontal_direction, vertical_direction = self.get_current_direction()
         player_rect = pygame.Rect(player_x_position, player_y_position, PLAYER_SIZE, PLAYER_SIZE)
         wall_rect = pygame.Rect(i_wall_coord * SPRITE_SIZE, q_wall_coord * SPRITE_SIZE, SPRITE_SIZE, SPRITE_SIZE)
         if pygame.Rect.colliderect(wall_rect, player_rect):
-            if 'LEFT' in self.get_horizontal_directions():
-                self.set_x_position(player_x_position + 2)
-            if 'RIGHT' in self.get_horizontal_directions():
-                self.set_x_position(player_x_position - 2)
-            if 'UP' in self.get_vertical_directions():
-                self.set_y_position(player_y_position + 2)
-            if 'DOWN' in self.get_vertical_directions():
-                self.set_y_position(player_y_position - 2)
+            if horizontal_direction is not None:
+                if self.get_horizontal_directions()[0] == 'LEFT':
+                    self.set_x_position(player_x_position + 2)
+                elif self.get_horizontal_directions()[0] == 'RIGHT':
+                    self.set_x_position(player_x_position - 2)
+            if vertical_direction is not None:
+                if self.get_vertical_directions()[0] == 'UP':
+                    self.set_y_position(player_y_position + 2)
+                elif self.get_vertical_directions()[0] == 'DOWN':
+                    self.set_y_position(player_y_position - 2)
+
+
 
     def stop_use_key_call_func(self, board, player_x_position, player_y_position, i, q):
         if board[i][q] == 'brick':
@@ -149,16 +162,17 @@ class Player(GameBaseObject):
     def get_key(self):
         return self.player_item['key']
 
-    def use_key(self, board, player_x_position, player_y_position, i, q):  # need to add function call. use did player hit wall for colli detect.
+    def use_key(self, board, player_x_position, player_y_position, i,
+                q):  # need to add function call. use did player hit wall for colli detect.
         '''Use key to open door or chest.'''
         if self.get_key() == 0:
             self.stop_player(player_x_position, player_y_position, i, q)
         if self.get_key() > 0:
             player_rect = pygame.Rect(player_x_position, player_y_position, PLAYER_SIZE, PLAYER_SIZE)
-            if pygame.Rect.colliderect(player_rect, pygame.Rect(i * SPRITE_SIZE, q * SPRITE_SIZE, SPRITE_SIZE, SPRITE_SIZE)):
+            if pygame.Rect.colliderect(player_rect,
+                                       pygame.Rect(i * SPRITE_SIZE, q * SPRITE_SIZE, SPRITE_SIZE, SPRITE_SIZE)):
                 self.remove_key()
                 board[i][q] = ""
-
 
     def to_string(self):
         return 'X position: %s, Y position: %s' % (self.x_position, self.y_position)
