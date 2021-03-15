@@ -1,7 +1,7 @@
 import pygame
 
 
-class maze_walls(pygame.sprite.Sprite):
+class MazeWalls(pygame.sprite.Sprite):
     '''A class to hold the maze walls.'''
 
     def __init__(self):
