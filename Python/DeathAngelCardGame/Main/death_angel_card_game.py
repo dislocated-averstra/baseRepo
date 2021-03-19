@@ -4,7 +4,6 @@ import pygame
 from pygame.locals import *
 
 from Python.DeathAngelCardGame.Main.GameObjects.dice_sprite import DiceSprite
-from Python.DeathAngelCardGame.Main.GameObjects.space_marine import SpaceMarine
 from Python.DeathAngelCardGame.Main.Menus.game_menu import Game_Menu
 from Python.DeathAngelCardGame.Main.Utils.game_utils import *
 

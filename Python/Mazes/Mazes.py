@@ -1,16 +1,15 @@
-import pygame
 import sys
-import random
 
-
+import pygame
 from pygame.locals import *
+
+from Python.Mazes.GameObject.maze_walls import MazeWalls
 
 WINDOWWIDTH = 1024
 WINDOWHEIGHT = 768
 GRAY = (185, 185, 185)
-LIGHTRED = (175,  20,  20)
+LIGHTRED = (175, 20, 20)
 FPS = 60
-
 
 
 def main():
@@ -25,16 +24,34 @@ def main():
     showStartScreen()
     run_game()
 
+
 def run_game():
+    # create the render group that is going to hold all the sprite for the time being
+    render_update_group = pygame.sprite.RenderUpdates()
+    MazeWalls.containers = render_update_group
+
+    maze_wall = MazeWalls()
+
     while True:
         checkForQuit()
         DISPLAYSURF.fill(GRAY)
-        pygame.display.update()
+
+        # clear all the sprites
+        render_update_group.clear(DISPLAYSURF, DISPLAYSURF)
+
+        # update all the sprites
+        render_update_group.update()
+
+        dirty = render_update_group.draw(DISPLAYSURF)
+
+        pygame.display.update(dirty)
         FPSCLOCK.tick(FPS)
+
 
 def makeTextObjs(text, font, color):
     surf = font.render(text, True, color)
     return surf, surf.get_rect()
+
 
 def checkForKeyPress():
     # Go through event queue looking for a KEYUP event.
@@ -46,6 +63,7 @@ def checkForKeyPress():
             continue
         return event.key
     return None
+
 
 def showStartScreen():
     titleSurf, titleRect = makeTextObjs('Mazes', BIGFONT, LIGHTRED)
@@ -60,6 +78,7 @@ def showStartScreen():
         pygame.display.update()
         FPSCLOCK.tick()
 
+
 def terminate():
     pygame.quit()
     sys.exit()
@@ -72,6 +91,7 @@ def checkForQuit():
         if event.key == K_ESCAPE:
             terminate()  # terminate if the KEYUP event was for the Esc key
         pygame.event.post(event)  # put the other KEYUP event objects back
+
 
 if __name__ == '__main__':
     main()
