@@ -3,7 +3,7 @@ import sys
 import pygame
 from pygame.locals import *
 
-from Python.Mazes.GameObject.maze_walls import MazeWalls
+from Python.Mazes.GameObject.maze_container import MazeContainer
 
 WINDOWWIDTH = 1024
 WINDOWHEIGHT = 768
@@ -28,9 +28,10 @@ def main():
 def run_game():
     # create the render group that is going to hold all the sprite for the time being
     render_update_group = pygame.sprite.RenderUpdates()
-    MazeWalls.containers = render_update_group
+    MazeContainer.containers = render_update_group
 
-    maze_wall = MazeWalls()
+    maze = MazeContainer()
+    maze.set_position(300, 300)
 
     while True:
         checkForQuit()
