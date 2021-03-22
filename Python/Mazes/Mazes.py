@@ -49,6 +49,8 @@ def run_game():
         FPSCLOCK.tick(FPS)
 
 
+
+
 def makeTextObjs(text, font, color):
     surf = font.render(text, True, color)
     return surf, surf.get_rect()
