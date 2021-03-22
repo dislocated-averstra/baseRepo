@@ -5,7 +5,7 @@ from Python.Mazes.Utilities.Stack import Stack
 from Python.Mazes.GameObject.maze_container import MazeContainer
 
 
-class GenerateMaze():
+class GenerateMaze:
     '''list of list for maze'''
 
     def __init__(self, maze_containers):
