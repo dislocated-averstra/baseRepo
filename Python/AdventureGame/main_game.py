@@ -31,11 +31,7 @@ FPS = 60
 
 DIRECTIONS = ['LEFT', 'RIGHT', ' UP', 'DOWN']
 
-MAXHEALTH = 3
-
 KEYSIZE = 20
-
-player_item = []
 
 
 
@@ -109,7 +105,7 @@ def run_game():
         draw_player_icon()
         draw_enemy_icon(enemy.get_x_position(), enemy.get_y_position(), ENERMY_SIZE, ENERMY_SIZE, BLACK)
         showTextScreen('Battle Square')
-        healthHeart(board.get_board())
+        health_heart(player.player_health['health'])
         # drawHealthMeter(3)
         # move_element(board)
         player_eat_key(board.get_board(), player.get_x_position(), player.get_y_position())
@@ -144,18 +140,29 @@ def player_eat_key(board, player_x_position, player_y_position):
                     player.add_key()
                     board[i][q] = ""
 
-
-def testing():
-    enemy.function1()
-
-
-def healthHeart(board):
-    full_heart = pygame.image.load('gameSprites/Fullheart.png')
-    full_heart = pygame.transform.scale(full_heart, (100, 100))
-    DISPLAYSURF.blit(full_heart, (780, 30))
+def health_heart(player_health):
     empty_heart = pygame.image.load('gameSprites/EmptyHeart.png')
     empty_heart = pygame.transform.scale(empty_heart, (100, 100))
-    DISPLAYSURF.blit(empty_heart, (860, 30))
+
+    full_heart = pygame.image.load('gameSprites/Fullheart.png')
+    full_heart = pygame.transform.scale(full_heart, (100, 100))
+
+    if player_health == 3:
+        DISPLAYSURF.blit(full_heart, (680, 30))
+        DISPLAYSURF.blit(full_heart, (780, 30))
+        DISPLAYSURF.blit(full_heart, (580, 30))
+    elif player_health == 2:
+        DISPLAYSURF.blit(full_heart, (680, 30))
+        DISPLAYSURF.blit(full_heart, (780, 30))
+        DISPLAYSURF.blit(empty_heart, (860, 30))
+    elif player_health == 1:
+        DISPLAYSURF.blit(full_heart, (680, 30))
+        DISPLAYSURF.blit(empty_heart, (780, 30))
+        DISPLAYSURF.blit(empty_heart, (580, 30))
+    else:
+        DISPLAYSURF.blit(empty_heart, (680, 30))
+        DISPLAYSURF.blit(empty_heart, (780, 30))
+        DISPLAYSURF.blit(empty_heart, (580, 30))
 
 
 def draw_board(board):

@@ -1,5 +1,6 @@
 import pygame
 
+
 class Stack():
     '''A class to build the mazes.'''
 
