@@ -150,10 +150,6 @@ class Player(GameBaseObject):
 
 
 
-
-
-
-
     def stop_use_key_call_func(self, board, player_x_position, player_y_position, i, q):
         if board[i][q] == 'brick':
             self.stop_player(player_x_position, player_y_position, i, q)
