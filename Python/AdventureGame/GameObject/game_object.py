@@ -20,12 +20,6 @@ class GameBaseObject:
     def set_y_position(self, y_position):
         self.y_position = y_position
 
-    def hello_bounce(self, func):
-        greeting_1 = func(self.bounce_call_function)
-
-    def hello_stop_key(self, func):
-        greeting_2 = func(self.stop_use_key_call_func)
-
     def did_object_hit_wall(self, func, board, player_x_position, player_y_position):
 
         x_index = player_x_position // SPRITE_SIZE

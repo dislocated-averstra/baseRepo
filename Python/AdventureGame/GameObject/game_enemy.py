@@ -108,6 +108,4 @@ class Enemy(GameBaseObject):
             self.bouncing_enemy(enemy_x_position, enemy_y_position, i, q)
 
     def did_enemy_hit_wall(self, board, enemy_x_position, enemy_y_position):
-        self.did_object_hit_wall(self.bounce_call_function,board, enemy_x_position, enemy_y_position)
-
-
+        self.did_object_hit_wall(self.bounce_call_function, board, enemy_x_position, enemy_y_position)
