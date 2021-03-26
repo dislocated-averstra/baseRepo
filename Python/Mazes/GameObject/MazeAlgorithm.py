@@ -17,5 +17,12 @@ class GenerateMaze:
     def maze_algorithm(self):
         self.stack.push(self.container.maze_wall[0][0])
 
-    """visited cell , current cell, checkNeighbor() function ,????"""
-
+    def neighbor(self):
+        top = self.stack.top()
+        rows = top.x_index
+        colunms = top.y_index
+        top_neighbor = self.container.maze_wall[rows][colunms - 1]
+        right_neighbor = self.container.maze_wall[rows + 1][colunms]
+        left_neighbor = self.container.maze_wall[rows - 1][colunms]
+        bottom_neighbor = self.container.maze_wall[rows][colunms + 1]
+        neighbor = []
