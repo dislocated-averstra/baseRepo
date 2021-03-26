@@ -51,6 +51,7 @@ def run_game():
     menu_text, menu_rect = makeTextObjs('MENU', BASICFONT, BLUE)
 
     dice = DiceSprite()
+    game_menu = None
 
     background = DISPLAYSURF.copy()
     background.fill(BLACK)
@@ -68,7 +69,6 @@ def run_game():
         menu_rect.topleft = (WINDOWWIDTH - 130, 0)
         DISPLAYSURF.blit(menu_text, menu_rect)
 
-        game_menu = None
         checkForQuit()
         for event in pygame.event.get():  # event handling loop
             if event.type == MOUSEBUTTONUP:
@@ -87,6 +87,9 @@ def run_game():
                 elif menu_rect.collidepoint(event.pos):
                     game_menu = Game_Menu(WINDOWHEIGHT, WINDOWWIDTH)
                     DISPLAYSURF.blit(game_menu.get_menu_surface(), game_menu.get_menu_rect())
+
+                elif game_menu is not None and game_menu.is_quit_button_clicked(event.pos):
+                    terminate()
 
             if event.type == MOUSEMOTION:
                 x_click_position, y_click_position = pygame.mouse.get_pos()
@@ -145,10 +148,6 @@ def checkForQuit():
         if event.key == K_ESCAPE:
             terminate()  # terminate if the KEYUP event was for the Esc key
         pygame.event.post(event)  # put the other KEYUP event objects back
-
-def makeTextObjs(text, font, color):
-    surf = font.render(text, True, color)
-    return surf, surf.get_rect()
 
 if __name__ == '__main__':
     main()
