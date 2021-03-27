@@ -88,6 +88,9 @@ def run_game():
                     game_menu = Game_Menu(WINDOWHEIGHT, WINDOWWIDTH)
                     DISPLAYSURF.blit(game_menu.get_menu_surface(), game_menu.get_menu_rect())
 
+                elif game_menu is not None and game_menu.is_close_button_clicked(event.pos):
+                    game_menu.kill()
+
                 elif game_menu is not None and game_menu.is_quit_button_clicked(event.pos):
                     terminate()
 
