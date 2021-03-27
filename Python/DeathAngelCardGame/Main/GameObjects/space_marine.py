@@ -13,8 +13,6 @@ class SpaceMarine(pygame.sprite.Sprite):
         self.facing = Facing.LEFT
         self.is_selected = False
         # a bunch of stuff to hold the arrow that go with a space marine sprite
-        self.arrow_render_group = pygame.sprite.RenderUpdates()
-        FacingArrow.containers = self.arrow_render_group
         self.facing_arrow = FacingArrow()
 
     def get_is_selected(self):
@@ -53,6 +51,8 @@ class SpaceMarine(pygame.sprite.Sprite):
         elif facing is Facing.RIGHT:
             self.facing = Facing.RIGHT
 
-    def check_if_facing_arrow_clicked(self, x_click_position, y_click_position):
-        if self.facing_arrow.arrow_clicked(x_click_position, y_click_position):
-            self.image = pygame.transform.flip(self.image, True, False)
+    def flip_space_marine(self):
+        self.image = pygame.transform.flip(self.image, True, False)
+
+    def is_facing_arrow_clicked(self, x_click_position, y_click_position):
+        return self.facing_arrow.arrow_clicked(x_click_position, y_click_position)
