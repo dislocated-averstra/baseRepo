@@ -4,6 +4,7 @@ import pygame
 from pygame.locals import *
 
 from Python.DeathAngelCardGame.Main.GameObjects.dice_sprite import DiceSprite
+from Python.DeathAngelCardGame.Main.GameObjects.facing_arrow import FacingArrow
 from Python.DeathAngelCardGame.Main.Menus.game_menu import Game_Menu
 from Python.DeathAngelCardGame.Main.Utils.game_utils import *
 
@@ -40,6 +41,7 @@ def run_game():
     SpaceMarine.containers = render_update_group
     DiceSprite.containers = render_update_group
     Game_Menu.containers = render_update_group
+    FacingArrow.containers = render_update_group
 
     space_marine_list = init_game()
     y_position = 25
@@ -102,6 +104,9 @@ def run_game():
                         render_update_group.add(game_menu)
                         game_menu.is_displayed = True
                         DISPLAYSURF.blit(game_menu.get_menu_surface(), game_menu.get_menu_rect())
+
+                    elif selected_space_marine.is_facing_arrow_clicked(event.pos[0], event.pos[1]):
+                        selected_space_marine.flip_space_marine()
 
                 if event.type == MOUSEMOTION:
                     x_click_position, y_click_position = pygame.mouse.get_pos()
