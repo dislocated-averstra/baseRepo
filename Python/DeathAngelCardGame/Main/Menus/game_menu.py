@@ -15,6 +15,9 @@ class Game_Menu(pygame.sprite.Sprite):
         self.containing_window_height = window_height
         self.containing_window_width = window_width
 
+        # set the is display initialize to false
+        self.is_displayed = False
+
         # create the menu surface and rectangle
         self.image = pygame.Surface((MENU_WIDTH, MENU_HEIGHT))
         self.rect = pygame.Rect(window_width / 2 - 150, window_height / 2 - 100, MENU_WIDTH, MENU_HEIGHT)
