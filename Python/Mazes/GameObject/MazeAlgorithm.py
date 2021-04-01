@@ -25,8 +25,8 @@ class GenerateMaze:
         self.neighbor()
         # random_neighbor_index = self.pick_direction()
         # self.stack.push(self.neighbor[random_neighbor_index])
-    def recursive_function(self):
 
+    #def recursive_function(self):
 
     def neighbor(self):
         top = self.stack.top()
@@ -45,7 +45,7 @@ class GenerateMaze:
         if surrounding_neighbor not in self.visited:
             self.neighbor.append(surrounding_neighbor)
 
-    #you may need to change this , you dont need neihbor func or list
+    # you may need to change this , you dont need neihbor func or list
     def pick_direction(self):
         random_direction = random.sample(self.direction, 1)
         self.direction.remove(random_direction[0])
@@ -89,4 +89,3 @@ class GenerateMaze:
                 return True
             else:
                 return False
-
