@@ -22,28 +22,45 @@ class GenerateMaze:
     def maze_algorithm(self):
         self.stack.push(self.container.maze_wall[0][0])
         self.visited.append(self.stack.top())
-        self.neighbor()
-        # random_neighbor_index = self.pick_direction()
-        # self.stack.push(self.neighbor[random_neighbor_index])
+        for i in range(3):
+            random_neighbor_direction = self.pick_direction()
+            if random_neighbor_direction is not None:
+                self.remove_walls(random_neighbor_direction)
 
-    #def recursive_function(self):
 
-    def neighbor(self):
-        top = self.stack.top()
-        rows = top.x_index
-        colunms = top.y_index
-        top_neighbor = self.container.maze_wall[rows][colunms - 1]
-        right_neighbor = self.container.maze_wall[rows + 1][colunms]
-        left_neighbor = self.container.maze_wall[rows - 1][colunms]
-        bottom_neighbor = self.container.maze_wall[rows][colunms + 1]
-        self.check(top_neighbor)
-        self.check(right_neighbor)
-        self.check(left_neighbor)
-        self.check(bottom_neighbor)
+    def neighbor(self, direction):
+        x_index, y_index = None
+        current_maze_wall = self.stack.top()
+        if direction == 'LEFT':
+            x_index = current_maze_wall.x_index - 1
+            y_index = current_maze_wall.y_index
+        if direction == "RIGHT":
+            x_index = current_maze_wall.x_index + 1
+            y_index = current_maze_wall.y_index
+        if direction == "UP":
+            x_index = current_maze_wall.x_index
+            y_index = current_maze_wall.y_index - 1
+        if direction == "DOWN":
+            x_index = current_maze_wall.x_index
+            y_index = current_maze_wall.y_index + 1
+        return x_index, y_index
 
-    def check(self, surrounding_neighbor):
-        if surrounding_neighbor not in self.visited:
-            self.neighbor.append(surrounding_neighbor)
+    def remove_walls(self, direction):
+        '''Turns walls from true to false'''
+        current_maze_wall = self.stack.top()
+        x_index, y_index = self.neighbor(direction)
+        if direction == 'LEFT':
+            current_maze_wall.left_wall = False
+            self.container.maze_wall[x_index][y_index].right_wall = False
+        if direction == 'RIGHT':
+            current_maze_wall.right_wall = False
+            self.container.maze_wall[x_index][y_index].left_wall = False
+        if direction == 'UP':
+            current_maze_wall.top_wall = False
+            self.container.maze_wall[x_index][y_index].bottom_wall = False
+        if direction == 'DOWN':
+            current_maze_wall.bottom_wall = False
+            self.container.maze_wall[x_index][y_index].top_wall = False
 
     # you may need to change this , you dont need neihbor func or list
     def pick_direction(self):
@@ -53,7 +70,7 @@ class GenerateMaze:
             return random_direction[0]
         else:
             return None
-
+# TODO have is valid use neighbor function, check multiple returns
     def is_valid_move(self, direction):
         if direction == "LEFT":
             current_maze_wall = self.stack.top()
@@ -64,7 +81,6 @@ class GenerateMaze:
             else:
                 return False
 
-        # TODO FINISH FUNCTION
         if direction == "RIGHT":
             current_maze_wall = self.stack.top()
             x_index = current_maze_wall.x_index + 1
