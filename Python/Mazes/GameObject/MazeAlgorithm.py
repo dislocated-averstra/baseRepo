@@ -10,27 +10,29 @@ from random import sample
 class GenerateMaze:
     """ constructor for maze """
 
+
     def __init__(self, maze_containers):
         self.container = maze_containers
         self.stack = Stack()
         self.visited = []
-        self.neighbor = []
-        self.direction = ["LEFT", "RIGHT", "UP", "DOWN"]
+
 
     """ recursive """
 
-    def maze_algorithm(self, x_index, y_index):
-        self.stack.push(self.container.maze_wall[x_index][y_index])
+    def maze_algorithm(self, x_index, y_index, directions_list):
+        self.stack.push(self.container.maze_wall[y_index][x_index])
         self.visited.append(self.stack.top())
         for i in range(3):
-            random_neighbor_direction = self.pick_direction()
+            random_neighbor_direction = self.pick_direction(directions_list)
             if random_neighbor_direction is not None:
                 self.remove_walls(random_neighbor_direction)
-                self.maze_algorithm(self.neighbor(random_neighbor_direction))
+                neighbor_x_index, neighbor_y_index = self.neighbor(random_neighbor_direction)
+                self.maze_algorithm(neighbor_x_index, neighbor_y_index, ["LEFT", "RIGHT", "UP", "DOWN"])
         self.stack.pop()
 
     def neighbor(self, direction):
-        x_index, y_index = None
+        x_index = None
+        y_index = None
         current_maze_wall = self.stack.top()
         if direction == 'LEFT':
             x_index = current_maze_wall.x_index - 1
@@ -63,19 +65,18 @@ class GenerateMaze:
             current_maze_wall.bottom_wall = False
             self.container.maze_wall[x_index][y_index].top_wall = False
 
-    def pick_direction(self):
-        random_direction = random.sample(self.direction, 1)
-        self.direction.remove(random_direction[0])
+    def pick_direction(self, direction):
+        random_direction = random.sample(direction, 1)
+        direction.remove(random_direction[0])
         if self.is_valid_move(random_direction[0]):
             return random_direction[0]
         else:
             return None
 
-    # TODO have is valid use neighbor function, check multiple returns
     def is_valid_move(self, direction):
         x_index, y_index = self.neighbor(direction)
-        if x_index >= 0 or x_index <= 20 or y_index >= 0 or y_index <= 20 \
-                and self.container.maze_wall[x_index][y_index] not in self.visited:
+        if x_index in range(0,4) and y_index in range(0,4) \
+                and self.container.maze_wall[y_index][x_index] not in self.visited:
             return True
         else:
             return False
