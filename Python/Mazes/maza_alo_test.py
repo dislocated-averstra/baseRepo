@@ -9,7 +9,7 @@ class MyTestCase(unittest.TestCase):
         MazeContainer.containers = render_update_group
         test_maze = MazeContainer()
         test_algor = GenerateMaze(test_maze)
-        test_algor.maze_algorithm(0, 1,["LEFT", "RIGHT", "UP", "DOWN"])
+        test_algor.maze_algorithm(0, 0,["LEFT", "RIGHT", "UP", "DOWN"])
         for x in test_algor.container.maze_wall:
             for y in x:
                 self.assertTrue(self.helper_fun(y))
