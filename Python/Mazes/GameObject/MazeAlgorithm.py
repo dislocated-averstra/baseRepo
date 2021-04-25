@@ -15,6 +15,11 @@ class GenerateMaze:
         self.container = maze_containers
         self.stack = Stack()
         self.visited = []
+        if len(maze_containers.maze_wall) > 0:
+            self.row_container_length = len(maze_containers.maze_wall)
+            if len(maze_containers.maze_wall[0]) > 0:
+                self.col_container_length = len(maze_containers.maze_wall[0])
+
 
 
     """ recursive """
@@ -75,7 +80,7 @@ class GenerateMaze:
 
     def is_valid_move(self, direction):
         x_index, y_index = self.neighbor(direction)
-        if x_index in range(0,4) and y_index in range(0,4) \
+        if x_index in range(0, self.row_container_length) and y_index in range(0, self.col_container_length) \
                 and self.container.maze_wall[y_index][x_index] not in self.visited:
             return True
         else:
