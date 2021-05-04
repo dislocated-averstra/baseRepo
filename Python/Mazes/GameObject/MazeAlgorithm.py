@@ -1,10 +1,6 @@
-import sys
-import pygame
-from pygame.locals import *
-from Python.Mazes.Utilities.Stack import Stack
-from Python.Mazes.GameObject.maze_container import MazeContainer
 import random
-from random import sample
+
+from Python.Mazes.Utilities.Stack import Stack
 
 
 class GenerateMaze:

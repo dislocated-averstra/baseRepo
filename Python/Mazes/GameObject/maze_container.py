@@ -18,7 +18,7 @@ class MazeContainer(pygame.sprite.Sprite):
         MazeWalls.containers = self.maze_wall_update_group
 
         # create the maze wall and put them into a 2d array
-        rows, cols = (4, 4)
+        rows, cols = (20, 20)
         self.maze_wall = [[MazeWalls(i, j, 5) for i in range(cols)] for j in range(rows)]
 
         self.maze_wall_update_group.draw(self.image)
@@ -26,3 +26,9 @@ class MazeContainer(pygame.sprite.Sprite):
     def set_position(self, x, y):
         self.rect.x = x
         self.rect.y = y
+
+    def draw_maze_walls(self):
+        for maze_list in self.maze_wall:
+            for wall in maze_list:
+                wall.draw_self()
+        self.maze_wall_update_group.draw(self.image)
