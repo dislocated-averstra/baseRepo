@@ -4,6 +4,7 @@ import pygame
 from pygame.locals import *
 
 from Python.DeathAngelCardGame.Main.GameObjects.dice_sprite import DiceSprite
+from Python.DeathAngelCardGame.Main.GameObjects.facing_arrow import FacingArrow
 from Python.DeathAngelCardGame.Main.Menus.game_menu import Game_Menu
 from Python.DeathAngelCardGame.Main.Utils.game_utils import *
 
@@ -40,6 +41,7 @@ def run_game():
     SpaceMarine.containers = render_update_group
     DiceSprite.containers = render_update_group
     Game_Menu.containers = render_update_group
+    FacingArrow.containers = render_update_group
 
     space_marine_list = init_game()
     y_position = 25
@@ -51,6 +53,10 @@ def run_game():
     menu_text, menu_rect = makeTextObjs('MENU', BASICFONT, BLUE)
 
     dice = DiceSprite()
+
+    # create a menu but call the kill method so that it does not display
+    game_menu = Game_Menu(WINDOWHEIGHT, WINDOWWIDTH)
+    game_menu.kill()
 
     background = DISPLAYSURF.copy()
     background.fill(BLACK)
@@ -68,36 +74,48 @@ def run_game():
         menu_rect.topleft = (WINDOWWIDTH - 130, 0)
         DISPLAYSURF.blit(menu_text, menu_rect)
 
-        game_menu = None
-        checkForQuit()
-        for event in pygame.event.get():  # event handling loop
-            if event.type == MOUSEBUTTONUP:
-                if selected_space_marine is not None:
-                    selected_space_marine.set_is_selected(False)
-                    selected_space_marine = None
-            if event.type == MOUSEBUTTONDOWN:
-                # at this point we set the starting mouse position
-                previous_x_mouse_position, previous_y_mouse_position = event.pos
-                is_mouse_over_a_space_marine(space_marine_list, previous_x_mouse_position,
-                                             previous_y_mouse_position)
-                selected_space_marine = get_selected_space_marine(space_marine_list)
-                if roll_rect.collidepoint(event.pos) and not dice.is_dice_rolling:
-                    dice.roll_dice()
+        # This if statement divides the event handle so that when the menu is displayed the user can only interact
+        # with it
+        if game_menu.is_displayed:
+            for event in pygame.event.get():
+                if event.type == MOUSEBUTTONDOWN:
+                    if game_menu is not None and game_menu.is_close_button_clicked(event.pos):
+                        game_menu.kill()
+                        game_menu.is_displayed = False
 
-                elif menu_rect.collidepoint(event.pos):
-                    game_menu = Game_Menu(WINDOWHEIGHT, WINDOWWIDTH)
-                    DISPLAYSURF.blit(game_menu.get_menu_surface(), game_menu.get_menu_rect())
+                    elif game_menu is not None and game_menu.is_quit_button_clicked(event.pos):
+                        terminate()
+        else:
+            for event in pygame.event.get():  # event handling loop
+                if event.type == MOUSEBUTTONUP:
+                    if selected_space_marine is not None:
+                        selected_space_marine.set_is_selected(False)
+                        selected_space_marine = None
+                if event.type == MOUSEBUTTONDOWN:
+                    # at this point we set the starting mouse position
+                    previous_x_mouse_position, previous_y_mouse_position = event.pos
+                    is_mouse_over_a_space_marine(space_marine_list, previous_x_mouse_position,
+                                                 previous_y_mouse_position)
+                    selected_space_marine = get_selected_space_marine(space_marine_list)
+                    if roll_rect.collidepoint(event.pos) and not dice.is_dice_rolling:
+                        dice.roll_dice()
 
-            if event.type == MOUSEMOTION:
-                x_click_position, y_click_position = pygame.mouse.get_pos()
-                if selected_space_marine is not None:
-                    selected_space_marine.move_relative_to_mouse_movement(
-                        int(previous_x_mouse_position - x_click_position),
-                        int(previous_y_mouse_position - y_click_position))
-                    previous_x_mouse_position = x_click_position
-                    previous_y_mouse_position = y_click_position
+                    elif menu_rect.collidepoint(event.pos):
+                        render_update_group.add(game_menu)
+                        game_menu.is_displayed = True
+                        DISPLAYSURF.blit(game_menu.get_menu_surface(), game_menu.get_menu_rect())
 
+                    elif selected_space_marine.is_facing_arrow_clicked(event.pos[0], event.pos[1]):
+                        selected_space_marine.flip_space_marine()
 
+                if event.type == MOUSEMOTION:
+                    x_click_position, y_click_position = pygame.mouse.get_pos()
+                    if selected_space_marine is not None:
+                        selected_space_marine.move_relative_to_mouse_movement(
+                            int(previous_x_mouse_position - x_click_position),
+                            int(previous_y_mouse_position - y_click_position))
+                        previous_x_mouse_position = x_click_position
+                        previous_y_mouse_position = y_click_position
 
         # clear all the sprites
         render_update_group.clear(DISPLAYSURF, background)
@@ -137,18 +155,6 @@ def get_selected_space_marine(space_marine_list):
         if space_marine.get_is_selected():
             return space_marine
 
-
-def checkForQuit():
-    for event in pygame.event.get(QUIT):  # get all the QUIT events
-        terminate()  # terminate  if any QUIT events are present
-    for event in pygame.event.get(KEYUP):  # get all the KEYUP events
-        if event.key == K_ESCAPE:
-            terminate()  # terminate if the KEYUP event was for the Esc key
-        pygame.event.post(event)  # put the other KEYUP event objects back
-
-def makeTextObjs(text, font, color):
-    surf = font.render(text, True, color)
-    return surf, surf.get_rect()
 
 if __name__ == '__main__':
     main()

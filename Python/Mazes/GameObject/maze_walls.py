@@ -37,3 +37,17 @@ class MazeWalls(pygame.sprite.Sprite):
         # set the position of the surface by setting the position of the rect
         self.rect.x = (self.x_index * self.BLOCK_SIZE) + container_boarder_width
         self.rect.y = (self.y_index * self.BLOCK_SIZE) + container_boarder_width
+
+    def draw_self(self):
+        self.image = pygame.Surface((self.BLOCK_SIZE, self.BLOCK_SIZE))
+        self.image.fill((0, 0, 0))
+        if self.left_wall:
+            pygame.draw.line(self.image, (0, 0, 255), (0, 0), (0, self.BLOCK_SIZE), self.WALL_WIDTH)
+        if self.top_wall:
+            pygame.draw.line(self.image, (0, 0, 255), (0, 0), (self.BLOCK_SIZE, 0), self.WALL_WIDTH)
+        if self.right_wall:
+            pygame.draw.line(self.image, (0, 0, 255), (self.BLOCK_SIZE - self.WALL_WIDTH, 0),
+                             (self.BLOCK_SIZE - self.WALL_WIDTH, self.BLOCK_SIZE - self.WALL_WIDTH), self.WALL_WIDTH)
+        if self.bottom_wall:
+            pygame.draw.line(self.image, (0, 0, 255), (0, self.BLOCK_SIZE - self.WALL_WIDTH),
+                             (self.BLOCK_SIZE, self.BLOCK_SIZE - self.WALL_WIDTH), self.WALL_WIDTH)

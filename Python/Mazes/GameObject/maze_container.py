@@ -26,3 +26,9 @@ class MazeContainer(pygame.sprite.Sprite):
     def set_position(self, x, y):
         self.rect.x = x
         self.rect.y = y
+
+    def draw_maze_walls(self):
+        for maze_list in self.maze_wall:
+            for wall in maze_list:
+                wall.draw_self()
+        self.maze_wall_update_group.draw(self.image)

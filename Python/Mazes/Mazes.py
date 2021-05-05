@@ -3,6 +3,7 @@ import sys
 import pygame
 from pygame.locals import *
 
+from Python.Mazes.GameObject.MazeAlgorithm import GenerateMaze
 from Python.Mazes.GameObject.maze_container import MazeContainer
 
 WINDOWWIDTH = 1024
@@ -31,6 +32,10 @@ def run_game():
     MazeContainer.containers = render_update_group
 
     maze = MazeContainer()
+    generate_maze = GenerateMaze(maze)
+    generate_maze.maze_algorithm(0, 0, ['LEFT', 'RIGHT', 'UP', 'DOWN'])
+    maze = generate_maze.container
+    maze.draw_maze_walls()
     maze.set_position(300, 300)
 
     while True:
@@ -47,8 +52,6 @@ def run_game():
 
         pygame.display.update(dirty)
         FPSCLOCK.tick(FPS)
-
-
 
 
 def makeTextObjs(text, font, color):

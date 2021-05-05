@@ -8,10 +8,10 @@ from Python.DeathAngelCardGame.Main.GameObjects.space_marine import SpaceMarine
 
 def init_game():
     space_marines = []
-    #open the game data and read it to a file
+    # open the game data and read it to a file
     f = open('Main/Resources/game_data.yml', 'r')
     result = yaml.full_load(f)
-    #from the data pick three teams at random
+    # from the data pick three teams at random
     samples = random.sample(list(result), 3)
     for sample in samples:
         team = result.get(sample)
@@ -24,3 +24,8 @@ def init_game():
         if i >= 3:
             space_marines[i].set_facing(Facing.RIGHT)
     return space_marines
+
+
+def makeTextObjs(text, font, color):
+    surf = font.render(text, True, color)
+    return surf, surf.get_rect()
