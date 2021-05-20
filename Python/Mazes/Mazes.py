@@ -5,17 +5,18 @@ from pygame.locals import *
 
 from Python.Mazes.GameObject.MazeAlgorithm import GenerateMaze
 from Python.Mazes.GameObject.maze_container import MazeContainer
+from Python.Mazes.GameObject.player_zame import PlayerZame
 
 WINDOWWIDTH = 1024
 WINDOWHEIGHT = 768
 GRAY = (185, 185, 185)
 LIGHTRED = (175, 20, 20)
 FPS = 60
-
+PLAYER_SIZE = 8
 
 def main():
-    global FPSCLOCK, DISPLAYSURF, BASICFONT, BIGFONT
-
+    global FPSCLOCK, DISPLAYSURF, BASICFONT, BIGFONT, player
+    player = PlayerZame(0,0, PLAYER_SIZE )
     pygame.init()
     DISPLAYSURF = pygame.display.set_mode((WINDOWWIDTH, WINDOWHEIGHT))
     FPSCLOCK = pygame.time.Clock()

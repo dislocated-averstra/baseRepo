@@ -5,7 +5,7 @@ class PlayerZame(pygame.sprite.Sprite):
     RED = (255, 0, 0)
     PLAYER_SIZE = 8
 
-    def __init__(self, x_position, y_position):
+    def __init__(self, x_position, y_position, size):
         pygame.sprite.Sprite.__init__(self, self.containers)
         self.x_position = x_position
         self.y_position = y_position
