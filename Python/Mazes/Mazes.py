@@ -15,8 +15,9 @@ FPS = 60
 PLAYER_SIZE = 8
 
 def main():
-    global FPSCLOCK, DISPLAYSURF, BASICFONT, BIGFONT, player
-    player = PlayerZame(0,0, PLAYER_SIZE )
+    global FPSCLOCK, DISPLAYSURF, BASICFONT, BIGFONT
+
+
     pygame.init()
     DISPLAYSURF = pygame.display.set_mode((WINDOWWIDTH, WINDOWHEIGHT))
     FPSCLOCK = pygame.time.Clock()
@@ -31,8 +32,10 @@ def run_game():
     # create the render group that is going to hold all the sprite for the time being
     render_update_group = pygame.sprite.RenderUpdates()
     MazeContainer.containers = render_update_group
+    PlayerZame.containers = render_update_group
 
     maze = MazeContainer()
+    player = PlayerZame(308, 308, PLAYER_SIZE)
     generate_maze = GenerateMaze(maze)
     generate_maze.maze_algorithm(0, 0, ['LEFT', 'RIGHT', 'UP', 'DOWN'])
     maze = generate_maze.container
@@ -41,6 +44,16 @@ def run_game():
 
     while True:
         checkForQuit()
+        for event in pygame.event.get():
+            if event.type == KEYDOWN:  # a person is pressed or is pressing a key
+                if event.key in (K_a, K_LEFT):
+                    player.move_player('LEFT')
+                if event.key in (K_d, K_RIGHT):
+                    player.move_player('RIGHT')
+                if event.key in (K_w, K_UP):
+                    player.move_player('UP')
+                if event.key in (K_s, K_DOWN):
+                    player.move_player('DOWN')
         DISPLAYSURF.fill(GRAY)
 
         # clear all the sprites
@@ -53,6 +66,8 @@ def run_game():
 
         pygame.display.update(dirty)
         FPSCLOCK.tick(FPS)
+
+
 
 
 def makeTextObjs(text, font, color):
