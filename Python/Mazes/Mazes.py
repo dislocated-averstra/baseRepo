@@ -46,13 +46,13 @@ def run_game():
         checkForQuit()
         for event in pygame.event.get():
             if event.type == KEYDOWN:  # a person is pressed or is pressing a key
-                if event.key in (K_a, K_LEFT):
+                if event.key in (K_a, K_LEFT) and check_if_player_move_valid(player, maze, 'LEFT'):
                     player.move_player('LEFT')
-                if event.key in (K_d, K_RIGHT):
+                if event.key in (K_d, K_RIGHT) and check_if_player_move_valid(player, maze, 'RIGHT'):
                     player.move_player('RIGHT')
-                if event.key in (K_w, K_UP):
+                if event.key in (K_w, K_UP) and check_if_player_move_valid(player, maze, 'UP'):
                     player.move_player('UP')
-                if event.key in (K_s, K_DOWN):
+                if event.key in (K_s, K_DOWN) and check_if_player_move_valid(player, maze, 'DOWN'):
                     player.move_player('DOWN')
         DISPLAYSURF.fill(GRAY)
 
@@ -68,6 +68,17 @@ def run_game():
         FPSCLOCK.tick(FPS)
 
 
+def check_if_player_move_valid(player, maze, direction):
+    if direction == 'LEFT' and maze.maze_wall[player.get_player_array_y_position()][player.get_player_array_x_position()].left_wall:
+        return False
+    elif direction == 'RIGHT' and maze.maze_wall[player.get_player_array_y_position()][player.get_player_array_x_position()].right_wall:
+        return False
+    elif direction == 'UP' and maze.maze_wall[player.get_player_array_y_position()][player.get_player_array_x_position()].top_wall:
+        return False
+    elif direction == 'DOWN' and maze.maze_wall[player.get_player_array_y_position()][player.get_player_array_x_position()].bottom_wall:
+        return False
+    else:
+        return True
 
 
 def makeTextObjs(text, font, color):
