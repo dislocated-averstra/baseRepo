@@ -44,6 +44,7 @@ def run_game():
 
     while True:
         checkForQuit()
+        check_for_win(player)
         for event in pygame.event.get():
             if event.type == KEYDOWN:  # a person is pressed or is pressing a key
                 if event.key in (K_a, K_LEFT) and check_if_player_move_valid(player, maze, 'LEFT'):
@@ -67,6 +68,9 @@ def run_game():
         pygame.display.update(dirty)
         FPSCLOCK.tick(FPS)
 
+def check_for_win(player):
+    if player.player_x_array_position == 19 and player.player_y_array_position == 19:
+        terminate()
 
 def check_if_player_move_valid(player, maze, direction):
     if direction == 'LEFT' and maze.maze_wall[player.get_player_array_y_position()][player.get_player_array_x_position()].left_wall:
