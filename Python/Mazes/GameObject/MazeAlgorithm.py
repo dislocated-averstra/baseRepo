@@ -55,16 +55,16 @@ class GenerateMaze:
         x_index, y_index = self.neighbor(direction)
         if direction == 'LEFT':
             current_maze_wall.left_wall = False
-            self.container.maze_wall[x_index][y_index].right_wall = False
+            self.container.maze_wall[y_index][x_index].right_wall = False
         if direction == 'RIGHT':
             current_maze_wall.right_wall = False
-            self.container.maze_wall[x_index][y_index].left_wall = False
+            self.container.maze_wall[y_index][x_index].left_wall = False
         if direction == 'UP':
             current_maze_wall.top_wall = False
-            self.container.maze_wall[x_index][y_index].bottom_wall = False
+            self.container.maze_wall[y_index][x_index].bottom_wall = False
         if direction == 'DOWN':
             current_maze_wall.bottom_wall = False
-            self.container.maze_wall[x_index][y_index].top_wall = False
+            self.container.maze_wall[y_index][x_index].top_wall = False
 
     def pick_direction(self, direction):
         random_direction = random.sample(direction, 1)
