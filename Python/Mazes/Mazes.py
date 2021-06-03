@@ -5,16 +5,18 @@ from pygame.locals import *
 
 from Python.Mazes.GameObject.MazeAlgorithm import GenerateMaze
 from Python.Mazes.GameObject.maze_container import MazeContainer
+from Python.Mazes.GameObject.player_zame import PlayerZame
 
 WINDOWWIDTH = 1024
 WINDOWHEIGHT = 768
 GRAY = (185, 185, 185)
 LIGHTRED = (175, 20, 20)
 FPS = 60
-
+PLAYER_SIZE = 8
 
 def main():
     global FPSCLOCK, DISPLAYSURF, BASICFONT, BIGFONT
+
 
     pygame.init()
     DISPLAYSURF = pygame.display.set_mode((WINDOWWIDTH, WINDOWHEIGHT))
@@ -30,8 +32,10 @@ def run_game():
     # create the render group that is going to hold all the sprite for the time being
     render_update_group = pygame.sprite.RenderUpdates()
     MazeContainer.containers = render_update_group
+    PlayerZame.containers = render_update_group
 
     maze = MazeContainer()
+    player = PlayerZame(308, 308, PLAYER_SIZE)
     generate_maze = GenerateMaze(maze)
     generate_maze.maze_algorithm(0, 0, ['LEFT', 'RIGHT', 'UP', 'DOWN'])
     maze = generate_maze.container
@@ -40,6 +44,17 @@ def run_game():
 
     while True:
         checkForQuit()
+        check_for_win(player)
+        for event in pygame.event.get():
+            if event.type == KEYDOWN:  # a person is pressed or is pressing a key
+                if event.key in (K_a, K_LEFT) and check_if_player_move_valid(player, maze, 'LEFT'):
+                    player.move_player('LEFT')
+                if event.key in (K_d, K_RIGHT) and check_if_player_move_valid(player, maze, 'RIGHT'):
+                    player.move_player('RIGHT')
+                if event.key in (K_w, K_UP) and check_if_player_move_valid(player, maze, 'UP'):
+                    player.move_player('UP')
+                if event.key in (K_s, K_DOWN) and check_if_player_move_valid(player, maze, 'DOWN'):
+                    player.move_player('DOWN')
         DISPLAYSURF.fill(GRAY)
 
         # clear all the sprites
@@ -52,6 +67,22 @@ def run_game():
 
         pygame.display.update(dirty)
         FPSCLOCK.tick(FPS)
+
+def check_for_win(player):
+    if player.player_x_array_position == 19 and player.player_y_array_position == 19:
+        terminate()
+
+def check_if_player_move_valid(player, maze, direction):
+    if direction == 'LEFT' and maze.maze_wall[player.get_player_array_y_position()][player.get_player_array_x_position()].left_wall:
+        return False
+    elif direction == 'RIGHT' and maze.maze_wall[player.get_player_array_y_position()][player.get_player_array_x_position()].right_wall:
+        return False
+    elif direction == 'UP' and maze.maze_wall[player.get_player_array_y_position()][player.get_player_array_x_position()].top_wall:
+        return False
+    elif direction == 'DOWN' and maze.maze_wall[player.get_player_array_y_position()][player.get_player_array_x_position()].bottom_wall:
+        return False
+    else:
+        return True
 
 
 def makeTextObjs(text, font, color):
