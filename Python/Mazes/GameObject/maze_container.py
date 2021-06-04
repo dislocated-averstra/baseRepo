@@ -5,7 +5,7 @@ from Python.Mazes.GameObject.maze_walls import MazeWalls
 
 class MazeContainer(pygame.sprite.Sprite):
 
-
+    '''construtor for maze container'''
     def __init__(self):
         pygame.sprite.Sprite.__init__(self, self.containers)
         self.image = pygame.Surface((310, 310))
