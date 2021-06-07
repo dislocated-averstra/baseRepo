@@ -14,9 +14,9 @@ LIGHTRED = (175, 20, 20)
 FPS = 60
 PLAYER_SIZE = 8
 
+
 def main():
     global FPSCLOCK, DISPLAYSURF, BASICFONT, BIGFONT
-
 
     pygame.init()
     DISPLAYSURF = pygame.display.set_mode((WINDOWWIDTH, WINDOWHEIGHT))
@@ -26,6 +26,7 @@ def main():
     pygame.display.set_caption('Mazes')
     showStartScreen()
     run_game()
+
 
 
 def run_game():
@@ -55,6 +56,14 @@ def run_game():
                     player.move_player('UP')
                 if event.key in (K_s, K_DOWN) and check_if_player_move_valid(player, maze, 'DOWN'):
                     player.move_player('DOWN')
+                elif event.key == K_r:
+                    player.rect.x = 308
+                    player.rect.y = 308
+
+
+
+
+
         DISPLAYSURF.fill(GRAY)
 
         # clear all the sprites
@@ -68,18 +77,31 @@ def run_game():
         pygame.display.update(dirty)
         FPSCLOCK.tick(FPS)
 
+
 def check_for_win(player):
-    if player.player_x_array_position == 19 and player.player_y_array_position == 19:
-        terminate()
+    if player.player_x_array_position == 1 and player.player_y_array_position == 0:
+        showWinningMessage(player)
+        for event in pygame.event.get():
+            if event.type == KEYDOWN:
+                if event.key == (K_r):
+                    player.rect.x = 308
+                    player.rect.y = 308
+    pygame.display.update()
+    FPSCLOCK.tick()
+
 
 def check_if_player_move_valid(player, maze, direction):
-    if direction == 'LEFT' and maze.maze_wall[player.get_player_array_y_position()][player.get_player_array_x_position()].left_wall:
+    if direction == 'LEFT' and maze.maze_wall[player.get_player_array_y_position()][
+        player.get_player_array_x_position()].left_wall:
         return False
-    elif direction == 'RIGHT' and maze.maze_wall[player.get_player_array_y_position()][player.get_player_array_x_position()].right_wall:
+    elif direction == 'RIGHT' and maze.maze_wall[player.get_player_array_y_position()][
+        player.get_player_array_x_position()].right_wall:
         return False
-    elif direction == 'UP' and maze.maze_wall[player.get_player_array_y_position()][player.get_player_array_x_position()].top_wall:
+    elif direction == 'UP' and maze.maze_wall[player.get_player_array_y_position()][
+        player.get_player_array_x_position()].top_wall:
         return False
-    elif direction == 'DOWN' and maze.maze_wall[player.get_player_array_y_position()][player.get_player_array_x_position()].bottom_wall:
+    elif direction == 'DOWN' and maze.maze_wall[player.get_player_array_y_position()][
+        player.get_player_array_x_position()].bottom_wall:
         return False
     else:
         return True
@@ -100,6 +122,21 @@ def checkForKeyPress():
             continue
         return event.key
     return None
+
+
+def showWinningMessage(player):
+    titleSurf, titleRect = makeTextObjs('You won the game', BIGFONT, LIGHTRED)
+    titleRect.center = (int(WINDOWWIDTH / 2) - 3, int(WINDOWHEIGHT / 2) - 3)
+    DISPLAYSURF.blit(titleSurf, titleRect)
+
+    pressKeySurf, pressKeyRect = makeTextObjs('Press a key to play again.', BASICFONT, LIGHTRED)
+    pressKeyRect.center = (int(WINDOWWIDTH / 2), int(WINDOWHEIGHT / 2) + 100)
+    DISPLAYSURF.blit(pressKeySurf, pressKeyRect)
+
+    while checkForKeyPress() == None:
+
+        pygame.display.update()
+        FPSCLOCK.tick()
 
 
 def showStartScreen():
