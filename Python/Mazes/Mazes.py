@@ -38,6 +38,7 @@ def run_game():
     player = PlayerZame(308, 308, PLAYER_SIZE)
     generate_maze = GenerateMaze(maze)
     generate_maze.maze_algorithm(0, 0, ['LEFT', 'RIGHT', 'UP', 'DOWN'])
+    print(generate_maze.largestStackLocation)
     maze = generate_maze.container
     maze.draw_maze_walls()
     maze.set_position(300, 300)
