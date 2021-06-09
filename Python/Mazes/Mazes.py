@@ -60,19 +60,20 @@ def run_game():
                 if winMode and event.key == K_r:
                     return
 
+        if winMode is not True:
 
-        DISPLAYSURF.fill(GRAY)
+            DISPLAYSURF.fill(GRAY)
 
-        # clear all the sprites
-        render_update_group.clear(DISPLAYSURF, DISPLAYSURF)
+            # clear all the sprites
+            render_update_group.clear(DISPLAYSURF, DISPLAYSURF)
 
-        # update all the sprites
-        render_update_group.update()
+            # update all the sprites
+            render_update_group.update()
 
-        dirty = render_update_group.draw(DISPLAYSURF)
+            dirty = render_update_group.draw(DISPLAYSURF)
 
-        pygame.display.update(dirty)
-        FPSCLOCK.tick(FPS)
+            pygame.display.update(dirty)
+            FPSCLOCK.tick(FPS)
 
 def check_for_win(player):
     if player.player_x_array_position == 1 and player.player_y_array_position == 0:
