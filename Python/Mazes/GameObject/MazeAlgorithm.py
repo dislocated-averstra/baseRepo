@@ -6,23 +6,27 @@ from Python.Mazes.Utilities.Stack import Stack
 class GenerateMaze:
     """ constructor for maze """
 
-
     def __init__(self, maze_containers):
         self.container = maze_containers
         self.stack = Stack()
         self.visited = []
+        self.largestStack = 0
+        self.largestStackLocation = (0, 0)
         if len(maze_containers.maze_wall) > 0:
             self.row_container_length = len(maze_containers.maze_wall)
             if len(maze_containers.maze_wall[0]) > 0:
                 self.col_container_length = len(maze_containers.maze_wall[0])
-
-
 
     """ recursive """
 
     def maze_algorithm(self, x_index, y_index, directions_list):
         self.stack.push(self.container.maze_wall[y_index][x_index])
         self.visited.append(self.stack.top())
+        if self.stack.size() > self.largestStack and (self.largestStackLocation[0] < x_index
+                                                      or self.largestStackLocation[1] < y_index):
+            self.largestStack = self.stack.size()
+            self.largestStackLocation = (x_index, y_index)
+
         for i in range(3):
             random_neighbor_direction = self.pick_direction(directions_list)
             if random_neighbor_direction is not None:
