@@ -25,9 +25,8 @@ def main():
     BIGFONT = pygame.font.Font('freesansbold.ttf', 100)
     pygame.display.set_caption('Mazes')
     showStartScreen()
-    run_game()
-
-
+    while True:
+        run_game()
 
 def run_game():
     # create the render group that is going to hold all the sprite for the time being
@@ -45,7 +44,8 @@ def run_game():
 
     while True:
         checkForQuit()
-        check_for_win(player)
+        winMode = check_for_win(player)
+
         for event in pygame.event.get():
             if event.type == KEYDOWN:  # a person is pressed or is pressing a key
                 if event.key in (K_a, K_LEFT) and check_if_player_move_valid(player, maze, 'LEFT'):
@@ -56,12 +56,8 @@ def run_game():
                     player.move_player('UP')
                 if event.key in (K_s, K_DOWN) and check_if_player_move_valid(player, maze, 'DOWN'):
                     player.move_player('DOWN')
-                elif event.key == K_r:
-                    player.rect.x = 308
-                    player.rect.y = 308
-
-
-
+                if winMode and event.key == K_r:
+                    return
 
 
         DISPLAYSURF.fill(GRAY)
@@ -77,18 +73,12 @@ def run_game():
         pygame.display.update(dirty)
         FPSCLOCK.tick(FPS)
 
-
 def check_for_win(player):
     if player.player_x_array_position == 1 and player.player_y_array_position == 0:
-        showWinningMessage(player)
-        for event in pygame.event.get():
-            if event.type == KEYDOWN:
-                if event.key == (K_r):
-                    player.rect.x = 308
-                    player.rect.y = 308
-    pygame.display.update()
-    FPSCLOCK.tick()
-
+        showWinningMessage()
+        return True
+    else:
+        return False
 
 def check_if_player_move_valid(player, maze, direction):
     if direction == 'LEFT' and maze.maze_wall[player.get_player_array_y_position()][
@@ -124,7 +114,7 @@ def checkForKeyPress():
     return None
 
 
-def showWinningMessage(player):
+def showWinningMessage():
     titleSurf, titleRect = makeTextObjs('You won the game', BIGFONT, LIGHTRED)
     titleRect.center = (int(WINDOWWIDTH / 2) - 3, int(WINDOWHEIGHT / 2) - 3)
     DISPLAYSURF.blit(titleSurf, titleRect)
@@ -133,10 +123,8 @@ def showWinningMessage(player):
     pressKeyRect.center = (int(WINDOWWIDTH / 2), int(WINDOWHEIGHT / 2) + 100)
     DISPLAYSURF.blit(pressKeySurf, pressKeyRect)
 
-    while checkForKeyPress() == None:
-
-        pygame.display.update()
-        FPSCLOCK.tick()
+    pygame.display.update()
+    FPSCLOCK.tick()
 
 
 def showStartScreen():
