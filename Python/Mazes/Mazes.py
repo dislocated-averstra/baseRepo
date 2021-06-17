@@ -28,6 +28,7 @@ def main():
     while True:
         run_game()
 
+
 def run_game():
     # create the render group that is going to hold all the sprite for the time being
     render_update_group = pygame.sprite.RenderUpdates()
@@ -60,7 +61,6 @@ def run_game():
                     return
 
         if winMode is not True:
-
             DISPLAYSURF.fill(GRAY)
 
             # clear all the sprites
@@ -74,12 +74,14 @@ def run_game():
             pygame.display.update(dirty)
             FPSCLOCK.tick(FPS)
 
+
 def check_for_win(player):
     if player.player_x_array_position == 1 and player.player_y_array_position == 0:
         showWinningMessage()
         return True
     else:
         return False
+
 
 def check_if_player_move_valid(player, maze, direction):
     if direction == 'LEFT' and maze.maze_wall[player.get_player_array_y_position()][
