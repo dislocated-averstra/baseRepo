@@ -76,7 +76,7 @@ def run_game():
 
 
 def check_for_win(player):
-    if player.player_x_array_position == 1 and player.player_y_array_position == 0:
+    if player.player_x_array_position == 19 and player.player_y_array_position == 19:
         showWinningMessage()
         return True
     else:
