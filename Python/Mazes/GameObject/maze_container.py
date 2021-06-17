@@ -31,4 +31,5 @@ class MazeContainer(pygame.sprite.Sprite):
         for maze_list in self.maze_wall:
             for wall in maze_list:
                 wall.draw_self()
+        self.maze_wall[19][19].draw_self_set_background_color(0, 255, 0)
         self.maze_wall_update_group.draw(self.image)
