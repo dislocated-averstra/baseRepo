@@ -6,6 +6,7 @@ from pygame.locals import *
 from Python.Mazes.GameObject.MazeAlgorithm import GenerateMaze
 from Python.Mazes.GameObject.maze_container import MazeContainer
 from Python.Mazes.GameObject.player_zame import PlayerZame
+from Python.Mazes.GameObject.maze_shoud import MazeShoud
 
 WINDOWWIDTH = 1024
 WINDOWHEIGHT = 768
@@ -34,9 +35,12 @@ def run_game():
     render_update_group = pygame.sprite.RenderUpdates()
     MazeContainer.containers = render_update_group
     PlayerZame.containers = render_update_group
+    MazeShoud.containers = render_update_group
+
 
     maze = MazeContainer()
     player = PlayerZame(308, 308, PLAYER_SIZE)
+    shoud = MazeShoud(600, 600, 600)
     generate_maze = GenerateMaze(maze)
     generate_maze.maze_algorithm(0, 0, ['LEFT', 'RIGHT', 'UP', 'DOWN'])
     maze = generate_maze.container
