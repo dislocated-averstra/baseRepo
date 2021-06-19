@@ -14,7 +14,7 @@ class MazeWalls(pygame.sprite.Sprite):
         self.top_wall = True
         self.bottom_wall = True
 
-        #position indexes
+        # position indexes
         self.x_index = x_index
         self.y_index = y_index
 
@@ -38,9 +38,9 @@ class MazeWalls(pygame.sprite.Sprite):
         self.rect.x = (self.x_index * self.BLOCK_SIZE) + container_boarder_width
         self.rect.y = (self.y_index * self.BLOCK_SIZE) + container_boarder_width
 
-    def draw_self(self):
+    def draw_self_set_background_color(self, red, green, blue):
         self.image = pygame.Surface((self.BLOCK_SIZE, self.BLOCK_SIZE))
-        self.image.fill((0, 0, 0))
+        self.image.fill((red, green, blue))
         if self.left_wall:
             pygame.draw.line(self.image, (0, 0, 255), (0, 0), (0, self.BLOCK_SIZE), self.WALL_WIDTH)
         if self.top_wall:
@@ -51,3 +51,6 @@ class MazeWalls(pygame.sprite.Sprite):
         if self.bottom_wall:
             pygame.draw.line(self.image, (0, 0, 255), (0, self.BLOCK_SIZE - self.WALL_WIDTH),
                              (self.BLOCK_SIZE, self.BLOCK_SIZE - self.WALL_WIDTH), self.WALL_WIDTH)
+
+    def draw_self(self):
+        self.draw_self_set_background_color(0, 0, 0)
