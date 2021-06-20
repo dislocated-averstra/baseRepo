@@ -37,7 +37,6 @@ def run_game():
     PlayerZame.containers = render_update_group
     MazeShoud.containers = render_update_group
 
-
     maze = MazeContainer()
     player = PlayerZame(308, 308, PLAYER_SIZE)
     shoud = MazeShoud(300, 300, 600)
