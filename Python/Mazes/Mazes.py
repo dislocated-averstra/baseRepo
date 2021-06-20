@@ -40,7 +40,7 @@ def run_game():
 
     maze = MazeContainer()
     player = PlayerZame(308, 308, PLAYER_SIZE)
-    shoud = MazeShoud(600, 600, 600)
+    shoud = MazeShoud(300, 300, 600)
     generate_maze = GenerateMaze(maze)
     generate_maze.maze_algorithm(0, 0, ['LEFT', 'RIGHT', 'UP', 'DOWN'])
     maze = generate_maze.container
