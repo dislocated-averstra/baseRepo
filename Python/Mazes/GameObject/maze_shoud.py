@@ -9,6 +9,7 @@ class MazeShoud(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self, self.containers)
 
         self.image = pygame.Surface((self.SHOUD_SIZE, self.SHOUD_SIZE))
+        #transparent square set to 250 for now
         self.image.set_alpha(250)
 
         pygame.draw.rect(self.image, self.BLACK, (300, 300, 600, 600))
