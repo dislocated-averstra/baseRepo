@@ -35,11 +35,9 @@ def run_game():
     render_update_group = pygame.sprite.RenderUpdates()
     MazeContainer.containers = render_update_group
     PlayerZame.containers = render_update_group
-    MazeShoud.containers = render_update_group
 
     maze = MazeContainer()
     player = PlayerZame(308, 308, PLAYER_SIZE)
-    shoud = MazeShoud(300, 300, 600)
     generate_maze = GenerateMaze(maze)
     generate_maze.maze_algorithm(0, 0, ['LEFT', 'RIGHT', 'UP', 'DOWN'])
     maze = generate_maze.container
@@ -52,13 +50,13 @@ def run_game():
 
         for event in pygame.event.get():
             if event.type == KEYDOWN:  # a person is pressed or is pressing a key
-                if event.key in (K_a, K_LEFT) and check_if_player_move_valid(player, maze, 'LEFT'):
+                if event.key in (K_a, K_LEFT) and check_if_player_move_valid(player, maze, 'LEFT') and winMode is False:
                     player.move_player('LEFT')
-                if event.key in (K_d, K_RIGHT) and check_if_player_move_valid(player, maze, 'RIGHT'):
+                if event.key in (K_d, K_RIGHT) and check_if_player_move_valid(player, maze, 'RIGHT') and winMode is False:
                     player.move_player('RIGHT')
-                if event.key in (K_w, K_UP) and check_if_player_move_valid(player, maze, 'UP'):
+                if event.key in (K_w, K_UP) and check_if_player_move_valid(player, maze, 'UP') and winMode is False:
                     player.move_player('UP')
-                if event.key in (K_s, K_DOWN) and check_if_player_move_valid(player, maze, 'DOWN'):
+                if event.key in (K_s, K_DOWN) and check_if_player_move_valid(player, maze, 'DOWN') and winMode is False:
                     player.move_player('DOWN')
                 if winMode and event.key == K_r:
                     return
