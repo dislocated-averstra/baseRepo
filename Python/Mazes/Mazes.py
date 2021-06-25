@@ -6,6 +6,7 @@ from pygame.locals import *
 from Python.Mazes.GameObject.MazeAlgorithm import GenerateMaze
 from Python.Mazes.GameObject.maze_container import MazeContainer
 from Python.Mazes.GameObject.player_zame import PlayerZame
+from Python.Mazes.GameObject.maze_shoud import MazeShoud
 
 WINDOWWIDTH = 1024
 WINDOWHEIGHT = 768
@@ -49,13 +50,13 @@ def run_game():
 
         for event in pygame.event.get():
             if event.type == KEYDOWN:  # a person is pressed or is pressing a key
-                if event.key in (K_a, K_LEFT) and check_if_player_move_valid(player, maze, 'LEFT'):
+                if event.key in (K_a, K_LEFT) and check_if_player_move_valid(player, maze, 'LEFT') and winMode is False:
                     player.move_player('LEFT')
-                if event.key in (K_d, K_RIGHT) and check_if_player_move_valid(player, maze, 'RIGHT'):
+                if event.key in (K_d, K_RIGHT) and check_if_player_move_valid(player, maze, 'RIGHT') and winMode is False:
                     player.move_player('RIGHT')
-                if event.key in (K_w, K_UP) and check_if_player_move_valid(player, maze, 'UP'):
+                if event.key in (K_w, K_UP) and check_if_player_move_valid(player, maze, 'UP') and winMode is False:
                     player.move_player('UP')
-                if event.key in (K_s, K_DOWN) and check_if_player_move_valid(player, maze, 'DOWN'):
+                if event.key in (K_s, K_DOWN) and check_if_player_move_valid(player, maze, 'DOWN') and winMode is False:
                     player.move_player('DOWN')
                 if winMode and event.key == K_r:
                     return
