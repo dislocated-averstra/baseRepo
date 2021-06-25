@@ -19,6 +19,11 @@ class PlayerZame(pygame.sprite.Sprite):
         self.player_x_array_position = 0
         self.player_y_array_position = 0
 
+        #previous position
+        self.previous_position_x = None
+        self.previous_position_y = None
+
+
     def get_player_array_x_position(self):
         return self.player_x_array_position
 
@@ -27,6 +32,9 @@ class PlayerZame(pygame.sprite.Sprite):
 
     def move_player(self, move_direction):
         '''moves the player 10 pixels in a given direction'''
+        # capture x and y when player move around
+        self.previous_position_x = self.player_x_array_position
+        self.previous_position_y = self.player_y_array_position
         if move_direction == 'LEFT':
             self.rect.x -= 15
             self.player_x_array_position -= 1
@@ -39,5 +47,8 @@ class PlayerZame(pygame.sprite.Sprite):
         if move_direction == 'DOWN':
             self.rect.y += 15
             self.player_y_array_position += 1
+
+
+
 
 

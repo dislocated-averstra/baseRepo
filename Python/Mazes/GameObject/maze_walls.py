@@ -13,6 +13,8 @@ class MazeWalls(pygame.sprite.Sprite):
         self.right_wall = True
         self.top_wall = True
         self.bottom_wall = True
+        self.visuality = False
+
 
         # position indexes
         self.x_index = x_index

@@ -35,7 +35,6 @@ def run_game():
     render_update_group = pygame.sprite.RenderUpdates()
     MazeContainer.containers = render_update_group
     PlayerZame.containers = render_update_group
-
     maze = MazeContainer()
     player = PlayerZame(308, 308, PLAYER_SIZE)
     generate_maze = GenerateMaze(maze)
@@ -77,6 +76,7 @@ def run_game():
 
 
 def check_for_win(player):
+    #recalculate here
     if player.player_x_array_position == 19 and player.player_y_array_position == 19:
         showWinningMessage()
         return True
