@@ -6,7 +6,7 @@ from pygame.locals import *
 from Python.Mazes.GameObject.MazeAlgorithm import GenerateMaze
 from Python.Mazes.GameObject.maze_container import MazeContainer
 from Python.Mazes.GameObject.player_zame import PlayerZame
-from Python.Mazes.GameObject.maze_shoud import MazeShoud
+
 
 WINDOWWIDTH = 1024
 WINDOWHEIGHT = 768
@@ -61,6 +61,11 @@ def run_game():
                     return
 
         if winMode is not True:
+            if player.previous_position_x != player.player_x_array_position or player.previous_position_y != player.player_y_array_position:
+                player.previous_position_x = player.player_x_array_position
+                player.previous_position_y = player.player_y_array_position
+                maze.vision_change(player.player_x_array_position, player.player_y_array_position)
+
             DISPLAYSURF.fill(GRAY)
 
             # clear all the sprites
