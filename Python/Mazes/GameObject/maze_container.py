@@ -35,4 +35,8 @@ class MazeContainer(pygame.sprite.Sprite):
         self.maze_wall_update_group.draw(self.image)
 
     def vision_change(self, x, y):
-        print("We suppose to recal vision here")
+        print("We suppose to recall vision here")
+
+    def check_9_squares_around_player(self, player_position_x, player_position_y):
+        """check the 9 squares around the player and change visuality to True"""
+        self.maze_wall[player_position_y][player_position_x].visuality = True

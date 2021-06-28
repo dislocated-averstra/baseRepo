@@ -46,7 +46,7 @@ def run_game():
     while True:
         checkForQuit()
         winMode = check_for_win(player)
-
+        maze.check_9_squares_around_player(player.player_x_array_position, player.player_y_array_position)
         for event in pygame.event.get():
             if event.type == KEYDOWN:  # a person is pressed or is pressing a key
                 if event.key in (K_a, K_LEFT) and check_if_player_move_valid(player, maze, 'LEFT') and winMode is False:
