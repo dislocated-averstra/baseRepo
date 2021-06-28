@@ -39,4 +39,35 @@ class MazeContainer(pygame.sprite.Sprite):
 
     def check_9_squares_around_player(self, player_position_x, player_position_y):
         """check the 9 squares around the player and change visuality to True"""
-        self.maze_wall[player_position_y][player_position_x].visuality = True
+        if player_position_x == 0 and player_position_y == 0:  # top left
+            for i in range(0, 2):
+                for q in range(0, 2):
+                    self.maze_wall[q][i].visuality = True
+        elif player_position_x == 0 and player_position_y != 19:  # left side
+            for i in range(0, 2):
+                for q in range(player_position_y - 1, player_position_y + 2):
+                    self.maze_wall[q][i].visuality = True
+        elif player_position_x == 19 and player_position_y == 0:  # top right
+            for i in range(player_position_x - 1, player_position_x + 1):
+                for q in range(player_position_y - 1, player_position_y + 2):
+                    self.maze_wall[q][i].visuality = True
+        elif player_position_y == 0 and player_position_x != 19:  # top side
+            for i in range(player_position_x - 1, player_position_x + 2):
+                for q in range(0, player_position_y + 2):
+                    self.maze_wall[q][i].visuality = True
+        elif player_position_x == 19 and player_position_y != 19:  # right side
+            for i in range(player_position_x - 1, player_position_x + 1):
+                for q in range(player_position_y - 1, player_position_y + 2):
+                    self.maze_wall[q][i].visuality = True
+        elif player_position_y == 19 and player_position_x != 19:  # bottom side
+            for i in range(player_position_x - 1, player_position_x + 2):
+                for q in range(player_position_y - 1, player_position_y + 1):
+                    self.maze_wall[q][i].visuality = True
+        elif player_position_x == 19 and player_position_y == 19:  # bottom right
+            for i in range(17, 19):
+                for q in range(17, 19):
+                    self.maze_wall[q][i].visuality = True
+        else:  # middle of board
+            for i in range(player_position_x - 1, player_position_x + 2):
+                for q in range(player_position_y - 1, player_position_y + 2):
+                    self.maze_wall[q][i].visuality = True
