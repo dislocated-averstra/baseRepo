@@ -20,8 +20,8 @@ class PlayerZame(pygame.sprite.Sprite):
         self.player_y_array_position = 0
 
         #previous position
-        self.previous_position_x = None
-        self.previous_position_y = None
+        self.previous_position_x = 0
+        self.previous_position_y = 0
 
 
     def get_player_array_x_position(self):

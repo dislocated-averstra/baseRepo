@@ -39,7 +39,7 @@ def run_game():
     generate_maze = GenerateMaze(maze)
     generate_maze.maze_algorithm(0, 0, ['LEFT', 'RIGHT', 'UP', 'DOWN'])
     maze = generate_maze.container
-    maze.check_9_squares_around_player(player.player_x_array_position, player.player_y_array_position)
+    maze.check_9_squares_around_player(player.player_x_array_position, player.player_y_array_position, True)
     maze.draw_maze_walls()
     maze.set_position(300, 300)
 
@@ -63,9 +63,11 @@ def run_game():
 
         if winMode is not True:
             if player.previous_position_x != player.player_x_array_position or player.previous_position_y != player.player_y_array_position:
+                maze.vision_change(player.previous_position_x, player.previous_position_y, False)
+
                 player.previous_position_x = player.player_x_array_position
                 player.previous_position_y = player.player_y_array_position
-                maze.vision_change(player.player_x_array_position, player.player_y_array_position)
+                maze.vision_change(player.player_x_array_position, player.player_y_array_position, True)
                 maze.draw_maze_walls()
 
             DISPLAYSURF.fill(GRAY)
