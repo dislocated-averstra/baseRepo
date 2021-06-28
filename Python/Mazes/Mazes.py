@@ -7,7 +7,6 @@ from Python.Mazes.GameObject.MazeAlgorithm import GenerateMaze
 from Python.Mazes.GameObject.maze_container import MazeContainer
 from Python.Mazes.GameObject.player_zame import PlayerZame
 
-
 WINDOWWIDTH = 1024
 WINDOWHEIGHT = 768
 GRAY = (185, 185, 185)
@@ -40,18 +39,20 @@ def run_game():
     generate_maze = GenerateMaze(maze)
     generate_maze.maze_algorithm(0, 0, ['LEFT', 'RIGHT', 'UP', 'DOWN'])
     maze = generate_maze.container
+    maze.check_9_squares_around_player(player.player_x_array_position, player.player_y_array_position)
     maze.draw_maze_walls()
     maze.set_position(300, 300)
 
     while True:
         checkForQuit()
         winMode = check_for_win(player)
-        maze.check_9_squares_around_player(player.player_x_array_position, player.player_y_array_position)
+
         for event in pygame.event.get():
             if event.type == KEYDOWN:  # a person is pressed or is pressing a key
                 if event.key in (K_a, K_LEFT) and check_if_player_move_valid(player, maze, 'LEFT') and winMode is False:
                     player.move_player('LEFT')
-                if event.key in (K_d, K_RIGHT) and check_if_player_move_valid(player, maze, 'RIGHT') and winMode is False:
+                if event.key in (K_d, K_RIGHT) and check_if_player_move_valid(player, maze,
+                                                                              'RIGHT') and winMode is False:
                     player.move_player('RIGHT')
                 if event.key in (K_w, K_UP) and check_if_player_move_valid(player, maze, 'UP') and winMode is False:
                     player.move_player('UP')
@@ -65,6 +66,7 @@ def run_game():
                 player.previous_position_x = player.player_x_array_position
                 player.previous_position_y = player.player_y_array_position
                 maze.vision_change(player.player_x_array_position, player.player_y_array_position)
+                maze.draw_maze_walls()
 
             DISPLAYSURF.fill(GRAY)
 
@@ -81,7 +83,7 @@ def run_game():
 
 
 def check_for_win(player):
-    #recalculate here
+    # recalculate here
     if player.player_x_array_position == 19 and player.player_y_array_position == 19:
         showWinningMessage()
         return True
