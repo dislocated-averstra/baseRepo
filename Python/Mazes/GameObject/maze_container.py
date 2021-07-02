@@ -38,7 +38,7 @@ class MazeContainer(pygame.sprite.Sprite):
         self.check_9_squares_around_player(x, y, boolean_val)
 
     def check_9_squares_around_player(self, player_position_x, player_position_y, boolean):
-        """check the 9 squares around the player and change visuality to True"""
+        """ check the 9 squares around the player and change visuality to True """
         if player_position_x == 0 and player_position_y == 0:  # top left
             for i in range(0, 2):
                 for q in range(0, 2):
