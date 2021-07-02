@@ -6,7 +6,6 @@ from pygame.locals import *
 from Python.Mazes.GameObject.MazeAlgorithm import GenerateMaze
 from Python.Mazes.GameObject.maze_container import MazeContainer
 from Python.Mazes.GameObject.player_zame import PlayerZame
-from Python.Mazes.GameObject.maze_shoud import MazeShoud
 
 WINDOWWIDTH = 1024
 WINDOWHEIGHT = 768
@@ -35,12 +34,12 @@ def run_game():
     render_update_group = pygame.sprite.RenderUpdates()
     MazeContainer.containers = render_update_group
     PlayerZame.containers = render_update_group
-
     maze = MazeContainer()
     player = PlayerZame(308, 308, PLAYER_SIZE)
     generate_maze = GenerateMaze(maze)
     generate_maze.maze_algorithm(0, 0, ['LEFT', 'RIGHT', 'UP', 'DOWN'])
     maze = generate_maze.container
+    maze.check_9_squares_around_player(player.player_x_array_position, player.player_y_array_position, True)
     maze.draw_maze_walls()
     maze.set_position(300, 300)
 
@@ -52,7 +51,8 @@ def run_game():
             if event.type == KEYDOWN:  # a person is pressed or is pressing a key
                 if event.key in (K_a, K_LEFT) and check_if_player_move_valid(player, maze, 'LEFT') and winMode is False:
                     player.move_player('LEFT')
-                if event.key in (K_d, K_RIGHT) and check_if_player_move_valid(player, maze, 'RIGHT') and winMode is False:
+                if event.key in (K_d, K_RIGHT) and check_if_player_move_valid(player, maze,
+                                                                              'RIGHT') and winMode is False:
                     player.move_player('RIGHT')
                 if event.key in (K_w, K_UP) and check_if_player_move_valid(player, maze, 'UP') and winMode is False:
                     player.move_player('UP')
@@ -62,6 +62,14 @@ def run_game():
                     return
 
         if winMode is not True:
+            if player.previous_position_x != player.player_x_array_position or player.previous_position_y != player.player_y_array_position:
+                maze.vision_change(player.previous_position_x, player.previous_position_y, False)
+
+                player.previous_position_x = player.player_x_array_position
+                player.previous_position_y = player.player_y_array_position
+                maze.vision_change(player.player_x_array_position, player.player_y_array_position, True)
+                maze.draw_maze_walls()
+
             DISPLAYSURF.fill(GRAY)
 
             # clear all the sprites
@@ -77,6 +85,7 @@ def run_game():
 
 
 def check_for_win(player):
+    # recalculate here
     if player.player_x_array_position == 19 and player.player_y_array_position == 19:
         showWinningMessage()
         return True

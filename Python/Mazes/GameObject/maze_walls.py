@@ -13,6 +13,8 @@ class MazeWalls(pygame.sprite.Sprite):
         self.right_wall = True
         self.top_wall = True
         self.bottom_wall = True
+        self.visuality = False
+
 
         # position indexes
         self.x_index = x_index
@@ -41,16 +43,18 @@ class MazeWalls(pygame.sprite.Sprite):
     def draw_self_set_background_color(self, red, green, blue):
         self.image = pygame.Surface((self.BLOCK_SIZE, self.BLOCK_SIZE))
         self.image.fill((red, green, blue))
-        if self.left_wall:
-            pygame.draw.line(self.image, (0, 0, 255), (0, 0), (0, self.BLOCK_SIZE), self.WALL_WIDTH)
-        if self.top_wall:
-            pygame.draw.line(self.image, (0, 0, 255), (0, 0), (self.BLOCK_SIZE, 0), self.WALL_WIDTH)
-        if self.right_wall:
-            pygame.draw.line(self.image, (0, 0, 255), (self.BLOCK_SIZE - self.WALL_WIDTH, 0),
-                             (self.BLOCK_SIZE - self.WALL_WIDTH, self.BLOCK_SIZE - self.WALL_WIDTH), self.WALL_WIDTH)
-        if self.bottom_wall:
-            pygame.draw.line(self.image, (0, 0, 255), (0, self.BLOCK_SIZE - self.WALL_WIDTH),
-                             (self.BLOCK_SIZE, self.BLOCK_SIZE - self.WALL_WIDTH), self.WALL_WIDTH)
+        if self.visuality:
+
+            if self.left_wall:
+                pygame.draw.line(self.image, (0, 0, 255), (0, 0), (0, self.BLOCK_SIZE), self.WALL_WIDTH)
+            if self.top_wall:
+                pygame.draw.line(self.image, (0, 0, 255), (0, 0), (self.BLOCK_SIZE, 0), self.WALL_WIDTH)
+            if self.right_wall:
+                pygame.draw.line(self.image, (0, 0, 255), (self.BLOCK_SIZE - self.WALL_WIDTH, 0),
+                                 (self.BLOCK_SIZE - self.WALL_WIDTH, self.BLOCK_SIZE - self.WALL_WIDTH), self.WALL_WIDTH)
+            if self.bottom_wall:
+                pygame.draw.line(self.image, (0, 0, 255), (0, self.BLOCK_SIZE - self.WALL_WIDTH),
+                                 (self.BLOCK_SIZE, self.BLOCK_SIZE - self.WALL_WIDTH), self.WALL_WIDTH)
 
     def draw_self(self):
         self.draw_self_set_background_color(0, 0, 0)
