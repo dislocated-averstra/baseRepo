@@ -37,6 +37,38 @@ class MazeContainer(pygame.sprite.Sprite):
     def vision_change(self, x, y, boolean_val):
         self.check_9_squares_around_player(x, y, boolean_val)
 
+    def look_at_the_wall_from_player(self, player_position_x, player_position_y):
+        self.maze_wall[player_position_y][player_position_x].visuality = True
+
+        if not self.maze_wall[player_position_y][player_position_x].bottom_wall:
+            self.maze_wall[player_position_y + 1][player_position_x].visuality = True
+            self.look_at_right_and_left_wall(player_position_x, player_position_y + 1)
+
+        if not self.maze_wall[player_position_y][player_position_x].top_wall:
+            self.maze_wall[player_position_y - 1][player_position_x].visuality = True
+
+            self.look_at_right_and_left_wall(player_position_x, player_position_y - 1)
+
+        if not self.maze_wall[player_position_y][player_position_x].left_wall:
+            self.maze_wall[player_position_y][player_position_x - 1].visuality = True
+            self.look_at_top_and_bottom_wall(player_position_x - 1, player_position_y)
+
+        if not self.maze_wall[player_position_y][player_position_x].right_wall:
+            self.maze_wall[player_position_y][player_position_x + 1].visuality = True
+            self.look_at_top_and_bottom_wall(player_position_x + 1, player_position_y)
+
+    def look_at_right_and_left_wall(self, x, y):
+        if not self.maze_wall[y][x].left_wall:
+            self.maze_wall[y][x - 1].visuality = True
+        if not self.maze_wall[y][x].right_wall:
+            self.maze_wall[y][x + 1].visuality = True
+
+    def look_at_top_and_bottom_wall(self, x, y):
+        if not self.maze_wall[y][x].bottom_wall:
+            self.maze_wall[y + 1][x].visuality = True
+        if not self.maze_wall[y][x].top_wall:
+            self.maze_wall[y - 1][x].visuality = True
+
     def check_9_squares_around_player(self, player_position_x, player_position_y, boolean):
         """ check the 9 squares around the player and change visuality to True """
         if player_position_x == 0 and player_position_y == 0:  # top left
