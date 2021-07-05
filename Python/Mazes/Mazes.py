@@ -67,7 +67,7 @@ def run_game():
 
                 player.previous_position_x = player.player_x_array_position
                 player.previous_position_y = player.player_y_array_position
-                maze.vision_change(player.player_x_array_position, player.player_y_array_position, True)
+                maze.look_at_the_wall_from_player(player.player_x_array_position, player.player_y_array_position)
                 maze.draw_maze_walls()
 
             DISPLAYSURF.fill(GRAY)
